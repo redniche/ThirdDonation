@@ -53,4 +53,4 @@ The purpose of this project is to ensure that your precious memories (and donati
 - Testnet: maybe Mumbai(https://rpc-mumbai.matic.today)
 
 ### Project Info
-[Notion Link](https://redniche.notion.site/d53b2ecae6f94d56aa83e9f1b37a7080)
+[Notion Link](https://redniche.notion.site/c362c3526e8f49d48b56594234573882)

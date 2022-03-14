@@ -1,6 +1,6 @@
 package com.thirdlife.thirddonation.controller;
 
-import com.thirdlife.thirddonation.dto.UserTest;
+import com.thirdlife.thirddonation.dto.UserDto;
 import com.thirdlife.thirddonation.repository.UserTestRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,9 +28,9 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = { "*" }, maxAge = 6000)
 @Api("Test 컨트롤러 API V1") // Controller에 대한 설명 Swagger Annotation
 @RequestMapping("/test")
-public class MongoTestController {
+public class TestController {
 
-    public static final Logger logger = LoggerFactory.getLogger(MongoTestController.class);
+    public static final Logger logger = LoggerFactory.getLogger(TestController.class);
     private static final String SUCCESS = "success";
     private static final String FAIL = "fail";
 
@@ -49,7 +49,7 @@ public class MongoTestController {
         Map<String, Object> responseMap = new HashMap<>();
         HttpStatus status = HttpStatus.ACCEPTED;
         try {
-            List<UserTest> userList = userTestRepository.findAll();
+            List<UserDto> userList = userTestRepository.findAll();
             responseMap.put("userList", userList);
         } catch (Exception e) {
             logger.error("회원정보 등록 실패 : {}", e);
@@ -67,13 +67,13 @@ public class MongoTestController {
      */
     @ApiOperation(value = "유저집어넣기", notes = "유저를 집어넣음", response = Map.class)
     @PostMapping("")
-    public ResponseEntity<Map<String, Object>> insertUser(@RequestBody @ApiParam UserTest user) {
+    public ResponseEntity<Map<String, Object>> insertUser(@RequestBody @ApiParam UserDto user) {
         logger.debug("regist............................");
         logger.debug("user:{}", user);
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = HttpStatus.ACCEPTED;
         try {
-            userTestRepository.insert(user);
+            userTestRepository.save(user);
             resultMap.put("message", SUCCESS);
             System.out.println(user);
         } catch (Exception e) {

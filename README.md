@@ -23,7 +23,7 @@
 
 ### CLIENTS
 
-- Framework: Vue.js 2.6.12
+- Framework: React 17.0.2
 - IDE: Visual Studio Code (Npm build)
 - Language: JavaScript ^ES6 => babel-ES5
 - Frontend native languages

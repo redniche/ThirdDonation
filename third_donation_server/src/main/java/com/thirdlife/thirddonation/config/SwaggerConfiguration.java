@@ -49,8 +49,8 @@ public class SwaggerConfiguration {
         return new Docket(DocumentationType.SWAGGER_2)
                 .consumes(getConsumeContentTypes()).produces(getProduceContentTypes())
                 .apiInfo(apiInfo()).groupName(version).select()
-                .apis(RequestHandlerSelectors.basePackage("com.thirdlife.thirddonation.controller"))
-                .paths(PathSelectors.ant("/**")).build()
+                .apis(RequestHandlerSelectors.any())
+                .paths(PathSelectors.ant("/api/**")).build()
                 .useDefaultResponseMessages(false)
                 .globalResponseMessage(RequestMethod.GET, responseMessages);
     }

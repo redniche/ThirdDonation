@@ -2,6 +2,7 @@ package com.thirdlife.thirddonation.db.entity.nft;
 
 import com.thirdlife.thirddonation.db.entity.user.User;
 import java.time.LocalDateTime;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -42,9 +43,9 @@ public class NftArt {
     @Column(length = 20)
     private String fileExtension;
 
-    @ManyToOne
-    @JoinColumn(name = "onwer_address", referencedColumnName = "wallet_address")
-    private User ownerAddress;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "owner_address", referencedColumnName = "wallet_address")
+    private User user;
 
     private LocalDateTime dateCreated;
 

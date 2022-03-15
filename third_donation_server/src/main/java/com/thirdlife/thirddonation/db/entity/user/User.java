@@ -1,13 +1,12 @@
 package com.thirdlife.thirddonation.db.entity.user;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,6 +18,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -34,32 +34,37 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
-    @Column(unique = true, nullable = false, length = 256)
+    @Column(name = "wallet_address", unique = true, nullable = false, length = 256)
     private String walletAddress;
 
     @Column(nullable = false, length = 256)
     private String privateHash;
 
+    @CreationTimestamp
     @Column(nullable = false)
     private LocalDateTime dateCreated;
 
-    private String dateExchanged;
+    private LocalDateTime dateExchanged;
 
     @Column(nullable = false)
     private boolean enabled;
 
-    @Column(nullable = false, length = 15)
+    @Column(nullable = false)
+    private boolean isArtist;
+
+    @Column(nullable = false, length = 50)
     private String username;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @PrimaryKeyJoinColumn
     private UserProfile userProfile;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @Builder.Default
-    private List<String> roles = new ArrayList<>();
+    @Column(nullable = false, length = 15)
+    @Enumerated(EnumType.STRING)
+    private Authority authority;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -91,7 +96,7 @@ public class User implements UserDetails {
         return true;
     }
 
-    public void chageUserProfile(UserProfile userProfile) {
+    public void changeUserProfile(UserProfile userProfile) {
         this.userProfile = userProfile;
     }
 }

@@ -1,0 +1,36 @@
+package com.thirdlife.thirddonation.api.dto.response;
+
+import com.thirdlife.thirddonation.api.dto.UserInfoDto;
+import com.thirdlife.thirddonation.common.model.response.BaseResponseBody;
+import com.thirdlife.thirddonation.db.entity.user.User;
+import io.swagger.annotations.ApiModel;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+/**
+ * 유저의 일부 정보만 반환 받습니다.
+ * description 이 제외되어 있습니다.
+ */
+@EqualsAndHashCode(callSuper = true)
+@Data
+@ApiModel("User")
+public class UserResponse extends BaseResponseBody {
+
+    private UserInfoDto userInfoDto;
+
+    /**
+     * 상태 코드와 메시지, 유저 객체를 입력받아 UserResponse 객체를 반환합니다.
+     *
+     * @param statusCode Integer
+     * @param message    String
+     * @param user       User
+     * @return UserResponse
+     */
+    public static UserResponse of(Integer statusCode, String message, User user) {
+        UserResponse response = new UserResponse();
+        response.setStatusCode(statusCode);
+        response.setMessage(message);
+        response.setUserInfoDto(UserInfoDto.of2(user));
+        return response;
+    }
+}

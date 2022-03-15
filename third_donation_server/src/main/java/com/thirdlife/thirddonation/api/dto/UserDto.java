@@ -1,13 +1,11 @@
-package com.thirdlife.thirddonation.dto;
+package com.thirdlife.thirddonation.api.dto;
 
 import java.io.Serializable;
-import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,9 +20,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@Entity
 @Builder
-@Data
 public class UserDto implements Serializable {
 
     @Id

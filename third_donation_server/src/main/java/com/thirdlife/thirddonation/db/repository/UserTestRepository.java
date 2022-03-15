@@ -1,7 +1,6 @@
-package com.thirdlife.thirddonation.repository;
+package com.thirdlife.thirddonation.db.repository;
 
-import com.thirdlife.thirddonation.dto.UserDto;
-import com.thirdlife.thirddonation.dto.UserDto;
+import com.thirdlife.thirddonation.api.dto.UserDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

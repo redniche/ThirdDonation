@@ -1,7 +1,7 @@
-package com.thirdlife.thirddonation.controller;
+package com.thirdlife.thirddonation.api.controller;
 
-import com.thirdlife.thirddonation.dto.UserDto;
-import com.thirdlife.thirddonation.repository.UserTestRepository;
+import com.thirdlife.thirddonation.api.dto.UserDto;
+import com.thirdlife.thirddonation.db.repository.UserTestRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;

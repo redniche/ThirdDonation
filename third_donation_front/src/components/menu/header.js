@@ -244,6 +244,12 @@ const Header = function ({ className }) {
                     <span className="lines"></span>
                   </NavLink>
                 </div>
+                <div className="navbar-item">
+                    <NavLink to="/ItemDetail/1">
+                        아이템 상세
+                        <span className="lines"></span>
+                    </NavLink>
+                  </div>
                 {/* <div className="navbar-item">
                   <div ref={ref1}>
                     <div
@@ -255,7 +261,7 @@ const Header = function ({ className }) {
                       {openMenu1 && (
                         <div className="item-dropdown">
                           <div className="dropdown" onClick={closeMenu1}>
-                            <NavLink to="/explore">찾아보기</NavLink>
+                            <NavLink to="/ItemDetail/1">Items Details</NavLink>
                           </div>
                         </div>
                       )}

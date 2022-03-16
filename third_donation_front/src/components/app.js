@@ -33,7 +33,7 @@ import Explore from './pages/explore';
 // import Helpcentergrey from './pages/helpcenterGrey';
 // import Colection from './pages/colection';
 // import Colectiongrey from './pages/colectionGrey';
-// // import ItemDetail from './pages/ItemDetail';
+import ItemDetail from './pages/ItemDetail';
 // import ItemDetailRedux from './pages/ItemDetailRedux';
 // import ItemDetailReduxgrey from './pages/ItemDetailReduxGrey';
 // import Author from './pages/Author';
@@ -111,6 +111,8 @@ const app = () => (
         <Home exact path="/">
           <Redirect to="/home" />
         </Home>
+        <ItemDetail path="/ItemDetail/:nftId" />
+        {/* <ItemDetailRedux path="/ItemDetailRedux/:nftId" /> */}
 
         {/* 아래 있는것들은 연결 링크 등록하는 것 */}
         {/* <HomeGrey path="/homeGrey" />
@@ -135,7 +137,7 @@ const app = () => (
         <Helpcentergrey path="/helpcenterGrey" />
         <Colection path="/colection/:collectionId" />
         <Colectiongrey path="/colectionGrey/:collectionId" />
-        <ItemDetailRedux path="/ItemDetail/:nftId" />
+
         <ItemDetailReduxgrey path="/ItemDetailGrey/:nftId" />
         <Author path="/Author/:authorId" />
         <Profile path="/Profile/:authorId" />

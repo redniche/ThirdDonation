@@ -25,10 +25,13 @@ const featurebox = () => (
         </Reveal>
         <div className="text">
           <Reveal className="onStep" keyframes={fadeInUp} delay={100} duration={600} triggerOnce>
-            <h4 className="">지갑을 등록하세요</h4>
+            <h4>지갑을 등록하세요</h4>
           </Reveal>
           <Reveal className="onStep" keyframes={fadeInUp} delay={200} duration={600} triggerOnce>
-            <p className="">(대충 지갑등록 설명 내용)</p>
+            <p>
+              metamask 지갑을 설치, 생성한 후 우측 상단의 지갑 연결 버튼을 클릭하여 Third Donation에
+              연결하세요!
+            </p>
           </Reveal>
         </div>
         <i className="wm icon_wallet"></i>
@@ -43,10 +46,10 @@ const featurebox = () => (
         </Reveal>
         <div className="text">
           <Reveal className="onStep" keyframes={fadeInUp} delay={100} duration={600} triggerOnce>
-            <h4 className="">NFT를 만들어보세요</h4>
+            <h4>NFT를 만들어보세요</h4>
           </Reveal>
           <Reveal className="onStep" keyframes={fadeInUp} delay={200} duration={600} triggerOnce>
-            <p className="">(대충 NFT 생성 설명 내용)</p>
+            <p>(대충 NFT 생성 설명 내용)</p>
           </Reveal>
         </div>
         <i className="wm icon_cloud-upload_alt"></i>
@@ -61,10 +64,10 @@ const featurebox = () => (
         </Reveal>
         <div className="text">
           <Reveal className="onStep" keyframes={fadeInUp} delay={100} duration={600} triggerOnce>
-            <h4 className="">NFT를 판매해보세요</h4>
+            <h4>NFT를 판매해보세요</h4>
           </Reveal>
           <Reveal className="onStep" keyframes={fadeInUp} delay={200} duration={600} triggerOnce>
-            <p className="">(대충 NFT 판매 설명 내용)</p>
+            <p>(대충 NFT 판매 설명 내용)</p>
           </Reveal>
         </div>
         <i className="wm icon_tags_alt"></i>

@@ -245,11 +245,11 @@ const Header = function ({ className }) {
                   </NavLink>
                 </div>
                 <div className="navbar-item">
-                    <NavLink to="/ItemDetail/1">
-                        아이템 상세
-                        <span className="lines"></span>
-                    </NavLink>
-                  </div>
+                  <NavLink to="/ItemDetail/1">
+                    아이템 상세
+                    <span className="lines"></span>
+                  </NavLink>
+                </div>
                 {/* <div className="navbar-item">
                   <div ref={ref1}>
                     <div

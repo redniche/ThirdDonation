@@ -17,6 +17,7 @@ const fadeInUp = keyframes`
 
 const featurebox = () => (
   <div className="row">
+    {/* 3부분 / 1번 - 지갑 등록 박스 */}
     <div className="col-lg-4 col-md-6 mb-3">
       <div className="feature-box f-boxed style-3">
         <Reveal className="onStep" keyframes={fadeInUp} delay={0} duration={600} triggerOnce>
@@ -27,16 +28,14 @@ const featurebox = () => (
             <h4 className="">지갑을 등록하세요</h4>
           </Reveal>
           <Reveal className="onStep" keyframes={fadeInUp} delay={200} duration={600} triggerOnce>
-            <p className="">
-              Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
-              laudantium, totam rem.
-            </p>
+            <p className="">(대충 지갑등록 설명 내용)</p>
           </Reveal>
         </div>
         <i className="wm icon_wallet"></i>
       </div>
     </div>
 
+    {/* 3부분 / 2번 - NFT 등록 박스 */}
     <div className="col-lg-4 col-md-6 mb-3">
       <div className="feature-box f-boxed style-3">
         <Reveal className="onStep" keyframes={fadeInUp} delay={0} duration={600} triggerOnce>
@@ -47,16 +46,14 @@ const featurebox = () => (
             <h4 className="">NFT를 만들어보세요</h4>
           </Reveal>
           <Reveal className="onStep" keyframes={fadeInUp} delay={200} duration={600} triggerOnce>
-            <p className="">
-              Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
-              laudantium, totam rem.
-            </p>
+            <p className="">(대충 NFT 생성 설명 내용)</p>
           </Reveal>
         </div>
         <i className="wm icon_cloud-upload_alt"></i>
       </div>
     </div>
 
+    {/* 3부분 / 3번 - NFT 판매 박스 */}
     <div className="col-lg-4 col-md-6 mb-3">
       <div className="feature-box f-boxed style-3">
         <Reveal className="onStep" keyframes={fadeInUp} delay={0} duration={600} triggerOnce>
@@ -67,10 +64,7 @@ const featurebox = () => (
             <h4 className="">NFT를 판매해보세요</h4>
           </Reveal>
           <Reveal className="onStep" keyframes={fadeInUp} delay={200} duration={600} triggerOnce>
-            <p className="">
-              Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
-              laudantium, totam rem.
-            </p>
+            <p className="">(대충 NFT 판매 설명 내용)</p>
           </Reveal>
         </div>
         <i className="wm icon_tags_alt"></i>

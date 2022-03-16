@@ -69,7 +69,7 @@ import ItemDetail from './pages/ItemDetail';
 // import Tabs from './pages/tabs';
 // import Minter from './pages/Minter';
 // import Mintergrey from './pages/MinterGrey';
-// import Profile from './pages/Profile';
+import EditProfile from './pages/EditProfile';
 
 import { createGlobalStyle } from 'styled-components';
 
@@ -113,7 +113,6 @@ const app = () => (
         </Home>
         <ItemDetail path="/ItemDetail/:nftId" />
         {/* <ItemDetailRedux path="/ItemDetailRedux/:nftId" /> */}
-
         {/* 아래 있는것들은 연결 링크 등록하는 것 */}
         {/* <HomeGrey path="/homeGrey" />
         <Home1 path="/home1" />
@@ -139,8 +138,9 @@ const app = () => (
         <Colectiongrey path="/colectionGrey/:collectionId" />
 
         <ItemDetailReduxgrey path="/ItemDetailGrey/:nftId" />
-        <Author path="/Author/:authorId" />
-        <Profile path="/Profile/:authorId" />
+        <Author path="/Author/:authorId" />*/}
+        <EditProfile path="/Profile/:authorId" />
+        {/*
         <AuthorGrey path="/AuthorGrey/:authorId" />
         <AuthorOpensea path="/AuthorOpensea" />
         <Wallet path="/wallet" />

@@ -228,6 +228,7 @@ const Header = function ({ className }) {
                         <div className="item-dropdown">
                           <div className="dropdown" onClick={closeMenu1}>
                             <NavLink to="/explore">Explore</NavLink>
+                            <NavLink to="/ItemDetail/1">Items Details</NavLink>
                           </div>
                         </div>
                       )}

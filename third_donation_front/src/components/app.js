@@ -31,7 +31,7 @@ import Home from './pages/home';
 // import Helpcentergrey from './pages/helpcenterGrey';
 // import Colection from './pages/colection';
 // import Colectiongrey from './pages/colectionGrey';
-// // import ItemDetail from './pages/ItemDetail';
+import ItemDetail from './pages/ItemDetail';
 // import ItemDetailRedux from './pages/ItemDetailRedux';
 // import ItemDetailReduxgrey from './pages/ItemDetailReduxGrey';
 // import Author from './pages/Author';
@@ -107,6 +107,8 @@ const app = () => (
         <Home exact path="/">
           <Redirect to="/home" />
         </Home>
+        <ItemDetail path="/ItemDetail/:nftId" />
+        {/* <ItemDetailRedux path="/ItemDetailRedux/:nftId" /> */}
         {/* <HomeGrey path="/homeGrey" />
         <Home1 path="/home1" />
         <Home1grey path="/home1Grey" />
@@ -129,7 +131,7 @@ const app = () => (
         <Helpcentergrey path="/helpcenterGrey" />
         <Colection path="/colection/:collectionId" />
         <Colectiongrey path="/colectionGrey/:collectionId" />
-        <ItemDetailRedux path="/ItemDetail/:nftId" />
+
         <ItemDetailReduxgrey path="/ItemDetailGrey/:nftId" />
         <Author path="/Author/:authorId" />
         <Profile path="/Profile/:authorId" />

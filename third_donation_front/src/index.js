@@ -14,23 +14,23 @@ import App from './components/app';
 import reportWebVitals from './reportWebVitals';
 
 // 템플릿에서는 이렇게 되어있는데 왜 안되는지 모르겠음
-// //redux store
-// import { Provider } from 'react-redux';
-// import store from './store';
-
-// ReactDOM.render(
-//   <Provider store={store}>
-//     <App />
-//   </Provider>,
-//   document.getElementById('root'),
-// );
+//redux store
+import { Provider } from 'react-redux';
+import store from './store';
 
 ReactDOM.render(
-  <React.StrictMode>
+  <Provider store={store}>
     <App />
-  </React.StrictMode>,
+  </Provider>,
   document.getElementById('root'),
 );
+
+// ReactDOM.render(
+//   <React.StrictMode>
+//     <App />
+//   </React.StrictMode>,
+//   document.getElementById('root'),
+// );
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

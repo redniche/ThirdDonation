@@ -23,6 +23,7 @@ export const getBlogPosts = (postId) => async (dispatch) => {
 export const getBlogComments = (postId) => async (dispatch) => {
   dispatch(actions.getComments.request(Canceler.cancel));
 
+  postId; //이것으로 api 조회하는 로직 작성
   try {
     const { data } = await Axios.get(`${api.baseUrl}${api.comments}`, {
       cancelToken: Canceler.token,
@@ -38,6 +39,7 @@ export const getBlogComments = (postId) => async (dispatch) => {
 export const getBlogTags = (postId) => async (dispatch) => {
   dispatch(actions.getTags.request(Canceler.cancel));
 
+  postId; //이것으로 api 조회하는 로직 작성
   try {
     const { data } = await Axios.get(`${api.baseUrl}${api.tags}`, {
       cancelToken: Canceler.token,

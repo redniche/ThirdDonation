@@ -2,8 +2,7 @@ import { Axios, Canceler } from '../../../core/axios';
 import * as actions from '../../actions';
 import api from '../../../core/api';
 
-export const fetchNftsBreakdown =
-  (authorId, isMusic = false) =>
+export const fetchNftsBreakdown = (authorId, isMusic = false) => {
   async (dispatch, getState) => {
     //access the state
     const state = getState();
@@ -27,6 +26,7 @@ export const fetchNftsBreakdown =
       dispatch(actions.getNftBreakdown.failure(err));
     }
   };
+};
 
 export const fetchNftShowcase = () => async (dispatch) => {
   dispatch(actions.getNftShowcase.request(Canceler.cancel));

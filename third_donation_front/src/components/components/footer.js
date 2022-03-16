@@ -4,78 +4,70 @@ import { Link } from '@reach/router';
 const footer = () => (
   <footer className="footer-light">
     <div className="container">
+      {/* 열로 정리 + 가운데 정렬 */}
       <div className="row justify-content-center">
+        {/* 3개 분할 / 1번- marketplace */}
         <div className="col-md-3 col-sm-6 col-xs-1">
           <div className="widget">
-            <h5>Marketplace</h5>
+            <h5>NFT 시장</h5>
             <ul>
               <li>
-                <Link to="">All NFTs</Link>
+                <Link to="">전체</Link>
               </li>
               <li>
-                <Link to="">Art</Link>
+                <Link to="">그림</Link>
               </li>
               <li>
-                <Link to="">Music</Link>
-              </li>
-              <li>
-                <Link to="">Domain Names</Link>
-              </li>
-              <li>
-                <Link to="">Virtual World</Link>
-              </li>
-              <li>
-                <Link to="">Collectibles</Link>
+                <Link to="">영상</Link>
               </li>
             </ul>
           </div>
         </div>
+        {/* 3개 분할 / 2번- Resources */}
         <div className="col-md-3 col-sm-6 col-xs-1">
           <div className="widget">
-            <h5>Resources</h5>
+            <h5>자원</h5>
             <ul>
               <li>
-                <Link to="">Help Center</Link>
+                <Link to="">지원센터</Link>
               </li>
               <li>
-                <Link to="">Partners</Link>
+                <Link to="">파트너사</Link>
               </li>
               <li>
-                <Link to="">Suggestions</Link>
+                <Link to="">제안</Link>
               </li>
               <li>
-                <Link to="">Discord</Link>
+                <Link to="">디스코드</Link>
               </li>
               <li>
-                <Link to="">Docs</Link>
+                <Link to="">문서</Link>
               </li>
               <li>
-                <Link to="">Newsletter</Link>
+                <Link to="">소식</Link>
               </li>
             </ul>
           </div>
         </div>
+        {/* 3개 분할 / 3번- Community */}
         <div className="col-md-3 col-sm-6 col-xs-1">
           <div className="widget">
-            <h5>Community</h5>
+            <h5>커뮤니티</h5>
             <ul>
               <li>
-                <Link to="">Community</Link>
+                <Link to="">커뮤니티</Link>
               </li>
               <li>
-                <Link to="">Documentation</Link>
+                <Link to="">문서</Link>
               </li>
               <li>
-                <Link to="">Brand Assets</Link>
+                <Link to="">회사 자산</Link>
               </li>
               <li>
-                <Link to="">Blog</Link>
+                <Link to="">블로그</Link>
               </li>
               <li>
-                <Link to="">Forum</Link>
-              </li>
-              <li>
-                <Link to="">Mailing List</Link>
+                <Link to="">포럼</Link>
               </li>
             </ul>
           </div>
@@ -110,6 +102,8 @@ const footer = () => (
         </div> */}
       </div>
     </div>
+
+    {/* 푸터 밑에 푸터 */}
     <div className="subfooter">
       <div className="container">
         <div className="row">

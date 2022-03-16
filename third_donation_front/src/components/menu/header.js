@@ -4,8 +4,13 @@ import React, { useEffect, useState } from 'react';
 import Breakpoint, { BreakpointProvider, setDefaultBreakpoints } from 'react-socks';
 // import { header } from 'react-bootstrap';
 import { Link } from '@reach/router';
+// 외부 마우스 클릭 감지
 import useOnclickOutside from 'react-cool-onclickoutside';
 
+// 기본 중단점을 설정
+// xs, s, m, l, xl이 있음
+// 이것을 명명해서 이름을 줄 수 있음
+// ex) [{cat : 0}, {dog : 1000}]
 setDefaultBreakpoints([{ xs: 0 }, { l: 1199 }, { xl: 1200 }]);
 
 const NavLink = (props) => (
@@ -23,46 +28,51 @@ const NavLink = (props) => (
 
 const Header = function ({ className }) {
   // const [openMenu, setOpenMenu] = React.useState(false);
-  const [openMenu1, setOpenMenu1] = React.useState(false);
+  // const [openMenu1, setOpenMenu1] = React.useState(false);
   const [openMenu2, setOpenMenu2] = React.useState(false);
-  const [openMenu3, setOpenMenu3] = React.useState(false);
+  // const [openMenu3, setOpenMenu3] = React.useState(false);
   // const handleBtnClick = () => {
   //   setOpenMenu(!openMenu);
   // };
-  const handleBtnClick1 = () => {
-    setOpenMenu1(!openMenu1);
-  };
+  // 버튼 클릭하면 상태 체인지
+  // const handleBtnClick1 = () => {
+  //   setOpenMenu1(!openMenu1);
+  // };
   const handleBtnClick2 = () => {
     setOpenMenu2(!openMenu2);
   };
-  const handleBtnClick3 = () => {
-    setOpenMenu3(!openMenu3);
-  };
+  // const handleBtnClick3 = () => {
+  //   setOpenMenu3(!openMenu3);
+  // };
   // const closeMenu = () => {
   //   setOpenMenu(false);
   // };
-  const closeMenu1 = () => {
-    setOpenMenu1(false);
-  };
+
+  // 닫혀 있으면 열기
+  // const closeMenu1 = () => {
+  //   setOpenMenu1(false);
+  // };
   const closeMenu2 = () => {
     setOpenMenu2(false);
   };
-  const closeMenu3 = () => {
-    setOpenMenu3(false);
-  };
+  // const closeMenu3 = () => {
+  //   setOpenMenu3(false);
+  // };
 
   // const ref = useOnclickOutside(() => {
   //   closeMenu();
   // });
-  const ref1 = useOnclickOutside(() => {
-    closeMenu1();
-  });
+
+  // 열려있으면 닫기
+  // const ref1 = useOnclickOutside(() => {
+  //   closeMenu1();
+  // });
   const ref2 = useOnclickOutside(() => {
     closeMenu2();
   });
-  const ref3 = useOnclickOutside(() => {
-    closeMenu3();
-  });
+  // const ref3 = useOnclickOutside(() => {
+  //   closeMenu3();
+  // });
 
   const [showmenu, btn_icon] = useState(false);
   const [showpop, btn_icon_pop] = useState(false);
@@ -81,9 +91,13 @@ const Header = function ({ className }) {
   });
 
   useEffect(() => {
+    // myHeader 아이디 요소
     const header = document.getElementById('myHeader');
+    // scroll-to-top 아이디 요소
     const totop = document.getElementById('scroll-to-top');
+    // 내부 경계를 기준으로 현재 요소의 외부 경계의 거리
     const sticky = header.offsetTop;
+
     const scrollCallBack = window.addEventListener('scroll', () => {
       btn_icon(false);
       if (window.pageYOffset > sticky) {
@@ -113,21 +127,28 @@ const Header = function ({ className }) {
             </div>
           </div>
 
+          {/* 검색창 */}
           <div className="search">
             <input
               id="quick_search"
               className="xs-hide"
               name="quick_search"
-              placeholder="search item here..."
+              placeholder="검색어를 입력하세요"
               type="text"
             />
           </div>
 
+          {/* breakpoint l down */}
           <BreakpointProvider>
             <Breakpoint l down>
               {showmenu && (
                 <div className="menu">
                   <div className="navbar-item">
+                    <NavLink to="/explore" onClick={() => btn_icon(!showmenu)}>
+                      찾아보기
+                    </NavLink>
+                  </div>
+                  {/* <div className="navbar-item">
                     <div ref={ref1}>
                       <div
                         className="dropdown-custom dropdown-toggle btn"
@@ -144,22 +165,22 @@ const Header = function ({ className }) {
                         </div>
                       )}
                     </div>
-                  </div>
+                  </div> */}
                   <div className="navbar-item">
                     <div ref={ref2}>
                       <div
                         className="dropdown-custom dropdown-toggle btn"
                         onClick={handleBtnClick2}>
-                        Pages
+                        페이지
                       </div>
                       {openMenu2 && (
                         <div className="item-dropdown">
                           <div className="dropdown" onClick={closeMenu2}>
                             <NavLink to="/Author/1" onClick={() => btn_icon(!showmenu)}>
-                              Author
+                              예술가
                             </NavLink>
                             <NavLink to="/Profile/1" onClick={() => btn_icon(!showmenu)}>
-                              Profile
+                              프로필
                             </NavLink>
                           </div>
                         </div>
@@ -168,10 +189,10 @@ const Header = function ({ className }) {
                   </div>
                   <div className="navbar-item">
                     <NavLink to="/activity" onClick={() => btn_icon(!showmenu)}>
-                      Activity
+                      활동
                     </NavLink>
                   </div>
-                  <div className="navbar-item">
+                  {/* <div className="navbar-item">
                     <div ref={ref3}>
                       <div
                         className="dropdown-custom dropdown-toggle btn"
@@ -209,44 +230,51 @@ const Header = function ({ className }) {
                         </div>
                       )}
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               )}
             </Breakpoint>
 
+            {/* breakpoint xl */}
             <Breakpoint xl>
               <div className="menu">
                 <div className="navbar-item">
+                  <NavLink to="/explore">
+                    찾아보기
+                    <span className="lines"></span>
+                  </NavLink>
+                </div>
+                {/* <div className="navbar-item">
                   <div ref={ref1}>
                     <div
                       className="dropdown-custom dropdown-toggle btn"
                       onMouseEnter={handleBtnClick1}
                       onMouseLeave={closeMenu1}>
-                      Explore
+                      찾아보기
                       <span className="lines"></span>
                       {openMenu1 && (
                         <div className="item-dropdown">
                           <div className="dropdown" onClick={closeMenu1}>
-                            <NavLink to="/explore">Explore</NavLink>
+                            <NavLink to="/explore">찾아보기</NavLink>
                           </div>
                         </div>
                       )}
                     </div>
                   </div>
-                </div>
+                </div> */}
                 <div className="navbar-item">
                   <div ref={ref2}>
                     <div
                       className="dropdown-custom dropdown-toggle btn"
                       onMouseEnter={handleBtnClick2}
                       onMouseLeave={closeMenu2}>
-                      Pages
+                      페이지
                       <span className="lines"></span>
                       {openMenu2 && (
                         <div className="item-dropdown">
                           <div className="dropdown" onClick={closeMenu2}>
-                            <NavLink to="/Author/1">Author</NavLink>
-                            <NavLink to="/Profile/1">Profile</NavLink>
+                            <NavLink to="/Author/1">예술가</NavLink>
+                            <NavLink to="/Profile/1">프로필</NavLink>
                           </div>
                         </div>
                       )}
@@ -255,11 +283,11 @@ const Header = function ({ className }) {
                 </div>
                 <div className="navbar-item">
                   <NavLink to="/activity">
-                    Activity
+                    활동
                     <span className="lines"></span>
                   </NavLink>
                 </div>
-                <div className="navbar-item">
+                {/* <div className="navbar-item">
                   <div ref={ref3}>
                     <div
                       className="dropdown-custom dropdown-toggle btn"
@@ -283,14 +311,15 @@ const Header = function ({ className }) {
                       )}
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
             </Breakpoint>
           </BreakpointProvider>
 
           <div className="mainside">
+            {/* 지갑을 연결하라는 버튼 */}
             <div className="connect-wal">
-              <NavLink to="/wallet">Connect Wallet</NavLink>
+              <NavLink to="/wallet">지갑 연결하기</NavLink>
             </div>
             <div className="logout">
               <NavLink to="/createOptions">Create</NavLink>
@@ -304,8 +333,8 @@ const Header = function ({ className }) {
                 {shownot && (
                   <div className="popshow">
                     <div className="de-flex">
-                      <h4>Notifications</h4>
-                      <span className="viewaall">Show all</span>
+                      <h4>알림</h4>
+                      <span className="viewaall">전체보기</span>
                     </div>
                     <ul>
                       <li>
@@ -375,40 +404,45 @@ const Header = function ({ className }) {
                 <img src="../../img/author_single/author_thumbnail.jpg" alt="" />
                 {showpop && (
                   <div className="popshow">
+                    {/* 유저 네임 */}
                     <div className="d-name">
                       <h4>Monica Lucas</h4>
                       <span className="name" onClick={() => window.open('', '_self')}>
                         Set display name
                       </span>
                     </div>
+                    {/* 유저 지갑 balance */}
                     <div className="d-balance">
-                      <h4>Balance</h4>
+                      <h4>잔액</h4>
                       12.858 ETH
                     </div>
+                    {/* 유저 지갑 주소 */}
                     <div className="d-wallet">
-                      <h4>My Wallet</h4>
+                      <h4>내 지갑</h4>
                       <span id="wallet" className="d-wallet-address">
                         DdzFFzCqrhshMSxb9oW3mRo4MJrQkusV3fGFSTwaiu4wPBqMryA9DYVJCkW9n7twCffG5f5wX2sSkoDXGiZB1HPa7K7f865Kk4LqnrME
                       </span>
+                      {/* 지갑 주소 카피 버튼 */}
                       <button id="btn_copy" title="Copy Text">
                         Copy
                       </button>
                     </div>
                     <div className="d-line"></div>
+                    {/* 유저 프로필 밑에 나오는 페이지 이동 버튼 */}
                     <ul className="de-submenu-profile">
                       <li>
                         <span>
-                          <i className="fa fa-user"></i> My profile
+                          <i className="fa fa-user"></i> 나의 프로필
                         </span>
                       </li>
                       <li>
                         <span>
-                          <i className="fa fa-pencil"></i> Edit profile
+                          <i className="fa fa-pencil"></i> 프로필 수정하기
                         </span>
                       </li>
                       <li>
                         <span>
-                          <i className="fa fa-sign-out"></i> Sign out
+                          <i className="fa fa-sign-out"></i> 로그아웃
                         </span>
                       </li>
                     </ul>

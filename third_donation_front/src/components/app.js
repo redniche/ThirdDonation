@@ -5,9 +5,11 @@ import { Router, Location, Redirect } from '@reach/router';
 
 import PropTypes from 'prop-types';
 
+// vue 처럼 페이지 임포트하고 사용하는 방식
 import ScrollToTopBtn from './menu/ScrollToTop';
 import Header from './menu/header';
 import Home from './pages/home';
+
 // import HomeGrey from './pages/homeGrey';
 // import Home1 from './pages/home1';
 // import Home1grey from './pages/home1Grey';
@@ -17,7 +19,7 @@ import Home from './pages/home';
 // import Home4 from './pages/home4';
 // import Home5 from './pages/home5';
 // import Home6 from './pages/home6';
-// import Explore from './pages/explore';
+import Explore from './pages/explore';
 // import Exploregrey from './pages/exploreGrey';
 // import Explore2 from './pages/explore2';
 // import Explore2grey from './pages/explore2Grey';
@@ -100,13 +102,17 @@ PosedRouter.propsTypes = {
 
 const app = () => (
   <div className="wraper">
+    {/* globalstyles 추가 */}
     <GlobalStyles />
+    {/* header 추가 */}
     <Header />
     <PosedRouter>
       <ScrollTop path="/">
         <Home exact path="/">
           <Redirect to="/home" />
         </Home>
+
+        {/* 아래 있는것들은 연결 링크 등록하는 것 */}
         {/* <HomeGrey path="/homeGrey" />
         <Home1 path="/home1" />
         <Home1grey path="/home1Grey" />
@@ -115,9 +121,9 @@ const app = () => (
         <Home3 path="/home3" />
         <Home4 path="/home4" />
         <Home5 path="/home5" />
-        <Home6 path="/home6" />
+        <Home6 path="/home6" /> */}
         <Explore path="/explore" />
-        <Exploregrey path="/exploreGrey" />
+        {/* <Exploregrey path="/exploreGrey" />
         <Explore2 path="/explore2" />
         <Explore2grey path="/explore2Grey" />
         <ExploreOpensea path="/exploreOpensea" />
@@ -167,6 +173,8 @@ const app = () => (
         <Mintergrey path="/minter" /> */}
       </ScrollTop>
     </PosedRouter>
+
+    {/* 맨 위로 올라가는 버튼 */}
     <ScrollToTopBtn />
   </div>
 );

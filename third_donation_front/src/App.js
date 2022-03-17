@@ -7,10 +7,12 @@ import Header from './components/menu/header';
 import Home from './components/pages/home';
 import Explore from './components/pages/explore';
 import ItemDetail from './components/pages/ItemDetail';
-import Sell from './components/pages/sell';
-import Minter from './components/pages/Minter';
 import Profile from './components/pages/profile/Profile';
 import EditProfile from './components/pages/profile/EditProfile';
+import Sell from './components/pages/sell';
+import Minter from './components/pages/Minter';
+import ArtistRegistration from './components/pages/artistRegistration';
+import NFTDetail from './components/pages/NFTDetail';
 
 import { createGlobalStyle } from 'styled-components';
 
@@ -56,6 +58,8 @@ const App = () => (
         <EditProfile path="/EditProfile/:authorId" />
         <Sell path="/sell" />
         <Minter path="/mint" />
+        <ArtistRegistration path="/artistRegistration" />
+        <NFTDetail path="/NFTDetail/:nftId" />
       </ScrollTop>
     </PosedRouter>
     <ScrollToTopBtn />

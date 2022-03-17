@@ -258,7 +258,7 @@ const Header = function ({ className }) {
                   </NavLink>
                 </div>
                 <div className="navbar-item">
-                  <NavLink to="/NFT_Detail/1">
+                  <NavLink to="/NFTDetail/1">
                     소유 NFT 상세
                     <span className="lines"></span>
                   </NavLink>
@@ -296,6 +296,7 @@ const Header = function ({ className }) {
                             <NavLink to="/EditProfile/1">프로필변경</NavLink>
                             <NavLink to="/sell">작품 판매</NavLink>
                             <NavLink to="/mint">작품 등록</NavLink>
+                            <NavLink to="/artistRegistration">예술가 등록</NavLink>
                           </div>
                         </div>
                       )}

@@ -1,25 +1,57 @@
-import logo from './logo.svg';
-import './App.css';
 import React from 'react';
+import { Router, Location, Redirect } from '@reach/router';
+import PropTypes from 'prop-types';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer">
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+import ScrollToTopBtn from './components/menu/ScrollToTop';
+import Header from './components/menu/header';
+import Home from './components/pages/home';
+import Explore from './components/pages/explore';
+import ItemDetail from './components/pages/ItemDetail';
+
+import { createGlobalStyle } from 'styled-components';
+
+const GlobalStyles = createGlobalStyle`
+  :root {
+    scroll-behavior: unset;
+  }
+`;
+
+export const ScrollTop = ({ children, location }) => {
+  React.useEffect(() => window.scrollTo(0, 0), [location]);
+  return children;
+};
+
+const PosedRouter = ({ children }) => (
+  <Location>
+    {({ location }) => (
+      <div id="routerhang">
+        <div key={location.key}>
+          <Router location={location}>{children}</Router>
+        </div>
+      </div>
+    )}
+  </Location>
+);
+
+PosedRouter.propsTypes = {
+  children: PropTypes.node.isRequired,
+};
+
+const App = () => (
+  <div className="wraper">
+    <GlobalStyles />
+    <Header />
+    <PosedRouter>
+      <ScrollTop path="/">
+        <Home exact path="/">
+          <Redirect to="/home" />
+        </Home>
+        <ItemDetail path="/ItemDetail/:nftId" />
+        <Explore path="/explore" />
+      </ScrollTop>
+    </PosedRouter>
+    <ScrollToTopBtn />
+  </div>
+);
 
 export default App;

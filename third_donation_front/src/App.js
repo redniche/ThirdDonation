@@ -9,6 +9,8 @@ import Explore from './components/pages/explore';
 import ItemDetail from './components/pages/ItemDetail';
 import Sell from './components/pages/sell';
 import Minter from './components/pages/Minter';
+import Profile from './components/pages/profile/Profile';
+import EditProfile from './components/pages/profile/EditProfile';
 
 import { createGlobalStyle } from 'styled-components';
 
@@ -50,6 +52,8 @@ const App = () => (
         </Home>
         <ItemDetail path="/ItemDetail/:nftId" />
         <Explore path="/explore" />
+        <Profile path="/Profile/:authorId" />
+        <EditProfile path="/EditProfile/:authorId" />
         <Sell path="/sell" />
         <Minter path="/mint" />
       </ScrollTop>

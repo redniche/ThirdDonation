@@ -6,6 +6,7 @@ import Breakpoint, { BreakpointProvider, setDefaultBreakpoints } from 'react-soc
 import { Link } from '@reach/router';
 // 외부 마우스 클릭 감지
 import useOnclickOutside from 'react-cool-onclickoutside';
+import Wallet from '../components/wallet/wallet';
 
 // 기본 중단점을 설정
 // xs, s, m, l, xl이 있음
@@ -431,22 +432,9 @@ const Header = function ({ className }) {
                         Set display name
                       </span>
                     </div>
-                    {/* 유저 지갑 balance */}
-                    <div className="d-balance">
-                      <h4>잔액</h4>
-                      12.858 ETH
-                    </div>
-                    {/* 유저 지갑 주소 */}
-                    <div className="d-wallet">
-                      <h4>내 지갑</h4>
-                      <span id="wallet" className="d-wallet-address">
-                        DdzFFzCqrhshMSxb9oW3mRo4MJrQkusV3fGFSTwaiu4wPBqMryA9DYVJCkW9n7twCffG5f5wX2sSkoDXGiZB1HPa7K7f865Kk4LqnrME
-                      </span>
-                      {/* 지갑 주소 카피 버튼 */}
-                      <button id="btn_copy" title="Copy Text">
-                        Copy
-                      </button>
-                    </div>
+                    {/* 유저 지갑 balance, address */}
+                    <Wallet />
+
                     <div className="d-line"></div>
                     {/* 유저 프로필 밑에 나오는 페이지 이동 버튼 */}
                     <ul className="de-submenu-profile">

@@ -1,6 +1,3 @@
-/* eslint-disable react/prop-types */
-// eslint 에러 발생해서 추가해줌
-
 import React, { Component } from 'react';
 
 class Clock extends Component {

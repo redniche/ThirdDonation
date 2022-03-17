@@ -1,14 +1,10 @@
-import React, { memo, useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { memo, useState } from 'react';
 import Slider from 'react-slick';
 import styled from 'styled-components';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import Clock from './Clock';
 import { carouselNew } from './constants';
-import * as selectors from '../../store/selectors';
-import { fetchNftsBreakdown } from '../../store/actions/thunks';
-import api from '../../core/api';
 
 const Outer = styled.div`
   display: flex;
@@ -17,10 +13,108 @@ const Outer = styled.div`
   align-items: center;
 `;
 
-const CarouselNewRedux = () => {
-  const dispatch = useDispatch();
-  const nftsState = useSelector(selectors.nftBreakdownState);
-  const nfts = nftsState.data ? nftsState.data : [];
+const NewNFTs = () => {
+  const nfts = [
+    {
+      title: 'Pinky Ocean',
+      price: '0.08',
+      bid: '1',
+      max_bid: '20',
+      deadline: 'January, 10, 2023',
+      author: {
+        avatar: {
+          url: './img/author/author-1.jpg',
+        },
+      },
+      preview_image: {
+        url: './img/items/static-1.jpg',
+      },
+      bid_link: '/#',
+      likes: '50',
+    },
+    {
+      title: 'Pinky Ocean',
+      price: '0.08',
+      bid: '1',
+      max_bid: '20',
+      author: {
+        avatar: {
+          url: './img/author/author-2.jpg',
+        },
+      },
+      preview_image: {
+        url: './img/items/static-2.jpg',
+      },
+      bid_link: '/#',
+      likes: '50',
+    },
+    {
+      title: 'Pinky Ocean',
+      price: '0.08',
+      bid: '1',
+      max_bid: '20',
+      author: {
+        avatar: {
+          url: './img/author/author-3.jpg',
+        },
+      },
+      preview_image: {
+        url: './img/items/static-3.jpg',
+      },
+      bid_link: '/#',
+      likes: '50',
+    },
+    {
+      title: 'Pinky Ocean',
+      price: '0.08',
+      bid: '1',
+      max_bid: '20',
+      deadline: 'February, 1, 2023',
+      author: {
+        avatar: {
+          url: './img/author/author-4.jpg',
+        },
+      },
+      preview_image: {
+        url: './img/items/static-4.jpg',
+      },
+      bid_link: '/#',
+      likes: '50',
+    },
+    {
+      title: 'Pinky Ocean',
+      price: '0.08',
+      bid: '1',
+      max_bid: '20',
+      deadline: 'February, 1, 2023',
+      author: {
+        avatar: {
+          url: './img/author/author-5.jpg',
+        },
+      },
+      preview_image: {
+        url: './img/items/static-5.jpg',
+      },
+      bid_link: '/#',
+      likes: '50',
+    },
+    {
+      title: 'Pinky Ocean',
+      price: '0.08',
+      bid: '1',
+      max_bid: '20',
+      author: {
+        avatar: {
+          url: './img/author/author-6.jpg',
+        },
+      },
+      preview_image: {
+        url: './img/items/static-6.jpg',
+      },
+      bid_link: '/#',
+      likes: '50',
+    },
+  ];
 
   const [height, setHeight] = useState(0);
 
@@ -31,9 +125,9 @@ const CarouselNewRedux = () => {
     }
   };
 
-  useEffect(() => {
-    dispatch(fetchNftsBreakdown());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(fetchNftsBreakdown());
+  // }, [dispatch]);
 
   return (
     <div className="nft">
@@ -50,7 +144,7 @@ const CarouselNewRedux = () => {
                   )}
                   <div className="author_list_pp">
                     <span onClick={() => window.open('/home1', '_self')}>
-                      <img className="lazy" src={api.baseUrl + nft.author.avatar.url} alt="" />
+                      <img className="lazy" src={nft.author.avatar.url} alt="" />
                       <i className="fa fa-check"></i>
                     </span>
                   </div>
@@ -58,7 +152,7 @@ const CarouselNewRedux = () => {
                     <Outer>
                       <span>
                         <img
-                          src={api.baseUrl + nft.preview_image.url}
+                          src={nft.preview_image.url}
                           className="lazy nft__item_preview"
                           onLoad={onImgLoad}
                           alt=""
@@ -93,4 +187,4 @@ const CarouselNewRedux = () => {
   );
 };
 
-export default memo(CarouselNewRedux);
+export default memo(NewNFTs);

@@ -3,13 +3,11 @@ import React from 'react';
 import SliderMain from '../components/SliderMain';
 // 피쳐박스 등록
 import FeatureBox from '../components/FeatureBox';
-// import CarouselCollectionRedux from '../components/CarouselCollectionRedux';
-// import CarouselNewRedux from '../components/CarouselNewRedux';
-// import AuthorListRedux from '../components/AuthorListRedux';
-// 카테고리 등록
 import Catgor from '../components/Catgor';
 // 푸터 등록 등록
 import Footer from '../components/footer';
+import NewNFTs from '../components/NewNFTs';
+import HotCollections from '../components/HotCollections';
 
 const home = () => (
   <div>
@@ -29,11 +27,13 @@ const home = () => (
       <div className="row">
         <div className="col-lg-12">
           <div className="text-center">
-            <h2>인기있는 아이템</h2>
+            <h2>인기 컬렉션</h2>
             <div className="small-border"></div>
           </div>
         </div>
-        <div className="col-lg-12">{/* <CarouselCollectionRedux /> */}</div>
+        <div className="col-lg-12">
+          <HotCollections />
+        </div>
       </div>
     </section>
 
@@ -46,20 +46,9 @@ const home = () => (
             <div className="small-border"></div>
           </div>
         </div>
-        <div className="col-lg-12">{/* <CarouselNewRedux /> */}</div>
-      </div>
-    </section>
-
-    {/* 탑 셀러 부분 */}
-    <section className="container no-bottom">
-      <div className="row">
         <div className="col-lg-12">
-          <div className="text-center">
-            <h2>인기있는 판매자들</h2>
-            <div className="small-border"></div>
-          </div>
+          <NewNFTs />
         </div>
-        <div className="col-lg-12">{/* <AuthorListRedux /> */}</div>
       </div>
     </section>
 

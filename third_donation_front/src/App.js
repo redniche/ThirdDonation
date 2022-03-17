@@ -7,7 +7,8 @@ import Header from './components/menu/header';
 import Home from './components/pages/home';
 import Explore from './components/pages/explore';
 import ItemDetail from './components/pages/ItemDetail';
-
+import ArtistRegistration from './components/pages/artistRegistration';
+import NFTDetail from './components/pages/NFTDetail';
 import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyles = createGlobalStyle`
@@ -48,6 +49,8 @@ const App = () => (
         </Home>
         <ItemDetail path="/ItemDetail/:nftId" />
         <Explore path="/explore" />
+        <ArtistRegistration path="/artistRegistration" />
+        <NFTDetail path="/NFTDetail/:nftId" />
       </ScrollTop>
     </PosedRouter>
     <ScrollToTopBtn />

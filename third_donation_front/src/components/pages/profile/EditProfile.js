@@ -1,15 +1,15 @@
 import React, { memo, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import Footer from '../components/footer';
+import Footer from '../../components/footer';
 import { createGlobalStyle } from 'styled-components';
 import { Form, Formik, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import auth, { authorUrl } from '../../core/auth';
-import request from '../../core/auth/request';
+import auth, { authorUrl } from '../../../core/auth';
+import request from '../../../core/auth/request';
 import { navigate } from '@reach/router';
-import api from '../../core/api';
-import { fetchAuthorList } from '../../store/actions/thunks';
-import * as selectors from '../../store/selectors';
+import api from '../../../core/api';
+import { fetchAuthorList } from '../../../store/actions/thunks';
+import * as selectors from '../../../store/selectors';
 import axios from 'axios';
 
 const GlobalStyles = createGlobalStyle`
@@ -59,10 +59,6 @@ const Profile = ({ authorId }) => {
     profile_image: '',
   };
 
-  const initialProfileBanner = {
-    profile_banner: '',
-  };
-
   const dispatch = useDispatch();
 
   const redirectUser = (path) => {
@@ -110,8 +106,6 @@ const Profile = ({ authorId }) => {
 
   const [profileImage, setProfileImage] = useState();
   const [profileImageTemp, setProfileImageTemp] = useState();
-  const [profileBanner, setProfileBanner] = useState();
-  const [profileBannerTemp, setProfileBannerTemp] = useState();
 
   const handleProfilePicture = (event) => {
     let file = event.target.files[0];
@@ -119,16 +113,6 @@ const Profile = ({ authorId }) => {
     let reader = new FileReader();
     reader.onloadend = () => {
       setProfileImageTemp(reader.result);
-    };
-    reader.readAsDataURL(file);
-  };
-
-  const handleProfileBanner = (event) => {
-    let file = event.target.files[0];
-    setProfileBanner(file);
-    let reader = new FileReader();
-    reader.onloadend = () => {
-      setProfileBannerTemp(reader.result);
     };
     reader.readAsDataURL(file);
   };
@@ -148,7 +132,7 @@ const Profile = ({ authorId }) => {
             api.baseUrl +
             (author && author.banner && author.banner.url
               ? author.banner.url
-              : '/uploads/4_1ec08f99e2.jpg')
+              : '/uploads/테스트배너1.jpg')
           })`,
         }}>
         <div className="mainbreadcumb"></div>
@@ -177,7 +161,7 @@ const Profile = ({ authorId }) => {
                         <ul className="de_nav text-left m-0 mb-3">
                           <li className="active" style={{ opacity: 1 }}>
                             <span>
-                              <i className="fa fa-user"></i>Profile
+                              <i className="fa fa-user"></i> 프로필 변경
                             </span>
                           </li>
                         </ul>
@@ -193,48 +177,37 @@ const Profile = ({ authorId }) => {
                               }}>
                               <div className="col-lg-8 mb-sm-20">
                                 <div className="field-set">
-                                  <h5>Username</h5>
+                                  <h5>유저명</h5>
                                   <Field
                                     type="text"
                                     name="username"
                                     id="username"
                                     className="form-control"
-                                    placeholder="Enter username"
+                                    placeholder="유저명(자신의 별명)을 입력합니다."
                                   />
                                   <ErrorMessage name="username" component="div" />
                                   <div className="spacer-20"></div>
 
-                                  <h5>About</h5>
+                                  <h5>설명</h5>
                                   <Field
                                     component="textarea"
                                     name="about"
                                     id="about"
                                     className="form-control"
-                                    placeholder="Tell the world who you are!"
+                                    placeholder="자신을 마음껏 소개 해보세요!"
                                   />
                                   <ErrorMessage name="about" component="div" />
                                   <div className="spacer-20"></div>
 
-                                  <h5>Social</h5>
+                                  <h5>소셜태그</h5>
                                   <Field
                                     type="text"
                                     name="social"
                                     id="social"
                                     className="form-control"
-                                    placeholder="Enter Social URLs like Instagram or Twitter"
+                                    placeholder="인스타그램, 트위터 등에서 사용하는 태그를 입력하세요!"
                                   />
                                   <ErrorMessage name="social" component="div" />
-                                  <div className="spacer-20"></div>
-
-                                  <h5>Wallet</h5>
-                                  <Field
-                                    type="text"
-                                    name="wallet"
-                                    id="wallet"
-                                    className="form-control"
-                                    placeholder="Enter your Wallet Address"
-                                  />
-                                  <ErrorMessage name="wallet" component="div" />
                                   <div className="spacer-20"></div>
                                 </div>
                               </div>
@@ -242,12 +215,7 @@ const Profile = ({ authorId }) => {
                           </div>
                         </div>
                       </div>
-                      <input
-                        type="submit"
-                        id="submit"
-                        className="btn-main"
-                        value="Update profile"
-                      />
+                      <input type="submit" id="submit" className="btn-main" value="프로필 갱신" />
                     </Form>
                   );
                 }}
@@ -267,7 +235,7 @@ const Profile = ({ authorId }) => {
                     return (
                       <Form>
                         <h5>
-                          Profile image{' '}
+                          소개용 이미지{' '}
                           <i
                             className="fa fa-info-circle id-color-2"
                             data-bs-toggle="tooltip"
@@ -282,7 +250,7 @@ const Profile = ({ authorId }) => {
                               ? profileImageTemp
                                 ? profileImageTemp
                                 : api.baseUrl + author.avatar.url
-                              : '../../img/author_single/author_thumbnail.jpg'
+                              : api.baseUrl + '/mock_data/uploads/예술가1.jpg'
                           }
                           id="click_profile_img"
                           className="d-profile-img-edit img-fluid"
@@ -297,60 +265,7 @@ const Profile = ({ authorId }) => {
                             handleProfilePicture(event);
                           }}
                         />
-                        <input type="submit" className="btn-main mt-3" value="Save Profile Image" />
-                      </Form>
-                    );
-                  }}
-                </Formik>
-                <div className="spacer-30"></div>
-                <Formik
-                  initialValues={initialProfileBanner}
-                  onSubmit={async (values, { setSubmitting, resetForm }) => {
-                    setSubmitting(true);
-                    await handleSubmitProfilePicture(profileBanner, 'banner');
-                    setSubmitting(false);
-                    resetForm();
-                  }}>
-                  {/* {({ values, isSubmitting, isValid }) => { */}
-                  {() => {
-                    return (
-                      <Form>
-                        <h5>
-                          Profile banner{' '}
-                          <i
-                            className="fa fa-info-circle id-color-2"
-                            data-bs-toggle="tooltip"
-                            data-bs-placement="top"
-                            title=""
-                            data-bs-original-title="Recommend 1500 x 500. Max size: 50MB. Click the image to upload."
-                            aria-label="Recommend 1500 x 500. Max size: 50MB. Click the image to upload."></i>
-                        </h5>
-                        <img
-                          src={
-                            author && author.banner && author.banner.url
-                              ? profileBannerTemp
-                                ? profileBannerTemp
-                                : api.baseUrl + author.banner.url
-                              : '../../img/author_single/author_banner.jpg'
-                          }
-                          id="click_banner_img"
-                          className="d-banner-img-edit img-fluid"
-                          alt=""
-                        />
-                        <input
-                          name="profile_banner"
-                          type="file"
-                          id="upload_banner_img"
-                          onChange={(event) => {
-                            handleProfileBanner(event);
-                          }}
-                        />
-                        <ErrorMessage name="profile_banner" component="div" />
-                        <input
-                          type="submit"
-                          className="btn-main mt-3"
-                          value="Save Profile Banner"
-                        />
+                        <input type="submit" className="btn-main mt-3" value="프로필 이미지 저장" />
                       </Form>
                     );
                   }}

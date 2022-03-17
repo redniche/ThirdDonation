@@ -36,7 +36,7 @@ import Explore from './pages/explore';
 import ItemDetail from './pages/ItemDetail';
 // import ItemDetailRedux from './pages/ItemDetailRedux';
 // import ItemDetailReduxgrey from './pages/ItemDetailReduxGrey';
-// import Author from './pages/Author';
+import Profile from './pages/profile/Profile';
 // import AuthorGrey from './pages/AuthorGrey';
 // import AuthorOpensea from './pages/Opensea/author';
 // import Wallet from './pages/wallet';
@@ -69,7 +69,7 @@ import ItemDetail from './pages/ItemDetail';
 // import Tabs from './pages/tabs';
 // import Minter from './pages/Minter';
 // import Mintergrey from './pages/MinterGrey';
-import EditProfile from './pages/EditProfile';
+import EditProfile from './pages/profile/EditProfile';
 
 import { createGlobalStyle } from 'styled-components';
 
@@ -137,9 +137,9 @@ const app = () => (
         <Colection path="/colection/:collectionId" />
         <Colectiongrey path="/colectionGrey/:collectionId" />
 
-        <ItemDetailReduxgrey path="/ItemDetailGrey/:nftId" />
-        <Author path="/Author/:authorId" />*/}
-        <EditProfile path="/Profile/:authorId" />
+      <ItemDetailReduxgrey path="/ItemDetailGrey/:nftId" /> */}
+        <Profile path="/Profile/:authorId" />
+        <EditProfile path="/EditProfile/:authorId" />
         {/*
         <AuthorGrey path="/AuthorGrey/:authorId" />
         <AuthorOpensea path="/AuthorOpensea" />

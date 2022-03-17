@@ -1,11 +1,11 @@
 import React, { memo, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import ColumnNewRedux from '../components/ColumnNewRedux';
-import Footer from '../components/footer';
+import ColumnNewRedux from '../../components/ColumnNewRedux';
+import Footer from '../../components/footer';
 import { createGlobalStyle } from 'styled-components';
-import * as selectors from '../../store/selectors';
-import { fetchAuthorList } from '../../store/actions/thunks';
-import api from '../../core/api';
+import * as selectors from '../../../store/selectors';
+import { fetchAuthorList } from '../../../store/actions/thunks';
+import api from '../../../core/api';
 
 const GlobalStyles = createGlobalStyle`
   header#myHeader.navbar.white {
@@ -37,6 +37,7 @@ const Colection = ({ authorId }) => {
   const [openMenu, setOpenMenu] = React.useState(true);
   const [openMenu1, setOpenMenu1] = React.useState(false);
   const [openMenu2, setOpenMenu2] = React.useState(false);
+
   const handleBtnClick = () => {
     setOpenMenu(!openMenu);
     setOpenMenu1(false);
@@ -64,7 +65,7 @@ const Colection = ({ authorId }) => {
 
   const dispatch = useDispatch();
   const authorsState = useSelector(selectors.authorsState);
-  const author = authorsState.data ? authorsState.data[0] : {};
+  const author = authorsState.data ? authorsState.data[authorId - 1] : {};
 
   useEffect(() => {
     dispatch(fetchAuthorList(authorId));
@@ -104,7 +105,7 @@ const Colection = ({ authorId }) => {
                         {author.wallet}
                       </span>
                       <button id="btn_copy" title="Copy Text">
-                        Copy
+                        복사
                       </button>
                     </h4>
                   </div>
@@ -112,10 +113,10 @@ const Colection = ({ authorId }) => {
               </div>
               <div className="profile_follow de-flex">
                 <div className="de-flex-col">
-                  <div className="profile_follower">{author.followers} followers</div>
+                  <div className="profile_follower">{author.followers} 팔로워</div>
                 </div>
                 <div className="de-flex-col">
-                  <span className="btn-main">Follow</span>
+                  <span className="btn-main">팔로우</span>
                 </div>
               </div>
             </div>
@@ -129,13 +130,13 @@ const Colection = ({ authorId }) => {
             <div className="items_filter">
               <ul className="de_nav text-left">
                 <li id="Mainbtn" className="active">
-                  <span onClick={handleBtnClick}>On Sale</span>
+                  <span onClick={handleBtnClick}>판매 중</span>
                 </li>
                 <li id="Mainbtn1" className="">
-                  <span onClick={handleBtnClick1}>Created</span>
+                  <span onClick={handleBtnClick1}>만든 작품</span>
                 </li>
                 <li id="Mainbtn2" className="">
-                  <span onClick={handleBtnClick2}>Liked</span>
+                  <span onClick={handleBtnClick2}>소유 중</span>
                 </li>
               </ul>
             </div>

@@ -3,10 +3,11 @@ import * as actions from '../../actions';
 import api from '../../../core/api';
 
 export const fetchNftsBreakdown = (authorId, isMusic = false) => {
-  async (dispatch, getState) => {
+  return async (dispatch, getState) => {
     //access the state
     const state = getState();
     console.log(state);
+
     dispatch(actions.getNftBreakdown.request(Canceler.cancel));
 
     try {
@@ -27,7 +28,6 @@ export const fetchNftsBreakdown = (authorId, isMusic = false) => {
     }
   };
 };
-
 export const fetchNftShowcase = () => async (dispatch) => {
   dispatch(actions.getNftShowcase.request(Canceler.cancel));
 

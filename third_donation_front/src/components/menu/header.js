@@ -176,11 +176,11 @@ const Header = function ({ className }) {
                       {openMenu2 && (
                         <div className="item-dropdown">
                           <div className="dropdown" onClick={closeMenu2}>
-                            <NavLink to="/Author/1" onClick={() => btn_icon(!showmenu)}>
-                              예술가
-                            </NavLink>
                             <NavLink to="/Profile/1" onClick={() => btn_icon(!showmenu)}>
                               프로필
+                            </NavLink>
+                            <NavLink to="/EditProfile/1" onClick={() => btn_icon(!showmenu)}>
+                              프로필변경
                             </NavLink>
                           </div>
                         </div>
@@ -279,8 +279,8 @@ const Header = function ({ className }) {
                       {openMenu2 && (
                         <div className="item-dropdown">
                           <div className="dropdown" onClick={closeMenu2}>
-                            <NavLink to="/Author/1">예술가</NavLink>
                             <NavLink to="/Profile/1">프로필</NavLink>
+                            <NavLink to="/EditProfile/1">프로필변경</NavLink>
                           </div>
                         </div>
                       )}

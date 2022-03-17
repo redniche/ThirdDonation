@@ -7,6 +7,8 @@ import Header from './components/menu/header';
 import Home from './components/pages/home';
 import Explore from './components/pages/explore';
 import ItemDetail from './components/pages/ItemDetail';
+import Sell from './components/pages/sell';
+import Minter from './components/pages/Minter';
 
 import { createGlobalStyle } from 'styled-components';
 
@@ -48,6 +50,8 @@ const App = () => (
         </Home>
         <ItemDetail path="/ItemDetail/:nftId" />
         <Explore path="/explore" />
+        <Sell path="/sell" />
+        <Minter path="/mint" />
       </ScrollTop>
     </PosedRouter>
     <ScrollToTopBtn />

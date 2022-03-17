@@ -19,11 +19,11 @@ const states = (state = defaultState, action) => {
         : new Set();
       return { ...state, selectedCategories };
     }
+
     case getType(actions.filterStatus): {
       let selectedStatus = payload.value
         ? handleSelection(state.selectedStatus, payload.value, payload.singleSelect)
         : new Set();
-
       return { ...state, selectedStatus };
     }
 
@@ -33,12 +33,14 @@ const states = (state = defaultState, action) => {
         : new Set();
       return { ...state, selectedItemsType };
     }
+
     case getType(actions.filterCollections): {
       let selectedCollections = payload.value
         ? handleSelection(state.selectedCollections, payload.value, payload.singleSelect)
         : new Set();
       return { ...state, selectedCollections };
     }
+
     case getType(actions.filterNftTitle):
       return { ...state, filterNftTitle: action.payload };
 

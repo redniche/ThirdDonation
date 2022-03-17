@@ -250,6 +250,12 @@ const Header = function ({ className }) {
                     <span className="lines"></span>
                   </NavLink>
                 </div>
+                <div className="navbar-item">
+                  <NavLink to="/NFT_Detail/1">
+                    소유 NFT 상세
+                    <span className="lines"></span>
+                  </NavLink>
+                </div>
                 {/* <div className="navbar-item">
                   <div ref={ref1}>
                     <div

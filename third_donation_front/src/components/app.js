@@ -9,7 +9,8 @@ import PropTypes from 'prop-types';
 import ScrollToTopBtn from './menu/ScrollToTop';
 import Header from './menu/header';
 import Home from './pages/home';
-
+import Profile from './pages/Profile';
+import NFT_Detail from './pages/NFT_Detail';
 // import HomeGrey from './pages/homeGrey';
 // import Home1 from './pages/home1';
 // import Home1grey from './pages/home1Grey';
@@ -69,7 +70,6 @@ import ItemDetail from './pages/ItemDetail';
 // import Tabs from './pages/tabs';
 // import Minter from './pages/Minter';
 // import Mintergrey from './pages/MinterGrey';
-// import Profile from './pages/Profile';
 
 import { createGlobalStyle } from 'styled-components';
 
@@ -112,7 +112,8 @@ const app = () => (
           <Redirect to="/home" />
         </Home>
         <ItemDetail path="/ItemDetail/:nftId" />
-        {/* <ItemDetailRedux path="/ItemDetailRedux/:nftId" /> */}
+        <NFT_Detail path="/NFT_Detail/:nftId" />
+        <Profile path="/Profile/:authorId" />
 
         {/* 아래 있는것들은 연결 링크 등록하는 것 */}
         {/* <HomeGrey path="/homeGrey" />
@@ -137,10 +138,9 @@ const app = () => (
         <Helpcentergrey path="/helpcenterGrey" />
         <Colection path="/colection/:collectionId" />
         <Colectiongrey path="/colectionGrey/:collectionId" />
-
+        <ItemDetailRedux path="/ItemDetailRedux/:nftId" />
         <ItemDetailReduxgrey path="/ItemDetailGrey/:nftId" />
         <Author path="/Author/:authorId" />
-        <Profile path="/Profile/:authorId" />
         <AuthorGrey path="/AuthorGrey/:authorId" />
         <AuthorOpensea path="/AuthorOpensea" />
         <Wallet path="/wallet" />

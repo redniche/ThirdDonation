@@ -20,7 +20,7 @@ const GlobalStyles = createGlobalStyle`
   }
 `;
 
-const Colection = function () {
+const NFTDetail = function () {
   const [openMenu, setOpenMenu] = React.useState(true);
   const [openMenu1, setOpenMenu1] = React.useState(false);
   const handleBtnClick = () => {
@@ -245,4 +245,4 @@ const Colection = function () {
     </div>
   );
 };
-export default Colection;
+export default NFTDetail;

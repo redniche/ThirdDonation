@@ -182,6 +182,12 @@ const Header = function ({ className }) {
                             <NavLink to="/Profile/1" onClick={() => btn_icon(!showmenu)}>
                               프로필
                             </NavLink>
+                            <NavLink to="/sell" onClick={() => btn_icon(!showmenu)}>
+                              작품 판매
+                            </NavLink>
+                            <NavLink to="/mint" onClick={() => btn_icon(!showmenu)}>
+                              작품 등록
+                            </NavLink>
                           </div>
                         </div>
                       )}
@@ -281,6 +287,8 @@ const Header = function ({ className }) {
                           <div className="dropdown" onClick={closeMenu2}>
                             <NavLink to="/Author/1">예술가</NavLink>
                             <NavLink to="/Profile/1">프로필</NavLink>
+                            <NavLink to="/sell">작품 판매</NavLink>
+                            <NavLink to="/mint">작품 등록</NavLink>
                           </div>
                         </div>
                       )}

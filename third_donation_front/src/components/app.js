@@ -34,6 +34,8 @@ import Explore from './pages/explore';
 // import Colection from './pages/colection';
 // import Colectiongrey from './pages/colectionGrey';
 import ItemDetail from './pages/ItemDetail';
+import Sell from './pages/sell';
+import Minter from './pages/Minter';
 // import ItemDetailRedux from './pages/ItemDetailRedux';
 // import ItemDetailReduxgrey from './pages/ItemDetailReduxGrey';
 // import Author from './pages/Author';
@@ -125,6 +127,8 @@ const app = () => (
         <Home5 path="/home5" />
         <Home6 path="/home6" /> */}
         <Explore path="/explore" />
+        <Sell path="/sell" />
+        <Minter path="/mint" />
         {/* <Exploregrey path="/exploreGrey" />
         <Explore2 path="/explore2" />
         <Explore2grey path="/explore2Grey" />

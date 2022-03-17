@@ -2,12 +2,12 @@ import React from 'react';
 
 // 이거 추가하면 화면이 안나옴
 // 확인 결과 redux 문제인 것으로 보임
-// import ColumnNewRedux from '../components/ColumnNewRedux';
+import ColumnNewRedux from '../components/ColumnNewRedux';
 import Footer from '../components/footer';
 import { createGlobalStyle } from 'styled-components';
 // 이거 추가하면 화면이 안나옴 >> 이유 찾아봐야함
 // 확인 결과 redux 문제인 것으로 보임
-// import TopFilterBar from '../components/TopFilterBar';
+import TopFilterBar from '../components/TopFilterBar';
 
 const GlobalStyles = createGlobalStyle`
   header#myHeader.navbar.sticky.white {
@@ -68,11 +68,11 @@ const explore = () => (
       <div className="row">
         <div className="col-lg-12">
           {/* 탑 필터 바 추가 */}
-          {/* <TopFilterBar /> */}
+          <TopFilterBar />
         </div>
       </div>
       {/* 컬럼 뉴 리덕스 추가 */}
-      {/* <ColumnNewRedux /> */}
+      <ColumnNewRedux />
     </section>
 
     {/* 푸터 추가 구문 */}

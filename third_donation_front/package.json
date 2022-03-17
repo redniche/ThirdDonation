@@ -15,7 +15,6 @@
     "eslint-plugin-prettier": "^4.0.0",
     "et-line": "^1.0.1",
     "font-awesome": "^4.7.0",
-    "formik": "^2.2.9",
     "moment": "^2.29.1",
     "opensea-js": "^1.2.7",
     "prettier": "^2.5.1",

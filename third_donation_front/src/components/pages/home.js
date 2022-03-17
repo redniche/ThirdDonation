@@ -52,19 +52,6 @@ const home = () => (
       </div>
     </section>
 
-    {/* 탑 셀러 부분 */}
-    <section className="container no-bottom">
-      <div className="row">
-        <div className="col-lg-12">
-          <div className="text-center">
-            <h2>인기있는 판매자들</h2>
-            <div className="small-border"></div>
-          </div>
-        </div>
-        <div className="col-lg-12">{/* <AuthorListRedux /> */}</div>
-      </div>
-    </section>
-
     {/* 카테고리 부분 */}
     <section className="container">
       <div className="row">

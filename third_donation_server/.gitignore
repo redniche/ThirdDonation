@@ -1,32 +1,7 @@
-##### Front End #####
-.DS_Store
-node_modules/
-dist/
-
-# local env files
-.env.local
-.env.*.local
-
-# Log files
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-
-# Editor directories and files
-.idea
-.vscode
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-
-##### Back End #####
 HELP.md
 .gradle
 build/
-gradle/wrapper/gradle-wrapper.jar
+!gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
 
@@ -58,3 +33,5 @@ out/
 /nbdist/
 /.nb-gradle/
 
+### VS Code ###
+.vscode/

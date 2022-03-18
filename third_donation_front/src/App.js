@@ -1,6 +1,7 @@
 import React from 'react';
 import { Router, Location, Redirect } from '@reach/router';
 import PropTypes from 'prop-types';
+import { createGlobalStyle } from 'styled-components';
 
 import ScrollToTopBtn from './components/menu/ScrollToTop';
 import Header from './components/menu/header';
@@ -13,8 +14,7 @@ import Sell from './components/pages/sell';
 import Minter from './components/pages/Minter';
 import ArtistRegistration from './components/pages/artistRegistration';
 import NFTDetail from './components/pages/NFTDetail';
-
-import { createGlobalStyle } from 'styled-components';
+import GrantArtist from './components/components/admin/GrantArtist';
 
 const GlobalStyles = createGlobalStyle`
   :root {
@@ -60,6 +60,7 @@ const App = () => (
         <Minter path="/mint" />
         <ArtistRegistration path="/artistRegistration" />
         <NFTDetail path="/NFTDetail/:nftId" />
+        <GrantArtist path="/admin/grantArtist" />
       </ScrollTop>
     </PosedRouter>
     <ScrollToTopBtn />

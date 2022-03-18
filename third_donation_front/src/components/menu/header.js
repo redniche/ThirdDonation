@@ -27,6 +27,11 @@ const NavLink = (props) => (
   />
 );
 
+/**
+ * 탑 bar로 있을 헤더 컴포넌트
+ * @param {*} param0
+ * @returns
+ */
 const Header = function ({ className }) {
   // const [openMenu, setOpenMenu] = React.useState(false);
   // const [openMenu1, setOpenMenu1] = React.useState(false);

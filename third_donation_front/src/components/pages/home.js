@@ -1,13 +1,13 @@
 import React from 'react';
 // 메인화면 가운데 이미지 부분 등록
-import SliderMain from '../components/SliderMain';
+import SliderMain from '../components/main/SliderMain';
 // 피쳐박스 등록
-import FeatureBox from '../components/FeatureBox';
-import Catgor from '../components/Catgor';
+import FeatureBox from '../components/main/FeatureBox';
+import Catgor from '../components/nfts/Catgor';
 // 푸터 등록 등록
 import Footer from '../components/footer';
-import NewNFTs from '../components/NewNFTs';
-import HotCollections from '../components/HotCollections';
+import NewNFTs from './nfts/SellNFT';
+import HotCollections from '../components/nfts/HotCollections';
 
 const home = () => (
   <div>

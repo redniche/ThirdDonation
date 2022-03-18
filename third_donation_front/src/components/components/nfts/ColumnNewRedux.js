@@ -2,14 +2,19 @@
 
 import React, { memo, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import * as selectors from '../../store/selectors';
-import * as actions from '../../store/actions/thunks';
-import { clearNfts, clearFilter } from '../../store/actions';
+import * as selectors from '../../../store/selectors';
+import * as actions from '../../../store/actions/thunks';
+import { clearNfts, clearFilter } from '../../../store/actions';
 import NftCard from './NftCard';
 import NftMusicCard from './NftMusicCard';
-import { shuffleArray } from '../../store/utils';
+import { shuffleArray } from '../../../store/utils';
 
 //react functional component
+/**
+ * NFT리스트들을 표시하기 위한 컴포넌트
+ * @param {*} param0
+ * @returns
+ */
 const ColumnNewRedux = ({ showLoadMore = true, shuffle = false, authorId = null }) => {
   const dispatch = useDispatch();
   const nftItems = useSelector(selectors.nftItems);

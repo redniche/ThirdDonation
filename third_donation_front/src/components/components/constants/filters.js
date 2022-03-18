@@ -1,41 +1,41 @@
 export const categories = [
   {
     value: 'all',
-    label: 'All',
+    label: '전체',
   },
   {
     value: 'art',
-    label: 'Art',
+    label: '그림',
   },
   {
     value: 'videos',
-    label: 'Videos',
+    label: '비디오',
   },
 ];
 
 export const status = [
   {
     value: 'buy_now',
-    label: 'Buy Now',
+    label: '바로 구매',
   },
   {
     value: 'on_auction',
-    label: 'On Auction',
+    label: '경매 입찰',
   },
   {
     value: 'has_offers',
-    label: 'Has Offers',
+    label: '제안 가능',
   },
 ];
 
 export const itemsType = [
   {
     value: 'single_items',
-    label: 'Single Items',
+    label: '단일 아이템',
   },
   {
     value: 'bundles',
-    label: 'Bundles',
+    label: '번들',
   },
 ];
 

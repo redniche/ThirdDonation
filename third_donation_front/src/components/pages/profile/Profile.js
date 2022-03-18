@@ -1,6 +1,6 @@
 import React, { memo, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import ColumnNewRedux from '../../components/ColumnNewRedux';
+import ColumnNewRedux from '../../components/nfts/ColumnNewRedux';
 import Footer from '../../components/footer';
 import { createGlobalStyle } from 'styled-components';
 import * as selectors from '../../../store/selectors';
@@ -33,7 +33,13 @@ const GlobalStyles = createGlobalStyle`
   }
 `;
 
-const Colection = ({ authorId }) => {
+/**
+ * authorId를 받아 해당 유저의 프로필을 표시해주는 페이지 컴포넌트
+ * @param {*} param0 authorId
+ * @returns
+ */
+const Profile = ({ authorId }) => {
+  // 리덕스 부분
   const [openMenu, setOpenMenu] = React.useState(true);
   const [openMenu1, setOpenMenu1] = React.useState(false);
   const [openMenu2, setOpenMenu2] = React.useState(false);
@@ -71,6 +77,7 @@ const Colection = ({ authorId }) => {
     dispatch(fetchAuthorList(authorId));
   }, [dispatch, authorId]);
 
+  // 컴포넌트 레이아웃
   return (
     <div>
       <GlobalStyles />
@@ -163,4 +170,4 @@ const Colection = ({ authorId }) => {
     </div>
   );
 };
-export default memo(Colection);
+export default memo(Profile);

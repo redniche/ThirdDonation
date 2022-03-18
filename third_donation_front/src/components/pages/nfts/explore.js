@@ -2,12 +2,12 @@ import React from 'react';
 
 // 이거 추가하면 화면이 안나옴
 // 확인 결과 redux 문제인 것으로 보임
-import ColumnNewRedux from '../components/ColumnNewRedux';
-import Footer from '../components/footer';
+import ColumnNewRedux from '../../components/nfts/ColumnNewRedux';
+import Footer from '../../components/footer';
 import { createGlobalStyle } from 'styled-components';
 // 이거 추가하면 화면이 안나옴 >> 이유 찾아봐야함
 // 확인 결과 redux 문제인 것으로 보임
-import TopFilterBar from '../components/TopFilterBar';
+import TopFilterBar from '../../components/nfts/TopFilterBar';
 
 const GlobalStyles = createGlobalStyle`
   header#myHeader.navbar.sticky.white {
@@ -43,6 +43,10 @@ const GlobalStyles = createGlobalStyle`
   }
 `;
 
+/**
+ * NFT 탐색 기능을 제공하는 페이지 컴포넌트
+ * @returns
+ */
 const explore = () => (
   <div>
     <GlobalStyles />

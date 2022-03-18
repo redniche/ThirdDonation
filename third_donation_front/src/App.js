@@ -6,15 +6,15 @@ import { createGlobalStyle } from 'styled-components';
 import ScrollToTopBtn from './components/menu/ScrollToTop';
 import Header from './components/menu/header';
 import Home from './components/pages/home';
-import Explore from './components/pages/explore';
-import ItemDetail from './components/pages/ItemDetail';
+import Explore from './components/pages/nfts/explore';
+import ItemDetail from './components/pages/nfts/ItemDetail';
 import Profile from './components/pages/profile/Profile';
 import EditProfile from './components/pages/profile/EditProfile';
-import Sell from './components/pages/sell';
-import Minter from './components/pages/Minter';
-import ArtistRegistration from './components/pages/artistRegistration';
-import NFTDetail from './components/pages/NFTDetail';
-import GrantArtist from './components/components/admin/GrantArtist';
+import Sell from './components/pages/exchange/sell';
+import Minter from './components/pages/nfts/Minter';
+import ArtistRegistration from './components/pages/artist/artistRegistration';
+import NFTDetail from './components/pages/nfts/NFTDetail';
+import GrantArtist from './components/pages/admin/GrantArtist';
 
 const GlobalStyles = createGlobalStyle`
   :root {

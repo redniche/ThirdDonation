@@ -38,12 +38,20 @@ const GlobalStyles = createGlobalStyle`
   }
 `;
 
+/**
+ * Yup 패키지로 유효성 체크
+ */
 const validationSchema = Yup.object().shape({
   username: Yup.lazy(() => Yup.string().required('Username is required')),
   wallet: Yup.lazy(() => Yup.string().required('Wallet is required')),
 });
 
-const Profile = ({ authorId }) => {
+/**
+ * authorId를 파라미터로 받아 해당 프로필을 편집할 수 있게 해주는 컴포넌트
+ * @param {*} param0 authorId
+ * @returns
+ */
+const EditProfile = ({ authorId }) => {
   const jwt = auth.getToken();
   const authorsState = useSelector(selectors.authorsState);
   const author = authorsState.data ? authorsState.data[0] : null;
@@ -61,10 +69,18 @@ const Profile = ({ authorId }) => {
 
   const dispatch = useDispatch();
 
+  /**
+   * path를 받아 리다이렉트
+   * @param {*} path
+   */
   const redirectUser = (path) => {
     navigate(path);
   };
 
+  /**
+   * form에서 submit 데이터 핸들링
+   * @param {*}} data
+   */
   const handleSubmitForm = async (data) => {
     const requestURL = authorUrl(authorId);
 
@@ -280,4 +296,4 @@ const Profile = ({ authorId }) => {
   );
 };
 
-export default memo(Profile);
+export default memo(EditProfile);

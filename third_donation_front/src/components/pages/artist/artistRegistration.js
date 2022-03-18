@@ -4,12 +4,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import { createGlobalStyle } from 'styled-components';
 import { Form, Formik, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import auth, { authorUrl } from '../../core/auth';
-import request from '../../core/auth/request';
+import auth, { authorUrl } from '../../../core/auth';
+import request from '../../../core/auth/request';
 import { navigate } from '@reach/router';
-import api from '../../core/api';
-import { fetchAuthorList } from '../../store/actions/thunks';
-import * as selectors from '../../store/selectors';
+import api from '../../../core/api';
+import { fetchAuthorList } from '../../../store/actions/thunks';
+import * as selectors from '../../../store/selectors';
 import axios from 'axios';
 
 const GlobalStyles = createGlobalStyle`
@@ -45,7 +45,11 @@ const validationSchema = Yup.object().shape({
   wallet: Yup.lazy(() => Yup.string().required('장애인 등록번호를 안적어주셨습니다.')),
 });
 
-// 프로필
+/**
+ * authorId를 파라미터로 받아 예술가 등록을 할 수 있는 페이지 컴포넌트
+ * @param {*} param0 authorId
+ * @returns
+ */
 const artistRegistration = ({ authorId }) => {
   const jwt = auth.getToken();
   const authorsState = useSelector(selectors.authorsState);
@@ -181,8 +185,8 @@ const artistRegistration = ({ authorId }) => {
                                   <h5>등록번호</h5>
                                   <Field
                                     type="text"
-                                    name="wallet"
-                                    id="wallet"
+                                    name="regi-number"
+                                    id="regi-numbe"
                                     className="form-control"
                                     placeholder="장애인 등록번호를 적어주세요"
                                   />

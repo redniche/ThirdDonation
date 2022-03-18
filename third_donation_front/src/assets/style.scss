@@ -842,20 +842,6 @@ a {
     padding: 30px 6px;
     height: max-content;
     cursor: default;
-    .lines {
-      position: absolute;
-      top: 22px;
-      display: block;
-      width: 0;
-      border-bottom: 2px solid $color;
-      transition: 0.7s;
-    }
-    &:hover {
-      .lines {
-        width: 90%;
-        transition: 0.7s;
-      }
-    }
   }
   .breakpoint__xl-only {
     width: max-content;
@@ -2313,10 +2299,10 @@ i.font60 {
   top: 0%;
   width: 100%;
   left: 50%;
-  transition: 2s ease;
-  &:hover {
-    transition: 2s ease;
-  }
+  // transition: 2s ease;
+  // &:hover {
+  //   transition: 2s ease;
+  // }
 }
 .feature-box:hover .inner i.wm {
   transform: scale(1.2);
@@ -2394,10 +2380,8 @@ i.font60 {
   border-radius: 6px;
   -moz-border-radius: 6px;
   -webkit-border-radius: 6px;
-  transition: 0.7s;
   &:hover {
     background: #403f83;
-    transition: 0.7s;
   }
 }
 .text-light .feature-box.f-boxed {

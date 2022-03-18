@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Footer from '../footer';
+import Footer from '../../components/footer';
 import { Table, Modal, Button } from 'react-bootstrap';
 import { createGlobalStyle } from 'styled-components';
 
@@ -60,6 +60,10 @@ function MyVerticallyCenteredModal(props) {
   );
 }
 
+/**
+ * 관리자가 예술가 등록 요청을 승인할 수 있는 페이지 컴포넌트
+ * @returns
+ */
 const GrantArtist = () => {
   const [data, setData] = useState([]);
   const [detailsShown, setDetailsShown] = useState([]);

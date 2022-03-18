@@ -44,6 +44,10 @@ const GlobalStyles = createGlobalStyle`
   }
 `;
 
+/**
+ * NFT 민팅을 할 수 있는 페이지 컴포넌트
+ * @returns
+ */
 const Minter = () => {
   // export default class Minter extends Component {
   // constructor() {

@@ -1,6 +1,10 @@
 import React from 'react';
 import { Link } from '@reach/router';
 
+/**
+ * 카테고리를 표시하는 컴포넌트
+ * @returns
+ */
 const catgor = () => (
   <div className="row justify-content-center">
     {/* 3부분 / 1번 - 전체 */}

@@ -1,14 +1,18 @@
 import React, { memo, useCallback } from 'react';
 import Select from 'react-select';
 import { useDispatch } from 'react-redux';
-import { categories, status, itemsType } from './constants/filters';
+import { categories, status, itemsType } from '../constants/filters';
 import {
   filterCategories,
   filterStatus,
   filterItemsType,
   filterNftTitle,
-} from '../../store/actions';
+} from '../../../store/actions';
 
+/**
+ * NFT 탐색기 등에서 사용될 필터 컴포넌트
+ * @returns
+ */
 const TopFilterBar = () => {
   const dispatch = useDispatch();
   const handleCategory = useCallback(
@@ -43,9 +47,17 @@ const TopFilterBar = () => {
     [dispatch],
   );
 
-  const defaultValue = {
+  const defaultValue1 = {
     value: null,
-    label: 'Select Filter',
+    label: 'NFT 종류 필터',
+  };
+  const defaultValue2 = {
+    value: null,
+    label: '판매 방식 필터',
+  };
+  const defaultValue3 = {
+    value: null,
+    label: '판매 종류 필터',
   };
 
   const customStyles = {
@@ -81,7 +93,7 @@ const TopFilterBar = () => {
             className="form-control"
             id="name_1"
             name="name_1"
-            placeholder="search item here..."
+            placeholder="검색어"
             type="text"
             onChange={filterNftTitles}
           />
@@ -93,19 +105,26 @@ const TopFilterBar = () => {
       </form>
       <div className="dropdownSelect one">
         <Select
+          placeholder={<div> {defaultValue1.label} </div>}
           styles={customStyles}
           menuContainerStyle={{ zIndex: 999 }}
-          options={[defaultValue, ...categories]}
+          options={[defaultValue1, ...categories]}
           onChange={handleCategory}
         />
       </div>
       <div className="dropdownSelect two">
-        <Select styles={customStyles} options={[defaultValue, ...status]} onChange={handleStatus} />
+        <Select
+          placeholder={<div> {defaultValue2.label} </div>}
+          styles={customStyles}
+          options={[defaultValue2, ...status]}
+          onChange={handleStatus}
+        />
       </div>
       <div className="dropdownSelect three">
         <Select
+          placeholder={<div> {defaultValue3.label} </div>}
           styles={customStyles}
-          options={[defaultValue, ...itemsType]}
+          options={[defaultValue3, ...itemsType]}
           onChange={handleItemsType}
         />
       </div>

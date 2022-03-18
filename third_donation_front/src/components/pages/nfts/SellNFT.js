@@ -3,8 +3,8 @@ import Slider from 'react-slick';
 import styled from 'styled-components';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import Clock from './Clock';
-import { carouselNew } from './constants';
+import Clock from '../../components/nfts/Clock';
+import { carouselNew } from '../../components/constants';
 
 const Outer = styled.div`
   display: flex;
@@ -13,6 +13,10 @@ const Outer = styled.div`
   align-items: center;
 `;
 
+/**
+ * 판매할 NFT를 등록하는 페이지 컴포넌트
+ * @returns
+ */
 const NewNFTs = () => {
   const nfts = [
     {

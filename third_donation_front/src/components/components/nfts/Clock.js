@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 
+/**
+ * 판매 기간을 표시하기 위한 컴포넌트
+ */
 class Clock extends Component {
   constructor(props) {
     super(props);

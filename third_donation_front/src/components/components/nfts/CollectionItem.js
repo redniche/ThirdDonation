@@ -1,5 +1,10 @@
 import React, { memo } from 'react';
 
+/**
+ * 컬렉션을 표시하기 위한 컴포넌트
+ * @param {*} param0
+ * @returns
+ */
 const CollectionItem = ({ avatar, banner, username, tokenStandard, collectionId }) => {
   return (
     <div className="itm">

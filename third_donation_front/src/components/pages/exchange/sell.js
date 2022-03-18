@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-// import Clock from "../components/Clock";
-import Footer from '../components/footer';
+import Clock from '../../components/nfts/Clock';
+import Footer from '../../components/footer';
 import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyles = createGlobalStyle`
@@ -46,6 +46,9 @@ const GlobalStyles = createGlobalStyle`
   }
 `;
 
+/**
+ * 판매등록을 할 수 있는 클래스형 페이지 컴포넌트
+ */
 export default class Createpage extends Component {
   constructor() {
     super();
@@ -230,15 +233,15 @@ export default class Createpage extends Component {
             <div className="col-lg-3 col-sm-6 col-xs-12">
               <h5>Preview item</h5>
               <div className="nft__item m-0">
-                {/* <div className="de_countdown">
+                <div className="de_countdown">
                   <Clock deadline="December, 30, 2021" />
-                </div> */}
-                {/* <div className="author_list_pp">
+                </div>
+                <div className="author_list_pp">
                   <span>
                     <img className="lazy" src="./img/author/author-1.jpg" alt="" />
                     <i className="fa fa-check"></i>
                   </span>
-                </div> */}
+                </div>
                 <div className="nft__item_wrap">
                   <span>
                     <img

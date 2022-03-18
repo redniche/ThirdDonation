@@ -1,6 +1,10 @@
 import React from 'react';
 import { Link } from '@reach/router';
 
+/**
+ * Footer 컴포넌트
+ * @returns
+ */
 const footer = () => (
   <footer className="footer-light">
     <div className="container">

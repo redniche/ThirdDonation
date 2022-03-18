@@ -2,9 +2,13 @@ import React, { memo } from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import { settings } from './constants';
+import { settings } from '../constants';
 import CollectionItem from './CollectionItem';
 
+/**
+ * Hot 컬렉션들을 표시하기 위한 컴포넌트
+ * @returns
+ */
 const HotCollections = () => {
   const hotCollections = [
     {

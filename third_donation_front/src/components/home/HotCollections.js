@@ -3,7 +3,7 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { settings } from '../constants';
-import CollectionItem from '../nfts/CollectionItem';
+import CollectionItem from './CollectionItem';
 
 /**
  * Hot 컬렉션들을 표시하기 위한 컴포넌트

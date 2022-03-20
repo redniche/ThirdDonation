@@ -4,17 +4,17 @@ import PropTypes from 'prop-types';
 import { createGlobalStyle } from 'styled-components';
 
 import ScrollToTopBtn from './components/menu/ScrollToTop';
-import Header from './components/menu/header';
-import Home from './components/pages/home';
-import Explore from './components/pages/nfts/explore';
-import ItemDetail from './components/pages/nfts/ItemDetail';
-import Profile from './components/pages/profile/Profile';
-import EditProfile from './components/pages/profile/EditProfile';
-import Sell from './components/pages/exchange/sell';
-import Minter from './components/pages/nfts/Minter';
-import ArtistRegistration from './components/pages/artist/artistRegistration';
-import NFTDetail from './components/pages/nfts/NFTDetail';
-import GrantArtist from './components/pages/admin/GrantArtist';
+import Header from './components/menu/Header';
+import Home from './pages/Home';
+import Explore from './pages/nfts/Explore';
+import ItemDetail from './pages/nfts/ItemDetail';
+import Profile from './pages/profile/Profile';
+import EditProfile from './pages/profile/EditProfile';
+import Sell from './pages/exchange/Sell';
+import Mint from './pages/nfts/Mint';
+import ArtistRegistration from './pages/artist/ArtistRegistration';
+import NftDetail from './pages/nfts/NftDetail';
+import GrantArtist from './pages/admin/GrantArtist';
 
 const GlobalStyles = createGlobalStyle`
   :root {
@@ -52,14 +52,15 @@ const App = () => (
         <Home exact path="/">
           <Redirect to="/home" />
         </Home>
+        {/* 첫글자 소문자로 변경 */}
         <ItemDetail path="/ItemDetail/:nftId" />
         <Explore path="/explore" />
-        <Profile path="/Profile/:authorId" />
-        <EditProfile path="/EditProfile/:authorId" />
+        <Profile path="/profile/:authorId" />
+        <EditProfile path="/editProfile/:authorId" />
         <Sell path="/sell" />
-        <Minter path="/mint" />
+        <Mint path="/mint" />
         <ArtistRegistration path="/artistRegistration" />
-        <NFTDetail path="/NFTDetail/:nftId" />
+        <NftDetail path="/nftDetail/:nftId" />
         <GrantArtist path="/admin/grantArtist" />
       </ScrollTop>
     </PosedRouter>

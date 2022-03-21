@@ -1,9 +1,7 @@
-import Footer from '../../components/menu/Footer';
-import Header from '../../components/menu/Header';
+import BasicLayout from '../../components/layout/BasicLayout';
 
-const register = () => (
-  <div>
-    <Header />
+const CharityRegistration = () => (
+  <BasicLayout>
     <div style={{ height: 130 }}></div>
     <section id="section-main" aria-label="section">
       <div className="container">
@@ -52,8 +50,6 @@ const register = () => (
         </div>
       </div>
     </section>
-
-    <Footer />
-  </div>
+  </BasicLayout>
 );
-export default register;
+export default CharityRegistration;

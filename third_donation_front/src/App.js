@@ -15,6 +15,7 @@ import ArtistRegistration from './pages/artist/ArtistRegistration';
 import CharityRegistration from './pages/charity/CharityRegistration';
 import NftDetail from './pages/nfts/NftDetail';
 import GrantArtist from './pages/admin/GrantArtist';
+import GrantCharity from './pages/admin/GrantCharity';
 
 const GlobalStyles = createGlobalStyle`
   :root {
@@ -62,6 +63,7 @@ const App = () => (
         <CharityRegistration path="/charityRegistration" />
         <NftDetail path="/nftDetail/:nftId" />
         <GrantArtist path="/admin/grantArtist" />
+        <GrantCharity path="/admin/grantCharity" />
       </ScrollTop>
     </PosedRouter>
     <ScrollToTopBtn />

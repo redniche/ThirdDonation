@@ -46,22 +46,8 @@ const Mint = () => {
     );
   }, [files, title, author, description]);
 
-  // render() {
   return (
-    <PanelLayout>
-      <section
-        className="jumbotron breadcumb no-bg"
-        style={{ backgroundImage: `url(${'./img/background/subheader.jpg'})` }}>
-        <div className="mainbreadcumb">
-          <div className="container">
-            <div className="row m-10-hor">
-              <div className="col-12">
-                <h1 className="text-center">작품 등록</h1>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+    <PanelLayout title="작품 등록">
       <section className="container">
         <div className="Minter">
           <h1>작품 NFT 등록</h1>

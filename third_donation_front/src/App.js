@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { createGlobalStyle } from 'styled-components';
 
 import ScrollToTopBtn from './components/menu/ScrollToTop';
-import Header from './components/menu/Header';
 import Home from './pages/Home';
 import Explore from './pages/nfts/Explore';
 import ItemDetail from './pages/nfts/ItemDetail';
@@ -46,7 +45,6 @@ PosedRouter.propsTypes = {
 const App = () => (
   <div className="wraper">
     <GlobalStyles />
-    <Header />
     <PosedRouter>
       <ScrollTop path="/">
         <Home exact path="/">

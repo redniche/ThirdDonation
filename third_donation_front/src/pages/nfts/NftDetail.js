@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState } from 'react';
 import { Link } from '@reach/router';
 import BasicLayout from '../../components/layout/BasicLayout';
 
@@ -7,8 +7,8 @@ import BasicLayout from '../../components/layout/BasicLayout';
  * @returns
  */
 const NftDetail = function () {
-  const [openMenu, setOpenMenu] = React.useState(true);
-  const [openMenu1, setOpenMenu1] = React.useState(false);
+  const [openMenu, setOpenMenu] = useState(true);
+  const [openMenu1, setOpenMenu1] = useState(false);
   const handleBtnClick = () => {
     setOpenMenu(!openMenu);
     setOpenMenu1(false);

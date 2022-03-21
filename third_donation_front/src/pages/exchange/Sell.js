@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import Clock from '../../components/nfts/Clock';
 import PanelLayout from '../../components/layout/PanelLayout';
 

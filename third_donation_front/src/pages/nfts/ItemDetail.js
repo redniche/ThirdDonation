@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState } from 'react';
 import Clock from '../../components/nfts/Clock';
 import BasicLayout from './../../components/layout/BasicLayout';
 
@@ -7,8 +7,8 @@ import BasicLayout from './../../components/layout/BasicLayout';
  * @returns
  */
 const ItemDetail = function () {
-  const [openMenu, setOpenMenu] = React.useState(true);
-  const [openMenu1, setOpenMenu1] = React.useState(false);
+  const [openMenu, setOpenMenu] = useState(true);
+  const [openMenu1, setOpenMenu1] = useState(false);
   const handleBtnClick = () => {
     setOpenMenu(!openMenu);
     setOpenMenu1(false);
@@ -22,8 +22,8 @@ const ItemDetail = function () {
     document.getElementById('Mainbtn').classList.remove('active');
   };
 
-  const [openCheckout, setOpenCheckout] = React.useState(false);
-  const [openCheckoutbid, setOpenCheckoutbid] = React.useState(false);
+  const [openCheckout, setOpenCheckout] = useState(false);
+  const [openCheckoutbid, setOpenCheckoutbid] = useState(false);
   return (
     <BasicLayout>
       <section className="container">

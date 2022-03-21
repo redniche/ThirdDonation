@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Breakpoint, { BreakpointProvider, setDefaultBreakpoints } from 'react-socks';
 // import { header } from 'react-bootstrap';
 import { Link } from '@reach/router';
@@ -33,7 +33,7 @@ const NavLink = (props) => (
 const Header = function ({ className }) {
   // const [openMenu, setOpenMenu] = React.useState(false);
   // const [openMenu1, setOpenMenu1] = React.useState(false);
-  const [openMenu2, setOpenMenu2] = React.useState(false);
+  const [openMenu2, setOpenMenu2] = useState(false);
   // const [openMenu3, setOpenMenu3] = React.useState(false);
   // const handleBtnClick = () => {
   //   setOpenMenu(!openMenu);

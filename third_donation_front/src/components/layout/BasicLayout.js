@@ -1,4 +1,3 @@
-import React from 'react';
 import Header from '../menu/Header';
 import Footer from '../menu/Footer';
 import { createGlobalStyle } from 'styled-components';

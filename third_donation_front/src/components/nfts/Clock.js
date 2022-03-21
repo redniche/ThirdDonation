@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 
 /**
  * 판매 기간을 표시하기 위한 컴포넌트

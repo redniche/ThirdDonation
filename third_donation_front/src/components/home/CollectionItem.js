@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import { memo } from 'react';
 
 /**
  * 컬렉션을 표시하기 위한 컴포넌트

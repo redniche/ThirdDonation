@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from 'react';
+import { memo, useCallback } from 'react';
 import Select from 'react-select';
 import { useDispatch } from 'react-redux';
 import { categories, status, itemsType } from '../constants/filters';

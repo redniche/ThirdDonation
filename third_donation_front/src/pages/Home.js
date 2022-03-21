@@ -1,4 +1,3 @@
-import React from 'react';
 import Header from '../components/menu/Header';
 import Footer from '../components/menu/Footer';
 import SliderMain from '../components/home/SliderMain';

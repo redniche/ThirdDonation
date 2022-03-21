@@ -1,4 +1,3 @@
-import React from 'react';
 import NftList from '../../components/nfts/NftList';
 import TopFilterBar from '../../components/nfts/TopFilterBar';
 import PanelLayout from '../../components/layout/PanelLayout';

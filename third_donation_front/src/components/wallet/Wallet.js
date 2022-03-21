@@ -1,5 +1,3 @@
-import React from 'react';
-
 /**
  * 지갑에 관한 정보를 표시하는 컴포넌트
  * @returns

@@ -1,4 +1,4 @@
-import React, { memo, useEffect } from 'react';
+import { memo, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import ProfileLayout from '../../components/layout/ProfileLayout';
 import NftList from '../../components/nfts/NftList';
@@ -13,9 +13,9 @@ import api from '../../core/api';
  */
 const Profile = ({ authorId }) => {
   // 리덕스 부분
-  const [openMenu, setOpenMenu] = React.useState(true);
-  const [openMenu1, setOpenMenu1] = React.useState(false);
-  const [openMenu2, setOpenMenu2] = React.useState(false);
+  const [openMenu, setOpenMenu] = useState(true);
+  const [openMenu1, setOpenMenu1] = useState(false);
+  const [openMenu2, setOpenMenu2] = useState(false);
 
   const handleBtnClick = () => {
     setOpenMenu(!openMenu);

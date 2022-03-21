@@ -1,4 +1,4 @@
-import React, { memo, useState, useEffect } from 'react';
+import { memo, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Clock from './Clock';
 import { navigate } from '@reach/router';

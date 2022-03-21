@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 
 /**
  * 스크롤 맨 위로 올릴 수 있게 해주는 클래스형 컴포넌트

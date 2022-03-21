@@ -121,7 +121,7 @@ const ArtistRegistration = ({ authorId }) => {
                 {() => {
                   return (
                     <Form className="form-border w-100">
-                      <div style={{ height: 150 }}></div>
+                      <div style={{ height: 100 }}></div>
                       <div className=" ">
                         <ul className="de_nav text-left m-0 mb-3">
                           <li className="active" style={{ opacity: 1 }}>
@@ -157,8 +157,8 @@ const ArtistRegistration = ({ authorId }) => {
                                   <h5>등록번호</h5>
                                   <Field
                                     type="text"
-                                    name="regi-number"
-                                    id="regi-numbe"
+                                    name="regist-number"
+                                    id="regist-number"
                                     className="form-control"
                                     placeholder="장애인 등록번호를 적어주세요"
                                   />

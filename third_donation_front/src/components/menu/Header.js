@@ -301,6 +301,7 @@ const Header = function ({ className }) {
                             <NavLink to="/mint">작품 등록</NavLink>
                             <NavLink to="/artistRegistration">예술가 등록</NavLink>
                             <NavLink to="/admin/grantArtist">예술가 승인</NavLink>
+                            <NavLink to="/charityRegistration">자선단체 등록</NavLink>
                           </div>
                         </div>
                       )}

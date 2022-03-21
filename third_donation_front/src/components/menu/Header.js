@@ -4,7 +4,7 @@ import Breakpoint, { BreakpointProvider, setDefaultBreakpoints } from 'react-soc
 import { Link } from '@reach/router';
 // 외부 마우스 클릭 감지
 import useOnclickOutside from 'react-cool-onclickoutside';
-import Wallet from '../wallet/Wallet';
+import Wallet from '../accounts/Wallet';
 
 // 기본 중단점을 설정
 // xs, s, m, l, xl이 있음

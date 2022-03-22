@@ -7,15 +7,6 @@ const GlobalStyles = createGlobalStyle`
     background: #fff;
     border-bottom: solid 1px #dddddd;
   }
-  /* .mainside{
-    .connect-wal{
-      display: none;
-    }
-    .logout{
-      display: flex;
-      align-items: center;
-    }
-  } */
   @media only screen and (max-width: 1199px) {
     .navbar{
       background: #403f83;

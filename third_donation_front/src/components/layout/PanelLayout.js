@@ -23,15 +23,6 @@ const GlobalStyles = createGlobalStyle`
   header#myHeader .logo .d-none{
     display: block !important;
   }
-  /* .mainside{
-    .connect-wal{
-      display: none;
-    }
-    .logout{
-      display: flex;
-      align-items: center;
-    }
-  } */
   @media only screen and (max-width: 1199px) {
     .navbar{
       background: #403f83;

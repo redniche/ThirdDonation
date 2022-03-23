@@ -1,10 +1,11 @@
-import { memo, useState, useEffect } from 'react';
+import React, { memo, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import ProfileLayout from '../../components/layout/ProfileLayout';
 import NftList from '../../components/nfts/NftList';
 import * as selectors from '../../store/selectors';
 import { fetchAuthorList } from '../../store/actions/thunks';
 import api from '../../core/api';
+import FollowerModal from '../../components/accounts/FollowerModal';
 
 /**
  * authorId를 받아 해당 유저의 프로필을 표시해주는 페이지 컴포넌트
@@ -16,6 +17,15 @@ const Profile = ({ authorId }) => {
   const [openMenu, setOpenMenu] = useState(true);
   const [openMenu1, setOpenMenu1] = useState(false);
   const [openMenu2, setOpenMenu2] = useState(false);
+
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const openModal = () => {
+    setModalOpen(true);
+  };
+  const closeModal = () => {
+    setModalOpen(false);
+  };
 
   const handleBtnClick = () => {
     setOpenMenu(!openMenu);
@@ -92,7 +102,16 @@ const Profile = ({ authorId }) => {
               </div>
               <div className="profile_follow de-flex">
                 <div className="de-flex-col">
-                  <div className="profile_follower">{author.followers} 팔로워</div>
+                  <React.Fragment>
+                    <div className="profile_follower" onClick={openModal}>
+                      {author.followers} 팔로워
+                    </div>
+                    <FollowerModal
+                      user={author}
+                      open={modalOpen}
+                      close={closeModal}
+                      header="팔로워"></FollowerModal>
+                  </React.Fragment>
                 </div>
                 <div className="de-flex-col">
                   <span className="btn-main">팔로우</span>

@@ -1,7 +1,7 @@
 import { memo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import useOnclickOutside from 'react-cool-onclickoutside';
-import Wallet from '../wallet/Wallet';
+import Wallet from '../accounts/Wallet';
 import { clearAccount } from '../../store/actions';
 
 const ProfilePopup = () => {

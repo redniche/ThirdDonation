@@ -17,6 +17,8 @@ import NftDetail from './pages/nfts/NftDetail';
 import GrantArtist from './pages/admin/GrantArtist';
 import GrantCharity from './pages/admin/GrantCharity';
 
+import Donation from './pages/nfts/SendToken';
+
 const GlobalStyles = createGlobalStyle`
   :root {
     scroll-behavior: unset;
@@ -59,6 +61,7 @@ const App = () => (
         <EditProfile path="/editProfile/:authorId" />
         <Sell path="/sell" />
         <Mint path="/mint" />
+        <Donation path="/donation" />
         <ArtistRegistration path="/artistRegistration" />
         <CharityRegistration path="/charityRegistration" />
         <NftDetail path="/nftDetail/:nftId" />

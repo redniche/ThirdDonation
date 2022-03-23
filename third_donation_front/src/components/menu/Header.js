@@ -52,7 +52,7 @@ const Header = ({ className }) => {
   const [supportMenu, setSupportMenu] = useState(false);
   const [adminMenu, setAdminMenu] = useState(false);
   const [testMenu, setTestMenu] = useState(false);
-  const [disableMenu, setDisableMenu] = useState(false);
+  const [artistMenu, setArtistMenu] = useState(false);
   /* 모바일 뷰 메뉴 */
   const [menu, setMenu] = useState(false);
 
@@ -60,19 +60,19 @@ const Header = ({ className }) => {
   const onSupportMenuClick = () => setSupportMenu(!supportMenu);
   const onAdminMenuClick = () => setAdminMenu(!adminMenu);
   const onTestMenuClick = () => setTestMenu(!testMenu);
-  const onDisableMenuClick = () => setDisableMenu(!disableMenu);
+  const onArtistMenuClick = () => setArtistMenu(!artistMenu);
 
   const closeStatMenu = () => setStatMenu(false);
   const closeSupportMenu = () => setSupportMenu(false);
   const closeAdminMenu = () => setAdminMenu(false);
   const closeTestMenu = () => setTestMenu(false);
-  const closeDisableMenu = () => setDisableMenu(false);
+  const closeArtistMenu = () => setArtistMenu(false);
 
   const refStatMenu = useOnclickOutside(() => closeStatMenu());
   const refSupportMenu = useOnclickOutside(() => closeSupportMenu());
   const refAdminMenu = useOnclickOutside(() => closeAdminMenu());
   const refTestMenu = useOnclickOutside(() => closeTestMenu());
-  const refDisableMenu = useOnclickOutside(() => closeDisableMenu());
+  const refArtistMenu = useOnclickOutside(() => closeArtistMenu());
 
   const onConnectWallet = () => {
     connectWallet()
@@ -206,15 +206,15 @@ const Header = ({ className }) => {
                   </div>
                   {/* TODO : 장애인 예술가 체크 */}
                   <div className="navbar-item">
-                    <div ref={refDisableMenu}>
+                    <div ref={refArtistMenu}>
                       <div
                         className="dropdown-custom dropdown-toggle btn"
-                        onClick={onDisableMenuClick}>
-                        Disabled Artist
+                        onClick={onArtistMenuClick}>
+                        Artist
                       </div>
-                      {disableMenu && (
+                      {artistMenu && (
                         <div className="item-dropdown">
-                          <div className="dropdown" onClick={closeDisableMenu}>
+                          <div className="dropdown" onClick={closeArtistMenu}>
                             <NavLink to="/mint" onClick={() => setMenu(!menu)}>
                               작품 등록
                             </NavLink>
@@ -322,16 +322,16 @@ const Header = ({ className }) => {
                 </div>
                 {/* TODO : 장애인 예술가 체크 */}
                 <div className="navbar-item">
-                  <div ref={refDisableMenu}>
+                  <div ref={refArtistMenu}>
                     <div
                       className="dropdown-custom dropdown-toggle btn"
-                      onMouseEnter={onDisableMenuClick}
-                      onMouseLeave={closeDisableMenu}>
-                      Disabled Artist
+                      onMouseEnter={onArtistMenuClick}
+                      onMouseLeave={closeArtistMenu}>
+                      Artist
                       <span className="lines"></span>
-                      {disableMenu && (
+                      {artistMenu && (
                         <div className="item-dropdown">
-                          <div className="dropdown" onClick={closeDisableMenu}>
+                          <div className="dropdown" onClick={closeArtistMenu}>
                             <NavLink to="/mint">작품 등록</NavLink>
                             <NavLink to="#">장애인 예술가 메뉴</NavLink>
                           </div>

@@ -52,6 +52,7 @@ const Header = ({ className }) => {
   const [supportMenu, setSupportMenu] = useState(false);
   const [adminMenu, setAdminMenu] = useState(false);
   const [testMenu, setTestMenu] = useState(false);
+  const [disableMenu, setDisableMenu] = useState(false);
   /* 모바일 뷰 메뉴 */
   const [menu, setMenu] = useState(false);
 
@@ -59,16 +60,19 @@ const Header = ({ className }) => {
   const onSupportMenuClick = () => setSupportMenu(!supportMenu);
   const onAdminMenuClick = () => setAdminMenu(!adminMenu);
   const onTestMenuClick = () => setTestMenu(!testMenu);
+  const onDisableMenuClick = () => setDisableMenu(!disableMenu);
 
   const closeStatMenu = () => setStatMenu(false);
   const closeSupportMenu = () => setSupportMenu(false);
   const closeAdminMenu = () => setAdminMenu(false);
   const closeTestMenu = () => setTestMenu(false);
+  const closeDisableMenu = () => setDisableMenu(false);
 
   const refStatMenu = useOnclickOutside(() => closeStatMenu());
   const refSupportMenu = useOnclickOutside(() => closeSupportMenu());
   const refAdminMenu = useOnclickOutside(() => closeAdminMenu());
   const refTestMenu = useOnclickOutside(() => closeTestMenu());
+  const refDisableMenu = useOnclickOutside(() => closeDisableMenu());
 
   const onConnectWallet = () => {
     connectWallet()
@@ -178,6 +182,7 @@ const Header = ({ className }) => {
                       )}
                     </div>
                   </div>
+                  {/* TODO : 관리자 체크 */}
                   <div className="navbar-item">
                     <div ref={refAdminMenu}>
                       <div
@@ -193,6 +198,28 @@ const Header = ({ className }) => {
                             </NavLink>
                             <NavLink to="#" onClick={() => setMenu(!menu)}>
                               관리자기능2
+                            </NavLink>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  {/* TODO : 장애인 예술가 체크 */}
+                  <div className="navbar-item">
+                    <div ref={refDisableMenu}>
+                      <div
+                        className="dropdown-custom dropdown-toggle btn"
+                        onClick={onDisableMenuClick}>
+                        Disabled Artist
+                      </div>
+                      {disableMenu && (
+                        <div className="item-dropdown">
+                          <div className="dropdown" onClick={closeDisableMenu}>
+                            <NavLink to="/mint" onClick={() => setMenu(!menu)}>
+                              작품 등록
+                            </NavLink>
+                            <NavLink to="#" onClick={() => setMenu(!menu)}>
+                              장애인 예술가 메뉴1
                             </NavLink>
                           </div>
                         </div>
@@ -217,9 +244,6 @@ const Header = ({ className }) => {
                             </NavLink>
                             <NavLink to="/sell" onClick={() => setMenu(!menu)}>
                               작품 판매
-                            </NavLink>
-                            <NavLink to="/mint" onClick={() => setMenu(!menu)}>
-                              작품 등록
                             </NavLink>
                           </div>
                         </div>
@@ -276,6 +300,7 @@ const Header = ({ className }) => {
                     </div>
                   </div>
                 </div>
+                {/* TODO : 관리자 체크 */}
                 <div className="navbar-item">
                   <div ref={refAdminMenu}>
                     <div
@@ -289,6 +314,26 @@ const Header = ({ className }) => {
                           <div className="dropdown" onClick={closeAdminMenu}>
                             <NavLink to="#">회원 관리</NavLink>
                             <NavLink to="#">장애인</NavLink>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                {/* TODO : 장애인 예술가 체크 */}
+                <div className="navbar-item">
+                  <div ref={refDisableMenu}>
+                    <div
+                      className="dropdown-custom dropdown-toggle btn"
+                      onMouseEnter={onDisableMenuClick}
+                      onMouseLeave={closeDisableMenu}>
+                      Disabled Artist
+                      <span className="lines"></span>
+                      {disableMenu && (
+                        <div className="item-dropdown">
+                          <div className="dropdown" onClick={closeDisableMenu}>
+                            <NavLink to="/mint">작품 등록</NavLink>
+                            <NavLink to="#">장애인 예술가 메뉴</NavLink>
                           </div>
                         </div>
                       )}
@@ -312,7 +357,6 @@ const Header = ({ className }) => {
                             <NavLink to="/editProfile/1">프로필변경</NavLink>
                             <NavLink to="/donation">후원하기</NavLink>
                             <NavLink to="/sell">작품 판매</NavLink>
-                            <NavLink to="/mint">작품 등록</NavLink>
                             <NavLink to="/artistRegistration">예술가 등록</NavLink>
                             <NavLink to="/admin/grantArtist">예술가 승인</NavLink>
                             <NavLink to="/charityRegistration">자선단체 등록</NavLink>

@@ -299,6 +299,7 @@ const Header = function ({ className }) {
                             <NavLink to="/editProfile/1">프로필변경</NavLink>
                             <NavLink to="/sell">작품 판매</NavLink>
                             <NavLink to="/mint">작품 등록</NavLink>
+                            <NavLink to="/donation">후원하기</NavLink>
                             <NavLink to="/artistRegistration">예술가 등록</NavLink>
                             <NavLink to="/admin/grantArtist">예술가 승인</NavLink>
                             <NavLink to="/charityRegistration">자선단체 등록</NavLink>

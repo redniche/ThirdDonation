@@ -1,5 +1,6 @@
 package com.thirdlife.thirddonation.api.dto;
 
+import com.thirdlife.thirddonation.db.entity.charity.Charity;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,7 +11,7 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class CherityInfoDto {
+public class CharityInfoDto {
     private String name;
     private String walletAddress;
 
@@ -18,14 +19,14 @@ public class CherityInfoDto {
     /**
      * 자선단체의 모든 정보를 반환합니다.
      *
-     * @param cherity Cherity 자선단체 객체
+     * @param charity Cherity 자선단체 객체
      * @return CherityInfoDto 자선단체 정보 Dto
      */
-    public static CherityInfoDto of(Cherity cherity) {
-        CherityInfoDto cherifyInfoDto = new CherityInfoDto();
-        CherityInfoDto.setName(cherity.getName());
-        CherityInfoDto.setWalletAddress(cherity.getWalletAddress());
+    public static CharityInfoDto of(Charity charity) {
+        CharityInfoDto charifyInfoDto = new CharityInfoDto();
+        charifyInfoDto.setName(charity.getName());
+        charifyInfoDto.setWalletAddress(charity.getWalletAddress());
 
-        return cherifyInfoDto;
+        return charifyInfoDto;
     }
 }

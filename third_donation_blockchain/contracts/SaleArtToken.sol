@@ -33,6 +33,25 @@ contract SaleArtToken {
         onSaleArtTokkenArray.push(_artTokenId);
     }
 
+    // 작품 판매 중지
+    function cancelSaleArtToken(uint256 _artTokenId) public {
+        // 해당 작품의 소유자 주소
+        address artTokenOwner = mintArtTokenAddress.ownerOf(_artTokenId);
+
+        require(artTokenOwner == msg.sender, "Caller is not art token owner.");
+
+        artTokenPrices[_artTokenId] = 0;
+
+        for(uint256 i = 0; i < onSaleArtTokkenArray.length; i++){
+            if(artTokenPrices[onSaleArtTokkenArray[i]] == 0){
+                onSaleArtTokkenArray[i] = onSaleArtTokkenArray[onSaleArtTokkenArray.length-1];
+                onSaleArtTokkenArray.pop();
+            }
+
+        }
+
+    }
+
     // 작품 구매
     function purchaseArtToken(uint256 _artTokenId) public payable{
         uint256 price = artTokenPrices[_artTokenId];

@@ -737,11 +737,11 @@
 	},
 	"sources": {
 		"contracts/SaleArtToken.sol": {
-			"keccak256": "0x1daba76a741551e147f15d3cc78eee52cf8fc291fadda5eeff9a4bde2d27ce6d",
+			"keccak256": "0xd30cde53ea108283215735af70401ed7ce6861fa2ef6b9439d3cfa03840cb6f3",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://232d845fd17f0940b80c46159d54040aacb5e29f869a187a06e225714f44a0ac",
-				"dweb:/ipfs/QmYf646PT5N5fVxYPHV9W4pLm6Pn8KqktZjAVqj4hWzFkb"
+				"bzz-raw://5f1dac31a0674d0ceaa1bab465a27da97e42bb9370d786aad58b9ec2f5c594c5",
+				"dweb:/ipfs/QmZqzooDdx6Vg8EvqsX5hfVwKpC4uZ1Te3U4xx9xnKsrD5"
 			]
 		},
 		"contracts/SsafyNFT.sol": {

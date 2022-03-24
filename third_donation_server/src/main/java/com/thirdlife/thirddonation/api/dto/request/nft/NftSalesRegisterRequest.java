@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.ToString;
 
 /**
- * NFT 구매 정보 등록 요청 양식.
+ * NFT 판매 정보 등록 요청 양식.
  */
 @ToString
 @Getter

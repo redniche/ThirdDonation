@@ -38,7 +38,6 @@ public class UserServiceImpl implements UserService {
         User userEntity = userRequest.toEntity();
 
         System.out.println(userEntity);
-        userEntity.setPrivateHash(passwordEncoder.encode(userRequest.getPrivateHash()));
         try {
             userRepository.save(userEntity);
         } catch (Exception ex) {

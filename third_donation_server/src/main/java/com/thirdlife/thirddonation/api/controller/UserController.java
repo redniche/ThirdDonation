@@ -57,7 +57,6 @@ public class UserController {
                     UserRequest userRequest) {
 
         String walletAddress = userRequest.getWalletAddress();
-        String privateHash = userRequest.getPrivateHash();
 
         User user = userService.getUserByWalletAddress(walletAddress);
 
@@ -67,10 +66,11 @@ public class UserController {
             return ResponseEntity.status(200).body(UserProfileResponse.of(200, "Success", user));
         }
 
-        if (passwordEncoder.matches(privateHash, user.getPrivateHash())) {
-            // 유효한 privateHash 맞는 경우, 로그인 성공으로 응답.(액세스 토큰을 포함하여 응답값 전달)
-            return ResponseEntity.ok(UserProfileResponse.of(200, "Success", user));
-        }
-        throw new CustomException(ErrorCode.USER_NOT_FOUND);
+//        if (passwordEncoder.matches(privateHash, user.getPrivateHash())) {
+//            // 유효한 privateHash 맞는 경우, 로그인 성공으로 응답.(액세스 토큰을 포함하여 응답값 전달)
+//            return ResponseEntity.ok(UserProfileResponse.of(200, "Success", user));
+//        }
+
+        throw new CustomException(ErrorCode.OWNER_NOT_FOUND);
     }
 }

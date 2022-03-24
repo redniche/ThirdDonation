@@ -2,7 +2,6 @@ package com.thirdlife.thirddonation.api.dto;
 
 import com.thirdlife.thirddonation.db.entity.user.Authority;
 import com.thirdlife.thirddonation.db.entity.user.User;
-import com.thirdlife.thirddonation.db.entity.user.UserProfile;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -39,14 +38,6 @@ public class UserInfoDto {
         userInfoDto.setWalletAddress(user.getWalletAddress());
         userInfoDto.setUsername(user.getUsername());
 
-        UserProfile userProfile = user.getUserProfile();
-        userInfoDto.setDescription(userProfile.getDescription());
-
-        if (userProfile.getImagePath() != null) {
-            userInfoDto.setImagePath(userProfile.getImagePath());
-        } else {
-            userInfoDto.setImagePath("default_profile_img.png");
-        }
         return userInfoDto;
     }
 
@@ -62,13 +53,6 @@ public class UserInfoDto {
         userInfoDto.setWalletAddress(user.getWalletAddress());
         userInfoDto.setUsername(user.getUsername());
 
-        UserProfile userProfile = user.getUserProfile();
-
-        if (userProfile.getImagePath() != null) {
-            userInfoDto.setImagePath(userProfile.getImagePath());
-        } else {
-            userInfoDto.setImagePath("default_profile_img.png");
-        }
         return userInfoDto;
     }
 }

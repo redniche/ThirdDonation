@@ -1,6 +1,6 @@
 package com.thirdlife.thirddonation.api.dto;
 
-import com.thirdlife.thirddonation.db.entity.charity.Charity;
+import com.thirdlife.thirddonation.db.entity.nft.Charity;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,7 +25,7 @@ public class CharityInfoDto {
     public static CharityInfoDto of(Charity charity) {
         CharityInfoDto charifyInfoDto = new CharityInfoDto();
         charifyInfoDto.setName(charity.getName());
-        charifyInfoDto.setWalletAddress(charity.getWalletAddress());
+//        charifyInfoDto.setWalletAddress(charity.getWalletAddress());
 
         return charifyInfoDto;
     }

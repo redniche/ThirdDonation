@@ -1,9 +1,5 @@
 package com.thirdlife.thirddonation.api.service.charity;
 
-import com.thirdlife.thirddonation.api.dto.request.user.UserProfileModifyRequest;
-import com.thirdlife.thirddonation.api.dto.request.user.UserRequest;
-import com.thirdlife.thirddonation.db.entity.charity.Charity;
-
 /**
  * 자선단체 서비스입니다.
  */

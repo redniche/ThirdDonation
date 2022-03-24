@@ -28,7 +28,7 @@ public class UserProfileResponse extends BaseResponseBody {
         UserProfileResponse response = new UserProfileResponse();
         response.setStatusCode(statusCode);
         response.setMessage(message);
-        response.setUserInfoDto(UserInfoDto.of(user));
+        response.setUserInfoDto(UserInfoDto.of2(user));
         return response;
     }
 }

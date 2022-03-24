@@ -52,8 +52,14 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private boolean isArtist;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 100)
     private String username;
+
+    @Column(nullable = true, length = 300)
+    private String description;
+
+    @Column(nullable = true, length = 300)
+    private String imagePath;
 
     @Column(nullable = false, length = 15)
     @Enumerated(EnumType.STRING)
@@ -94,7 +100,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
     }
 
 }

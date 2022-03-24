@@ -27,7 +27,7 @@ public class UserInfoDto {
     private Authority authority;
 
     /**
-     * 유저의 모든 정보를 반환합니다.
+     * 유저의 접속시 일부 정보를 반환합니다.
      *
      * @param user User 유저 객체
      * @return UserInfoDto 유저 정보 Dto
@@ -37,12 +37,14 @@ public class UserInfoDto {
         userInfoDto.setId(user.getId());
         userInfoDto.setWalletAddress(user.getWalletAddress());
         userInfoDto.setUsername(user.getUsername());
+        userInfoDto.setDateCreated(user.getDateCreated());
+        userInfoDto.setEnabled(user.isEnabled());
 
         return userInfoDto;
     }
 
     /**
-     * 유저의 일부 정보를 반환합니다.
+     * 유저의 프로필 정보를 반환합니다.
      *
      * @param user User 유저 객체
      * @return UserInfoDto 유저 정보 Dto
@@ -52,6 +54,10 @@ public class UserInfoDto {
         userInfoDto.setId(user.getId());
         userInfoDto.setWalletAddress(user.getWalletAddress());
         userInfoDto.setUsername(user.getUsername());
+        userInfoDto.setDescription(user.getDescription());
+        userInfoDto.setImagePath(user.getImagePath());
+        userInfoDto.setDateCreated(user.getDateCreated());
+        userInfoDto.setEnabled(user.isEnabled());
 
         return userInfoDto;
     }

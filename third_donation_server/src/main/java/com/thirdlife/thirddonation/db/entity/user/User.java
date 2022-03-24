@@ -1,6 +1,6 @@
 package com.thirdlife.thirddonation.db.entity.user;
 
-import com.thirdlife.thirddonation.db.entity.nft.Market;
+import com.thirdlife.thirddonation.db.entity.nft.Sales;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -10,13 +10,10 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -62,11 +59,13 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Authority authority;
 
+    @Builder.Default
     @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
-    private List<Market> sellNfts = new ArrayList<>();
+    private List<Sales> sellNfts = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "buyer", cascade = CascadeType.ALL)
-    private List<Market> buyNfts = new ArrayList<>();
+    private List<Sales> buyNfts = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

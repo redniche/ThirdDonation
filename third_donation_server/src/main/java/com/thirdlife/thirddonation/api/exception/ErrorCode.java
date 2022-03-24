@@ -25,8 +25,10 @@ public enum ErrorCode {
 
     /* 404 NOT_FOUND : Resource 를 찾을 수 없음 */
     OWNER_NOT_FOUND(NOT_FOUND, "해당 Owner 주소에 해당하는 유저 정보를 찾을 수 없습니다."),
-    SELLER_NOT_FOUND(NOT_FOUND, "해당 Seller 주소에 해당하는 유저 정보를 찾을 수 없습니다."),
-    BUYER_NOT_FOUND(NOT_FOUND, "해당 Buyer 주소에 해당하는 유저 정보를 찾을 수 없습니다."),
+    SELLER_NOT_FOUND(NOT_FOUND, "해당 Seller 정보를 찾을 수 없습니다."),
+    BUYER_NOT_FOUND(NOT_FOUND, "해당 Buyer 정보를 찾을 수 없습니다."),
+    NFT_NOT_FOUND(NOT_FOUND, "해당 token id를 찾을 수 없습니다."),
+    SALE_NOT_FOUND(NOT_FOUND, "판매 정보를 찾을 수 없습니다."),
     FRIEND_NOT_FOUND(NOT_FOUND, "해당 유저와 친구가 아닙니다."),
     FRIEND_REQUEST_NOT_FOUND(NOT_FOUND, "친구 요청 정보를 찾을 수 없습니다."),
     MEETING_NOT_FOUND(NOT_FOUND, "해당 방을 찾을수 없습니다"),

@@ -71,4 +71,31 @@ public class UserController {
         data = UserResponse.of(200, "Success", user);
         return ResponseEntity.status(200).body(data);
     }
+
+    /**
+     * Get 요청시 전송받은 정보로 user를 찾고 없으면 에러를 반환합니다.
+     * 만약 있다면 ResponseEntity&lt;UserProfileResponse>&gt; 객체를 반환합니다.
+     *
+     * @param id Long
+     * @return ResponseEntity&lt;UserProfileResponse&gt;
+     */
+    @GetMapping("/profile/{id}")
+    @ApiOperation(value = "회원 프로필 조회",
+            notes = "<strong>회원 id</strong>를 통해 회원 프로필을 조회한다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 401, message = "인증 실패"),
+            @ApiResponse(code = 404, message = "사용자 없음"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<UserProfileResponse> profile(
+            @PathVariable @ApiParam(value = "조회할 회원 id를 입력받음", required = true)
+                    Long id) {
+        User user = userService.getUserById(id);
+        if (user == null) {
+            throw new CustomException(ErrorCode.OWNER_NOT_FOUND);
+        }
+        UserProfileResponse data = UserProfileResponse.of(200, "Success", user);
+        return ResponseEntity.status(200).body(data);
+    }
 }

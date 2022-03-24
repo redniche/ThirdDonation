@@ -6,7 +6,7 @@ export const connectWallet = () =>
         .then((accounts) =>
           resolve({
             walletInstalled: true,
-            walletAddress: accounts,
+            walletAddress: accounts[0],
           }),
         )
         .catch((error) => reject(error));

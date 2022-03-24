@@ -11,7 +11,7 @@ export const fetchAccount = (walletAddress) => async (dispatch) => {
     });
     const processedData = {
       ...data[0],
-      walletAddress: '0xe0124dC7A5e49D8b3065865f0c0feab88C007540',
+      walletAddress,
     };
     dispatch(actions.getAccount.success(processedData));
     // const { data } = await Axios.get(`${api.baseUrl}${api.authors}?${filter}`, {

@@ -1,48 +1,25 @@
-import { useCallback, useState, useEffect } from 'react';
+import { useCallback, useState } from 'react';
 import PanelLayout from '../../components/layout/PanelLayout';
 import { API_URL, Axios } from './../../core/axios';
 import { Ipfs } from './../../core/ipfs';
-import { web3, SsafyNftContract, SSAFY_NFT_CONTRACT_ADDRESS } from '../../contracts';
+import { web3, ssafyNftContract, SSAFY_NFT_CONTRACT_ADDRESS } from '../../contracts';
 import { useNavigate } from '@reach/router';
 import { useSelector } from 'react-redux';
 import * as selectors from '../../store/selectors';
 
-Ipfs;
-Axios;
 /**
  * NFT 민팅을 할 수 있는 페이지 컴포넌트
  * @returns
  */
 const Mint = () => {
-  // export default class Minter extends Component {
-  // constructor() {
-  //   super();
-  //   this.onChange = this.onChange.bind(this);
-  //   this.state = {
-  //     files: [],
-  //     title: '',
-  //     author: '',
-  //     description: '',
-  //   };
-  //   console.log(this.state.title);
-  // }
   const { data: account } = useSelector(selectors.accountState);
   const [file, setFile] = useState(null);
   const [isVideo, setIsVideo] = useState(false);
   const [preview, setPreview] = useState(null);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const navigate = useNavigate();
 
-  //리덕스로 유저 정보를 가져와야할듯.
-  //이건 테스트용 코드고 실제 메타데이터는 제출시 const로 생성.
-  var nft_metadata;
-  useEffect(() => {
-    nft_metadata = {
-      title: title,
-      description: description,
-    };
-    console.log(JSON.stringify(nft_metadata));
-  });
   const fileRegist = (e) => {
     let tempFile = e.target.files[0];
     if (!tempFile) return;
@@ -70,20 +47,20 @@ const Mint = () => {
     reader.onload = async (e) => {
       const fileResult = e.target.result;
       await getHash(Buffer(fileResult))
-        .then((fileHash, tokenUriHash) => {
+        .then(({ fileHash, tokenUriHash }) => {
+          console.log(fileHash, tokenUriHash);
           const tokenUri = `https://ipfs.io/ipfs/${tokenUriHash}`;
-          return fileHash, tokenUri;
+          return { fileHash, tokenUri };
         })
-        .then((fileHash, tokenUri) => {
+        .then(({ fileHash, tokenUri }) => {
           // mint함수 부르기
           if (fileHash && tokenUri) {
             //fileHash랑 tokenUri가 null이 아니어야 작동.
-            sendTransaction(tokenUri);
+            sendMintTx(fileHash, tokenUri);
           }
         })
         .catch((err) => alert(err));
     };
-    console.log(JSON.stringify(nft_metadata));
 
     // ipfs로 file 업로드
     // ipfs로 tokenUri 생성
@@ -113,12 +90,12 @@ const Mint = () => {
             author: account,
             create_date: timeData,
           };
-          // metadataURI생성하기
-          const tokenUriHash = Ipfs.add(JSON.stringify(metadata)).then((res) => {
-            console.log(`metaUri: ${res.path}`);
+          // tokenUri생성하기
+          const tokenUriHash = await Ipfs.add(JSON.stringify(metadata)).then((res) => {
+            console.log(`tokenUri: ${res.path}`);
             return res.path;
           });
-          return fileHash, tokenUriHash;
+          return { fileHash, tokenUriHash };
         }
       } catch (e) {
         console.log(e);
@@ -127,31 +104,37 @@ const Mint = () => {
     };
 
     // NFT 컨트랙트 실행
-    const sendTransaction = async (fileHash, tokenUri) => {
-      const nonce = await web3.eth.getTransactionCount(nowWalletAddress, 'latest');
-      const tx = {
-        from: nowWalletAddress,
-        to: SSAFY_NFT_CONTRACT_ADDRESS,
-        nonce: nonce,
-        gas: 0,
-        data: SsafyNftContract.methods.create(nowWalletAddress, fileHash, tokenUri).encodeABI(),
-      };
-      // mintNFT
-      await web3.eth
-        .sendTransaction(tx)
-        .then((res) => {
-          console.log(res);
-          const tokenId = SsafyNftContract.methods.getTokenId().call();
-          return tokenId;
-        })
-        .then((res) => {
-          handleSaveNFT(res, tokenUri);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-      alert('NFT가 생성되었습니다!');
-      useNavigate('/');
+    const sendMintTx = async (fileHash, tokenUri) => {
+      if (fileHash && tokenUri) {
+        const nonce = await web3.eth.getTransactionCount(nowWalletAddress, 'latest');
+        const tx = {
+          from: nowWalletAddress,
+          to: SSAFY_NFT_CONTRACT_ADDRESS,
+          nonce: nonce,
+          gas: 1000000,
+          data: ssafyNftContract.methods.create(nowWalletAddress, fileHash, tokenUri).encodeABI(),
+        };
+        console.log(tx);
+        // mintNFT
+        await web3.eth
+          .sendTransaction(tx)
+          .then((res) => {
+            console.log(res);
+            const tokenId = ssafyNftContract.methods.current().call();
+            return tokenId;
+          })
+          .then((res) => {
+            handleSaveNFT(res, tokenUri);
+            alert('NFT가 생성되었습니다!');
+          })
+          .catch((err) => {
+            alert('에러 발생!');
+            console.log(err);
+          });
+        navigate('/');
+      } else {
+        console.log('fileHash, tokenUri 가 빈 값임');
+      }
     };
 
     // request server with NFTInfo
@@ -191,12 +174,6 @@ const Mint = () => {
           <br />
           <br />
           <div>
-            {/* <h2>Link to image asset: </h2> */}
-            {/* <input
-              className="form-control"
-              type="text"
-              placeholder="e.g. https://gateway.pinata.cloud/ipfs/<hash>"
-            /> */}
             <h2>파일 업로드</h2>
             <div className="d-create-file mb-3">
               {file ? (

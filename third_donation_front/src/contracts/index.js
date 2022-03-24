@@ -7,14 +7,14 @@ const {
 
 const rpcHttpUrl = 'http://20.196.209.2:8545';
 
-const ssafyTokenContractAddress = '0x6C927304104cdaa5a8b3691E0ADE8a3ded41a333';
+const SSAFY_TOKEN_CONTRACT_ADDRESS = '0x6C927304104cdaa5a8b3691E0ADE8a3ded41a333';
 
-export const SSAFY_NFT_CONTRACT_ADDRESS = '0x2526FD5b07F2e6436d9bb5bbD5bc0075DDF6A3fD';
+export const SSAFY_NFT_CONTRACT_ADDRESS = '0xA451Abc664c6203596CC7fCf95190CE131B25d86';
 
 const ssafyTokenProvider = new Web3.providers.HttpProvider(rpcHttpUrl);
 
 export const web3 = new Web3(ssafyTokenProvider);
 
-export const ssafyTokenContract = new web3.eth.Contract(TOKEN_ABI, ssafyTokenContractAddress);
+export const ssafyTokenContract = new web3.eth.Contract(TOKEN_ABI, SSAFY_TOKEN_CONTRACT_ADDRESS);
 
-export const SsafyNftContract = new web3.eth.Contract(NFT_ABI, SSAFY_NFT_CONTRACT_ADDRESS);
+export const ssafyNftContract = new web3.eth.Contract(NFT_ABI, SSAFY_NFT_CONTRACT_ADDRESS);

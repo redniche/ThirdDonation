@@ -17,6 +17,7 @@
     "font-awesome": "^4.7.0",
     "formik": "^2.2.9",
     "formik-yup": "0.0.5",
+    "ipfs-http-client": "^56.0.1",
     "moment": "^2.29.1",
     "opensea-js": "^1.2.7",
     "prettier": "^2.5.1",

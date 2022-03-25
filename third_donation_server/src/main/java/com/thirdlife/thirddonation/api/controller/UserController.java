@@ -1,7 +1,9 @@
 package com.thirdlife.thirddonation.api.controller;
 
+import com.thirdlife.thirddonation.api.dto.UserInfoDto;
 import com.thirdlife.thirddonation.api.dto.request.user.UserRequest;
 import com.thirdlife.thirddonation.api.dto.response.UserProfileResponse;
+import com.thirdlife.thirddonation.api.dto.response.UserResponse;
 import com.thirdlife.thirddonation.api.exception.CustomException;
 import com.thirdlife.thirddonation.api.exception.ErrorCode;
 import com.thirdlife.thirddonation.api.service.user.UserService;
@@ -17,6 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,39 +42,60 @@ public class UserController {
 
     /**
      * Post 요청시 전송받은 정보로 user를 찾고 만약 없으면 회원가입을 시도합니다.
-     * 만약 있다면 ResponseEntity&lt;UserRequestDto>&gt; 객체를 반환합니다.
+     * 만약 있다면 ResponseEntity&lt;UserResponse>&gt; 객체를 반환합니다.
      *
-     * @param userRequest UserProfileResponseDto
-     * @return ResponseEntity&lt;UserProfileResponse&gt;
+     * @param userRequest UserRequest
+     * @return ResponseEntity&lt;UserResponse&gt;
      */
     @PostMapping
     @ApiOperation(value = "회원 가입 및 로그인",
             notes = "<strong>지갑주소와 해싱된개인키</strong>를 통해 회원가입 또는 로그인 한다.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
-            @ApiResponse(code = 401, message = "인증 실패"),
             @ApiResponse(code = 404, message = "사용자 없음"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    public ResponseEntity<UserProfileResponse> login(
+    public ResponseEntity<UserResponse> login(
             @Valid @RequestBody @ApiParam(value = "회원 정보를 입력받음", required = true)
                     UserRequest userRequest) {
 
         String walletAddress = userRequest.getWalletAddress();
-        String privateHash = userRequest.getPrivateHash();
 
         User user = userService.getUserByWalletAddress(walletAddress);
 
+        UserResponse data;
         if (user == null) {
             user = userService.createUser(userRequest);
-
-            return ResponseEntity.status(200).body(UserProfileResponse.of(200, "Success", user));
         }
+        //TODO JWT 사용
+        data = UserResponse.of(200, "Success", user);
+        return ResponseEntity.status(200).body(data);
+    }
 
-        if (passwordEncoder.matches(privateHash, user.getPrivateHash())) {
-            // 유효한 privateHash 맞는 경우, 로그인 성공으로 응답.(액세스 토큰을 포함하여 응답값 전달)
-            return ResponseEntity.ok(UserProfileResponse.of(200, "Success", user));
+    /**
+     * Get 요청시 전송받은 정보로 user를 찾고 없으면 에러를 반환합니다.
+     * 만약 있다면 ResponseEntity&lt;UserProfileResponse>&gt; 객체를 반환합니다.
+     *
+     * @param id Long
+     * @return ResponseEntity&lt;UserProfileResponse&gt;
+     */
+    @GetMapping("/profile/{id}")
+    @ApiOperation(value = "회원 프로필 조회",
+            notes = "<strong>회원 id</strong>를 통해 회원 프로필을 조회한다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 401, message = "인증 실패"),
+            @ApiResponse(code = 404, message = "사용자 없음"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<UserProfileResponse> profile(
+            @PathVariable @ApiParam(value = "조회할 회원 id를 입력받음", required = true)
+                    Long id) {
+        User user = userService.getUserById(id);
+        if (user == null) {
+            throw new CustomException(ErrorCode.OWNER_NOT_FOUND);
         }
-        throw new CustomException(ErrorCode.USER_NOT_FOUND);
+        UserProfileResponse data = UserProfileResponse.of(200, "Success", user);
+        return ResponseEntity.status(200).body(data);
     }
 }

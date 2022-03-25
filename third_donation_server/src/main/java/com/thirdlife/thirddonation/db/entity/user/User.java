@@ -1,18 +1,19 @@
 package com.thirdlife.thirddonation.db.entity.user;
 
+import com.thirdlife.thirddonation.db.entity.nft.Sales;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,14 +35,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
 
-    @Column(name = "wallet_address", unique = true, nullable = false, length = 256)
+    @Column(unique = true, nullable = false, length = 256)
     private String walletAddress;
-
-    @Column(nullable = false, length = 256)
-    private String privateHash;
 
     @CreationTimestamp
     @Column(nullable = false)
@@ -55,16 +52,26 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private boolean isArtist;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 100)
     private String username;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @PrimaryKeyJoinColumn
-    private UserProfile userProfile;
+    @Column(nullable = true, length = 300)
+    private String description;
+
+    @Column(nullable = true, length = 300)
+    private String imagePath;
 
     @Column(nullable = false, length = 15)
     @Enumerated(EnumType.STRING)
     private Authority authority;
+
+    @Builder.Default
+    @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
+    private List<Sales> sellNfts = new ArrayList<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "buyer", cascade = CascadeType.ALL)
+    private List<Sales> buyNfts = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -73,7 +80,7 @@ public class User implements UserDetails {
 
     @Override
     public String getPassword() {
-        return privateHash;
+        return null;
     }
 
     @Override
@@ -93,10 +100,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
     }
 
-    public void changeUserProfile(UserProfile userProfile) {
-        this.userProfile = userProfile;
-    }
 }

@@ -38,7 +38,6 @@ public class UserServiceImpl implements UserService {
         User userEntity = userRequest.toEntity();
 
         System.out.println(userEntity);
-        userEntity.setPrivateHash(passwordEncoder.encode(userRequest.getPrivateHash()));
         try {
             userRepository.save(userEntity);
         } catch (Exception ex) {
@@ -73,27 +72,13 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * 유저 프로필을 입력받아 유저 정보를 바꾸는 메서드입니다.
-     * 전체를 바꾸는 것이 아닌 존재하는 입력된 값만을 바꿉니다. (Patch)
+     * id로 찾아 유저를 반환하는 메서드입니다.
      *
-     * @param user             User
-     * @param userModifyReqDto UserProfileModifyRequestDto
+     * @param id Long
      * @return User
      */
     @Override
-    public User modifyUserProfile(User user, UserProfileModifyRequest userModifyReqDto) {
-        return null;
-    }
-
-    /**
-     * 유저와 이미지 파일을 입력받아 저장하고 이미지 경로를 반환합니다.
-     *
-     * @param user      User
-     * @param imageFile MultipartFile
-     * @return String
-     */
-    @Override
-    public String saveImage(User user, MultipartFile imageFile) {
-        return null;
+    public User getUserById(Long id) {
+        return userRepository.getById(id);
     }
 }

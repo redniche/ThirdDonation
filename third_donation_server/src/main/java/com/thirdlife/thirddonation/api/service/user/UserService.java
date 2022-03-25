@@ -34,22 +34,10 @@ public interface UserService {
     User getUserByWalletAddress(String walletAddress);
 
     /**
-     * 유저 프로필을 입력받아 유저 정보를 바꾸는 메서드입니다.
-     * 전체를 바꾸는 것이 아닌 일부만을 바꿉니다.
+     * id로 찾아 유저를 반환하는 메서드입니다.
      *
-     * @param user             User
-     * @param userModifyReqDto UserProfileModifyRequestDto
+     * @param id Long
      * @return User
      */
-    User modifyUserProfile(User user, UserProfileModifyRequest userModifyReqDto);
-
-    /**
-     * 유저와 이미지 파일을 입력받아 저장하고 이미지 경로를 반환합니다.
-     *
-     * @param user      User
-     * @param imageFile MultipartFile
-     * @return String
-     */
-    String saveImage(User user, MultipartFile imageFile);
-
+    User getUserById(Long id);
 }

@@ -1,0 +1,18 @@
+# @format
+
+version: "3"
+
+services:
+  mysql:
+    container_name: mysql
+    image: mysql:latest
+    ports:
+      - 32002:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: "admin_ssafy!@"
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - ~/docker/mysql/data:/var/lib/mysql
+      - ~/docker/mysql/config:/etc/mysql/conf.d

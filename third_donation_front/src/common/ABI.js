@@ -1,5 +1,7 @@
 import SsafyTokenAbi from '../core/nft/SsafyToken.json';
 import SsafyNFTAbi from '../core/nft/SsafyNFT.json';
+import MintArtTokenAbi from '../core/nft/MintArtTokenAbi.json';
+import SaleArtTokenAbi from '../core/nft/SaleArtTokenAbi.json';
 
 /* 
 [컨트랙트 ABI]
@@ -12,8 +14,9 @@ const ABI = {
   CONTRACT_ABI: {
     NFT_ABI: SsafyNFTAbi,
     SALE_FACTORY_ABI: [],
-    SALE_ABI: [],
+    SALE_ABI: SaleArtTokenAbi,
     TOKEN_ABI: SsafyTokenAbi,
+    MINT_ABI: MintArtTokenAbi,
   },
 };
 

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Clock from '../../components/nfts/Clock';
 import BasicLayout from './../../components/layout/BasicLayout';
+import saleArtTokenContracts from '../../contracts/index';
 
 /**
  * NFT의 상세 정보를 보여주는 페이지 컴포넌트
@@ -24,6 +25,22 @@ const ItemDetail = function () {
 
   const [openCheckout, setOpenCheckout] = useState(false);
   const [openCheckoutbid, setOpenCheckoutbid] = useState(false);
+
+  const onClickBuy = async () => {
+    try {
+      // account 없으면 실행하지 말아라
+      if (!account) return;
+      const response = await saleArtTokenContract.methods
+        .purchaseArtToken(artTokenId)
+        .send({ from: account, value: artPrice });
+
+      // transaction이 끝나면 뭘 실행할건지 지정해줘야함.
+      if (response.status) {
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <BasicLayout>
       <section className="container">
@@ -350,7 +367,9 @@ const ItemDetail = function () {
               <p>You will pay</p>
               <div className="subtotal">0.013325 ETH</div>
             </div>
-            <button className="btn-main lead mb-5">Checkout</button>
+            <button className="btn-main lead mb-5" onClick={onClickBuy}>
+              Checkout
+            </button>
           </div>
         </div>
       )}

@@ -57,6 +57,18 @@ abstract contract ERC721URIStorage is ERC721 {
         _tokenURIs[tokenId] = _tokenURI;
     }
 
+    // tokenId에 해당하는 tokenURI를 반환하는 함수
+    // function _getTokenURI(uint256 tokenId) internal virtual returns(string memory){
+    //     require(_exists(tokenId), "ERC721URIStorage: URI set of nonexistent token");
+
+    //     return _tokenURIs[tokenId];
+    // }
+    function getTokenURI(uint256 tokenId) view public returns(string memory){
+        require(_exists(tokenId), "ERC721URIStorage: URI set of nonexistent token");
+
+        return _tokenURIs[tokenId];
+    }
+
     /**
      * @dev Destroys `tokenId`.
      * The approval is cleared when the token is burned.

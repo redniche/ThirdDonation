@@ -63,13 +63,13 @@ public class UserController {
 
         User user = userService.getUserByWalletAddress(walletAddress);
 
-        UserResponse data;
+        UserResponse response;
         if (user == null) {
             user = userService.createUser(userRequest);
         }
         //TODO JWT 사용
-        data = UserResponse.of(200, "Success", user);
-        return ResponseEntity.status(200).body(data);
+        response = UserResponse.of(200, "Success", user);
+        return ResponseEntity.status(200).body(response);
     }
 
     /**
@@ -95,7 +95,7 @@ public class UserController {
         if (user == null) {
             throw new CustomException(ErrorCode.OWNER_NOT_FOUND);
         }
-        UserProfileResponse data = UserProfileResponse.of(200, "Success", user);
-        return ResponseEntity.status(200).body(data);
+        UserProfileResponse response = UserProfileResponse.of(200, "Success", user);
+        return ResponseEntity.status(200).body(response);
     }
 }

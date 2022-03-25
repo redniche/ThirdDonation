@@ -16,11 +16,9 @@ import lombok.NoArgsConstructor;
 public class UserInfoDto {
     private Long id;
     private String walletAddress;
-    private String privateHash;
     private LocalDateTime dateCreated;
-    private String dateExchanged;
+    private LocalDateTime dateExchanged;
     private boolean enabled;
-    private boolean isArtist;
     private String username;
     private String description;
     private String imagePath;
@@ -37,8 +35,11 @@ public class UserInfoDto {
         userInfoDto.setId(user.getId());
         userInfoDto.setWalletAddress(user.getWalletAddress());
         userInfoDto.setUsername(user.getUsername());
+        userInfoDto.setImagePath(user.getImagePath());
         userInfoDto.setDateCreated(user.getDateCreated());
+        userInfoDto.setDateExchanged(user.getDateExchanged());
         userInfoDto.setEnabled(user.isEnabled());
+        userInfoDto.setAuthority(user.getAuthority());
 
         return userInfoDto;
     }
@@ -57,7 +58,9 @@ public class UserInfoDto {
         userInfoDto.setDescription(user.getDescription());
         userInfoDto.setImagePath(user.getImagePath());
         userInfoDto.setDateCreated(user.getDateCreated());
+        userInfoDto.setDateExchanged(user.getDateExchanged());
         userInfoDto.setEnabled(user.isEnabled());
+        userInfoDto.setAuthority(user.getAuthority());
 
         return userInfoDto;
     }

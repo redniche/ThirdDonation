@@ -24,6 +24,7 @@ public enum ErrorCode {
     USER_PW_INVALID(UNAUTHORIZED, "사용자의 privateHash 가 일치하지 않습니다."),
 
     /* 404 NOT_FOUND : Resource 를 찾을 수 없음 */
+    USER_NOT_FOUND(NOT_FOUND, "해당 유저의 정보를 찾을 수 없습니다."),
     OWNER_NOT_FOUND(NOT_FOUND, "해당 Owner 주소에 해당하는 유저 정보를 찾을 수 없습니다."),
     SELLER_NOT_FOUND(NOT_FOUND, "해당 Seller 정보를 찾을 수 없습니다."),
     BUYER_NOT_FOUND(NOT_FOUND, "해당 Buyer 정보를 찾을 수 없습니다."),

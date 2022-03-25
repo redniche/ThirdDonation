@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import * as selectors from '../../store/selectors';
 import {
-  artTokenContract,
-  saleArtTokenContract,
+  ssafyNftContract,
+  saleArtTokenContracts,
   saleArtTokenContractAddress,
 } from '../../contracts';
 
@@ -17,7 +17,7 @@ import PanelLayout from '../../components/layout/PanelLayout';
 const Sell = () => {
   const { data: account } = useSelector(selectors.accountState);
   console.log(account.walletAddress);
-  console.log(artTokenContract.methods);
+  console.log(ssafyNftContract.methods);
 
   // const [artPrice, setArtPrice] = useState('');
   const [sellPrice, setSellPrice] = useState('');
@@ -44,7 +44,7 @@ const Sell = () => {
 
   const getIsApprovedForAll = async () => {
     try {
-      const response = await artTokenContract.methods
+      const response = await ssafyNftContract.methods
         .isApprovedForAll(account.walletAddress, saleArtTokenContractAddress)
         .call();
       console.log(response);
@@ -57,7 +57,7 @@ const Sell = () => {
     try {
       if (!account) return;
 
-      const response = await artTokenContract.methods.setApprovalForAll(
+      const response = await ssafyNftContract.methods.setApprovalForAll(
         saleArtTokenContractAddress,
         true,
       );
@@ -72,7 +72,7 @@ const Sell = () => {
     try {
       if (!account) return;
 
-      const response = await saleArtTokenContract.methods
+      const response = await saleArtTokenContracts.methods
         .setForSaleArtToken(2, sellPrice)
         .send({ from: account.walletAddress });
       console.log(response);
@@ -89,10 +89,10 @@ const Sell = () => {
     // }
     approveToggle();
     getIsApprovedForAll();
-    const balance = await artTokenContract.methods.balanceOf(account.walletAddress).call();
+    const balance = await ssafyNftContract.methods.balanceOf(account.walletAddress).call();
 
     console.log(balance);
-    const artPrice = await saleArtTokenContract.methods.artTokenPrices(2).call();
+    const artPrice = await saleArtTokenContracts.methods.artTokenPrices(2).call();
     console.log(artPrice);
   }, []);
 

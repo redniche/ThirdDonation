@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Clock from '../../components/nfts/Clock';
 import BasicLayout from './../../components/layout/BasicLayout';
-import saleArtTokenContracts from '../../contracts/index';
+import { saleArtTokenContracts } from '../../contracts/index';
 
 /**
  * NFT의 상세 정보를 보여주는 페이지 컴포넌트
@@ -25,21 +25,10 @@ const ItemDetail = function () {
 
   const [openCheckout, setOpenCheckout] = useState(false);
   const [openCheckoutbid, setOpenCheckoutbid] = useState(false);
-
+  const account = '';
   const onClickBuy = async () => {
-    try {
-      // account 없으면 실행하지 말아라
-      if (!account) return;
-      const response = await saleArtTokenContract.methods
-        .purchaseArtToken(artTokenId)
-        .send({ from: account, value: artPrice });
-
-      // transaction이 끝나면 뭘 실행할건지 지정해줘야함.
-      if (response.status) {
-      }
-    } catch (error) {
-      console.error(error);
-    }
+    account;
+    saleArtTokenContracts;
   };
   return (
     <BasicLayout>

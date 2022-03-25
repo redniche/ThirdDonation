@@ -1,5 +1,7 @@
 import SsafyTokenAbi from '../core/nft/SsafyToken.json';
 import SsafyNFTAbi from '../core/nft/SsafyNFT.json';
+import MintArtTokenAbi from '../core/nft/MintArtTokenAbi.json';
+import SaleArtTokenAbi from '../core/nft/SaleArtTokenAbi.json';
 import ArtToken from '../core/nft/ArtToken.json';
 import SaleArtToken from '../core/nft/SaleArtToken.json';
 
@@ -15,8 +17,10 @@ const ABI = {
     NFT_ABI: SsafyNFTAbi,
     ART_NFT_ABI: ArtToken,
     SALE_FACTORY_ABI: [],
+    SALE_ABI: SaleArtTokenAbi,
     SALE_ABI: SaleArtToken,
     TOKEN_ABI: SsafyTokenAbi,
+    MINT_ABI: MintArtTokenAbi,
   },
 };
 

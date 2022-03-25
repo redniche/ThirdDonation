@@ -2,7 +2,7 @@ import Web3 from 'web3';
 import ABI from '../common/ABI';
 
 const {
-  CONTRACT_ABI: { TOKEN_ABI, NFT_ABI },
+  CONTRACT_ABI: { TOKEN_ABI, NFT_ABI, SALE_ABI, MINT_ABI },
 } = ABI;
 
 const {
@@ -19,6 +19,10 @@ const SSAFY_TOKEN_CONTRACT_ADDRESS = '0x6C927304104cdaa5a8b3691E0ADE8a3ded41a333
 
 export const SSAFY_NFT_CONTRACT_ADDRESS = '0xA451Abc664c6203596CC7fCf95190CE131B25d86';
 
+const mintArtTokenAddress = '';
+
+const saleArtTokenAddress = '';
+
 const ssafyTokenProvider = new Web3.providers.HttpProvider(rpcHttpUrl);
 
 export const web3 = new Web3(ssafyTokenProvider);
@@ -32,3 +36,7 @@ export const artTokenContract = new web3.eth.Contract(ART_NFT_ABI, artTokenContr
 
 export const saleArtTokenContractAddress = '0x22bdf739A7Ab358bCB6Ba88E1ED84B1F075f6a37';
 export const saleArtTokenContract = new web3.eth.Contract(SALE_ABI, saleArtTokenContractAddress);
+
+export const mintArtTokenContracts = new web3.eth.Contract(MINT_ABI, mintArtTokenAddress);
+
+export const saleArtTokenContracts = new web3.eth.Contract(SALE_ABI, saleArtTokenAddress);

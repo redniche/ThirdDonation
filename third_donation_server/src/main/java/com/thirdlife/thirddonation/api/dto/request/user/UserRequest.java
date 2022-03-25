@@ -30,7 +30,7 @@ public class UserRequest {
                 .walletAddress(walletAddress)
                 .username(walletAddress)
                 .enabled(true)
-                .authority(Authority.normal)
+                .authority(Authority.NORMAL)
                 .build();
     }
 }

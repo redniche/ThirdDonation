@@ -16,7 +16,7 @@ import lombok.EqualsAndHashCode;
 @ApiModel("User")
 public class UserResponse extends BaseResponseBody {
 
-    private UserInfoDto userInfoDto;
+    private UserInfoDto data;
 
     /**
      * 상태 코드와 메시지, 유저 객체를 입력받아 UserResponse 객체를 반환합니다.
@@ -30,7 +30,7 @@ public class UserResponse extends BaseResponseBody {
         UserResponse response = new UserResponse();
         response.setStatusCode(statusCode);
         response.setMessage(message);
-        response.setUserInfoDto(UserInfoDto.of(user));
+        response.setData(UserInfoDto.of(user));
         return response;
     }
 }

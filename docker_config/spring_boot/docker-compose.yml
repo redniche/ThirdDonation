@@ -1,0 +1,16 @@
+# @format
+
+version: "3"
+services:
+  spring:
+    container_name: spring
+    build:
+      context: spring-dockerfile
+      dockerfile: Dockerfile
+    ports:
+      - 32090:8080
+    volumes:
+      - ~/docker/jenkins/jenkins_home/workspace/spring-boot-server/third_donation_server/build/libs:/deploy
+      - spring-upload:/upload
+volumes:
+  spring-upload:

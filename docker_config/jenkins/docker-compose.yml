@@ -1,0 +1,18 @@
+# @format
+
+version: "3"
+services:
+  jenkins:
+    container_name: jenkins
+    build:
+      context: jenkins-dockerfile
+      dockerfile: Dockerfile
+    user: root
+    ports:
+      - 32001:8080
+      - 50000:50000
+    volumes:
+      - /home/ubuntu/docker/jenkins/jenkins_home:/var/jenkins_home
+      - /home/ubuntu/docker/jenkins/.ssh:/root/.ssh
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /usr/bin/docker:/usr/bin/docker

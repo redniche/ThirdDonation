@@ -28,7 +28,7 @@ public class UserRequest {
     public User toEntity() {
         return User.builder()
                 .walletAddress(walletAddress)
-                .username(walletAddress)
+                .username("Unnamed")
                 .enabled(true)
                 .authority(Authority.NORMAL)
                 .build();

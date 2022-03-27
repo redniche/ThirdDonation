@@ -49,16 +49,13 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private boolean enabled;
 
-    @Column(nullable = false)
-    private boolean isArtist;
-
     @Column(nullable = false, length = 100)
     private String username;
 
-    @Column(nullable = true, length = 300)
+    @Column(length = 300)
     private String description;
 
-    @Column(nullable = true, length = 300)
+    @Column(length = 300)
     private String imagePath;
 
     @Column(nullable = false, length = 15)

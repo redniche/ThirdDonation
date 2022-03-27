@@ -1,5 +1,6 @@
 package com.thirdlife.thirddonation.api.service.user;
 
+import com.thirdlife.thirddonation.api.dto.request.user.UserImgRequest;
 import com.thirdlife.thirddonation.api.dto.request.user.UserProfileModifyRequest;
 import com.thirdlife.thirddonation.api.dto.request.user.UserRequest;
 import com.thirdlife.thirddonation.api.exception.CustomException;
@@ -69,6 +70,21 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     public User getUserByWalletAddress(String walletAddress) {
         return userRepository.findByWalletAddress(walletAddress);
+    }
+
+    /**
+     * 유저의 이미지 정보를 업로드하는 메서드입니다.
+     *
+     * @param userImgRequest UserImgRequest
+     */
+    @Override
+    public void uploadProfileImage(UserImgRequest userImgRequest) {
+        User user = userRepository.findById(userImgRequest.getId())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        user.setImagePath(userImgRequest.getImagePath());
+
+        userRepository.save(user);
     }
 
     /**

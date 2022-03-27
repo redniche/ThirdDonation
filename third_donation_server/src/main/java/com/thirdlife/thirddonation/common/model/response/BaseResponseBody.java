@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 /**
  * 서버 요청에대한 기본 응답값(바디) 정의.
@@ -14,6 +15,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
+@SuperBuilder
 @ApiModel("BaseResponseBody")
 public class BaseResponseBody {
 
@@ -30,20 +32,6 @@ public class BaseResponseBody {
      */
     public BaseResponseBody(Integer statusCode) {
         this.statusCode = statusCode;
-    }
-
-    /**
-     * 응답 코드와 메시지를 받아 BaseResponseBody 객체를 반환합니다.
-     *
-     * @param statusCode Integer
-     * @param message    String
-     * @return BaseResponseBody
-     */
-    public static BaseResponseBody of(Integer statusCode, String message) {
-        BaseResponseBody body = new BaseResponseBody();
-        body.message = message;
-        body.statusCode = statusCode;
-        return body;
     }
 }
 

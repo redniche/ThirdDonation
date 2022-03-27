@@ -1,5 +1,6 @@
 package com.thirdlife.thirddonation.api.service.nft;
 
+import com.thirdlife.thirddonation.api.dto.NftInfoDto;
 import com.thirdlife.thirddonation.api.dto.request.nft.NftMintRequest;
 import com.thirdlife.thirddonation.api.dto.request.nft.NftSalesRegisterRequest;
 import com.thirdlife.thirddonation.api.exception.CustomException;
@@ -10,9 +11,20 @@ import com.thirdlife.thirddonation.db.entity.user.User;
 import com.thirdlife.thirddonation.db.repository.NftRepository;
 import com.thirdlife.thirddonation.db.repository.SalesRepository;
 import com.thirdlife.thirddonation.db.repository.UserRepository;
+import java.util.ArrayList;
+import java.util.List;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import javax.annotation.PostConstruct;
 
 /**
  * NFT 서비스의 구현체입니다.
@@ -81,4 +93,34 @@ public class NftServiceImpl implements NftService {
         sales.setEnabled(false);
         salesRepository.save(sales);
     }
+
+    /**
+     * NFT 리스트 조회 메서드입니다.
+     * 유저 id로 해당 유저가 가진 NFT 를 조회합니다.
+     *
+     * @param userId   Long
+     * @param pageable Pageable
+     * @return List of Nft
+     */
+    @Override
+    public Page<Nft> getNftListByUserId(Long userId, Pageable pageable) {
+        Page<Nft> page = nftRepository.findAllByUserId(userId, pageable)
+                .orElseThrow(() -> new CustomException(ErrorCode.NFT_NOT_FOUND));
+        page.map(NftInfoDto::of);
+        return page;
+    }
+
+    /**
+     * NFT 정보 조회 메서드입니다.
+     * Nft 의 id로 해당 NFT의 정보를 조회합니다.
+     *
+     * @param tokenId Long
+     * @return List of Nft
+     */
+    @Override
+    public Nft getNftInfo(Long tokenId) {
+        return nftRepository.findById(tokenId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NFT_NOT_FOUND));
+    }
+
 }

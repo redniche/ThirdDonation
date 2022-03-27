@@ -2,8 +2,8 @@ package com.thirdlife.thirddonation.api.controller;
 
 import com.thirdlife.thirddonation.api.dto.request.user.UserImgRequest;
 import com.thirdlife.thirddonation.api.dto.request.user.UserRequest;
-import com.thirdlife.thirddonation.api.dto.response.UserProfileResponse;
-import com.thirdlife.thirddonation.api.dto.response.UserResponse;
+import com.thirdlife.thirddonation.api.dto.response.user.UserProfileResponse;
+import com.thirdlife.thirddonation.api.dto.response.user.UserResponse;
 import com.thirdlife.thirddonation.api.exception.CustomException;
 import com.thirdlife.thirddonation.api.exception.ErrorCode;
 import com.thirdlife.thirddonation.api.service.user.UserService;

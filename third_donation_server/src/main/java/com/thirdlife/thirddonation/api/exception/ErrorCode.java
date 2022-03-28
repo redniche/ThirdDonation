@@ -31,14 +31,14 @@ public enum ErrorCode {
     BUYER_NOT_FOUND(NOT_FOUND, "해당 Buyer 정보를 찾을 수 없습니다."),
     NFT_NOT_FOUND(NOT_FOUND, "해당 token id를 찾을 수 없습니다."),
     SALE_NOT_FOUND(NOT_FOUND, "판매 정보를 찾을 수 없습니다."),
-    FRIEND_NOT_FOUND(NOT_FOUND, "해당 유저와 친구가 아닙니다."),
-    FRIEND_REQUEST_NOT_FOUND(NOT_FOUND, "친구 요청 정보를 찾을 수 없습니다."),
+    ARTIST_NOT_FOUND(NOT_FOUND, "해당 예술가를 찾을 수 없습니다."),
+    FOLLOW_NOT_FOUND(NOT_FOUND, "follow 정보를 찾을 수 없습니다."),
     MEETING_NOT_FOUND(NOT_FOUND, "해당 방을 찾을수 없습니다"),
 
     /* 409 CONFLICT : Resource 의 현재 상태와 충돌. 보통 중복된 데이터 존재 */
     USER_ID_DUPLICATE(CONFLICT, "중복된 사용자 Wallet address 입니다."),
     ARTIST_DUPLICATE(CONFLICT, "이미 장애인 예술가 등록 (신청)된 사용자입니다."),
-    FALLOW_DUPLICATE(CONFLICT, "이미 등록된 팔로워입니다."),
+    FOLLOW_DUPLICATE(CONFLICT, "이미 following 중인 artist 입니다."),
 
     /* 500 ERROR : 서버에서 예기치 않은 에러 발생 */
     DATABASE_SERVER_ERROR(INTERNAL_SERVER_ERROR, "예기치 않은 오류가 발생했습니다.");

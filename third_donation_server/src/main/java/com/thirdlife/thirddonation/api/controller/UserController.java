@@ -1,6 +1,7 @@
 package com.thirdlife.thirddonation.api.controller;
 
 import com.thirdlife.thirddonation.api.dto.request.user.ArtistRegisterRequest;
+import com.thirdlife.thirddonation.api.dto.request.user.FollowRequest;
 import com.thirdlife.thirddonation.api.dto.request.user.UserImgRequest;
 import com.thirdlife.thirddonation.api.dto.request.user.UserRequest;
 import com.thirdlife.thirddonation.api.dto.response.user.UserProfileResponse;
@@ -8,6 +9,7 @@ import com.thirdlife.thirddonation.api.dto.response.user.UserResponse;
 import com.thirdlife.thirddonation.api.exception.CustomException;
 import com.thirdlife.thirddonation.api.exception.ErrorCode;
 import com.thirdlife.thirddonation.api.service.user.ArtistService;
+import com.thirdlife.thirddonation.api.service.user.FollowService;
 import com.thirdlife.thirddonation.api.service.user.UserService;
 import com.thirdlife.thirddonation.common.model.response.BaseResponseBody;
 import com.thirdlife.thirddonation.db.entity.user.User;
@@ -20,8 +22,8 @@ import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,6 +44,7 @@ public class UserController {
 
     private final UserService userService;
     private final ArtistService artistService;
+    private final FollowService followService;
 
     /**
      * Post 요청시 전송받은 정보로 user를 찾고 만약 없으면 회원가입을 시도합니다.
@@ -139,6 +142,40 @@ public class UserController {
                                                                    ArtistRegisterRequest artistRegisterRequest) {
 
         artistService.createArtist(artistRegisterRequest);
+
+        return ResponseEntity.status(200)
+                .body(BaseResponseBody.builder().statusCode(200).message("Success").build());
+    }
+
+    @PostMapping("/follow")
+    public ResponseEntity<BaseResponseBody> followArtist(
+            @Valid @RequestBody FollowRequest followRequest) {
+
+        final Long userId = followRequest.getUserId();
+        final Long artistId = followRequest.getArtistId();
+
+        if (userId.equals(artistId)) {
+            throw new CustomException(ErrorCode.CANNOT_FOLLOW_MYSELF);
+        }
+
+        followService.createFollow(followRequest);
+
+        return ResponseEntity.status(200)
+                .body(BaseResponseBody.builder().statusCode(200).message("Success").build());
+    }
+
+    @DeleteMapping("/follow")
+    public ResponseEntity<BaseResponseBody> unfollowArtist(
+            @Valid @RequestBody FollowRequest followRequest) {
+
+        final Long userId = followRequest.getUserId();
+        final Long artistId = followRequest.getArtistId();
+
+        if (userId.equals(artistId)) {
+            throw new CustomException(ErrorCode.CANNOT_FOLLOW_MYSELF);
+        }
+
+        followService.deleteFollow(followRequest);
 
         return ResponseEntity.status(200)
                 .body(BaseResponseBody.builder().statusCode(200).message("Success").build());

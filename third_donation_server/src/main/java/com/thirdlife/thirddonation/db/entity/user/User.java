@@ -47,7 +47,7 @@ public class User implements UserDetails {
     private LocalDateTime dateExchanged;
 
     @Column(nullable = false)
-    private boolean enabled;
+    private Boolean enabled;
 
     @Column(nullable = false, length = 100)
     private String username;
@@ -58,9 +58,16 @@ public class User implements UserDetails {
     @Column(length = 300)
     private String imagePath;
 
+    @Column
+    private Integer followerCount;
+
     @Column(nullable = false, length = 15)
     @Enumerated(EnumType.STRING)
     private Authority authority;
+
+    @Builder.Default
+    @OneToMany(mappedBy = "user")
+    private List<Follow> follows = new ArrayList<>();
 
     @Builder.Default
     @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)

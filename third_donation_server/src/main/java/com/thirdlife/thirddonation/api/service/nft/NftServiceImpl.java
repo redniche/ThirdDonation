@@ -103,11 +103,11 @@ public class NftServiceImpl implements NftService {
      * @return List of Nft
      */
     @Override
-    public Page<Nft> getNftListByUserId(Long userId, Pageable pageable) {
+    public Page<NftInfoDto> getNftListByUserId(Long userId, Pageable pageable) {
         Page<Nft> page = nftRepository.findAllByUserId(userId, pageable)
                 .orElseThrow(() -> new CustomException(ErrorCode.NFT_NOT_FOUND));
-        page.map(NftInfoDto::of);
-        return page;
+        Page<NftInfoDto> infoPage = page.map(NftInfoDto::of);
+        return infoPage;
     }
 
     /**

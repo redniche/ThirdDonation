@@ -1,6 +1,6 @@
 package com.thirdlife.thirddonation.api.controller;
 
-import io.swagger.annotations.*;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;

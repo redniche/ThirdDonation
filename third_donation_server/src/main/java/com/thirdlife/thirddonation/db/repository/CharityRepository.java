@@ -1,7 +1,6 @@
 package com.thirdlife.thirddonation.db.repository;
 
-import com.thirdlife.thirddonation.db.entity.nft.Charity;
-import com.thirdlife.thirddonation.db.entity.user.User;
+import com.thirdlife.thirddonation.db.entity.charity.Charity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 

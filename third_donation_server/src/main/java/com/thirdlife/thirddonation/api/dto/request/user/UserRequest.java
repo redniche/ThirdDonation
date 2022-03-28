@@ -31,6 +31,7 @@ public class UserRequest {
                 .username("Unnamed")
                 .enabled(true)
                 .authority(Authority.NORMAL)
+                .followerCount(0)
                 .build();
     }
 }

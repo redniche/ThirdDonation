@@ -29,6 +29,10 @@ public class Nft {
     private String tokenUri;
 
     @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "artist_id", referencedColumnName = "id")
+    private User artist;
+
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "owner_id", referencedColumnName = "id")
     private User user;
 

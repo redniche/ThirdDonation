@@ -1,5 +1,6 @@
 package com.thirdlife.thirddonation.api.service.nft;
 
+import com.thirdlife.thirddonation.api.dto.NftInfoDto;
 import com.thirdlife.thirddonation.api.dto.request.nft.NftMintRequest;
 import com.thirdlife.thirddonation.api.dto.request.nft.NftSalesRegisterRequest;
 import com.thirdlife.thirddonation.db.entity.nft.Nft;
@@ -40,7 +41,7 @@ public interface NftService {
      * @param pageable Pageable
      * @return List of Nft
      */
-    Page<Nft> getNftListByUserId(Long userId, Pageable pageable);
+    Page<NftInfoDto> getNftListByUserId(Long userId, Pageable pageable);
 
     /**
      * NFT 정보 조회 메서드입니다.

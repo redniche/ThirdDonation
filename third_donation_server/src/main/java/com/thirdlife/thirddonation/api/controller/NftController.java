@@ -133,7 +133,7 @@ public class NftController {
      * @param pageable Pageable 페이지
      * @return ResponseEntity BaseResponseBody
      */
-    @PostMapping("/items/{userId}")
+    @GetMapping("/items/{userId}")
     @ApiOperation(value = "NFT 리스트 조회",
             notes = "<strong>NFT 리스트</strong>를 조회한다.<br>http://{서버 주소}/api/chat/message/1?page=0&size=5&sort=id")
     @ApiResponses({
@@ -149,7 +149,7 @@ public class NftController {
             @ApiParam(value = "페이지네이션", required = true) final Pageable pageable) {
 
         //nftPage
-        Page<Nft> nftPage = nftService.getNftListByUserId(userId, pageable);
+        Page<NftInfoDto> nftPage = nftService.getNftListByUserId(userId, pageable);
 
         //Builder 패턴으로 List<NftInfoDto> 를 담은 NftListResponse 을 담은 ResponseEntity 반환
         NftListResponse response =
@@ -186,14 +186,7 @@ public class NftController {
         // nft 를 담은 NftResponse 을 담은 ResponseEntity 반환
         return ResponseEntity.status(200)
                 .body(NftResponse.builder().statusCode(200).message("Success")
-                        .data(
-                                NftInfoDto.builder()
-                                        .id(nft.getId())
-                                        .tokenUri(nft.getTokenUri())
-                                        .user(nft.getUser())
-                                        .isMintSold(nft.isMintSold())
-                                        .build()
-                        )
+                        .data(NftInfoDto.of(nft))
                         .build());
     }
 }

@@ -3,11 +3,19 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import * as selectors from '../../store/selectors';
 import {
-  getSsafyNftContract,
-  saleArtTokenContracts,
+  // GetWeb3,
+  // getSsafyNftContract,
+  // getSaleNftContract,
+  // saleArtTokenContracts,
   SALE_NFT_CONTRACT_ADDRESS,
-  // SSAFY_NFT_CONTRACT_ADDRESS,
+  SSAFY_NFT_CONTRACT_ADDRESS,
 } from '../../contracts';
+import Web3 from 'web3';
+import ABI from '../../common/ABI';
+import { detectCurrentProvider } from '../../core/ethereum';
+
+// import { API_URL, Axios } from './../../core/axios';
+import Spinner from 'react-bootstrap/Spinner';
 
 import Clock from '../../components/nfts/Clock';
 import PanelLayout from '../../components/layout/PanelLayout';
@@ -17,14 +25,14 @@ import PanelLayout from '../../components/layout/PanelLayout';
  */
 const Sell = () => {
   const { data: account } = useSelector(selectors.accountState);
-  console.log(account.walletAddress);
-  console.log(getSsafyNftContract().methods);
 
   // const privateKey = '0x94fa80f5c0885863488f5e0975929faa53b83a5791b098b85d0b7326f174a38e';
   // const walletAccount = web3.eth.accounts.privateKeyToAccount(privateKey);
 
   // const [artPrice, setArtPrice] = useState('');
+  // const [account, setAccount] = useState('');
   const [sellPrice, setSellPrice] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const onChangeSellPrice = (e) => {
     setSellPrice(e.target.value);
@@ -46,117 +54,108 @@ const Sell = () => {
     document.getElementById('btn2').classList.add('active');
   };
 
-  // const getIsApprovedForAll = async () => {
-  //   try {
-  //     const response = await getSsafyNftContract()
-  //       .methods.isApprovedForAll(account.walletAddress, saleArtTokenContractAddress)
-  //       .call();
-  //     console.log(response);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
   // 판매 등록을 승인하는 함수
-  const approveToggle = async () => {
+  const approveToggle = async (artNftContract, currentWallet) => {
     try {
-      if (!account) return;
-      // const nowWalletAddress = account.walletAddress;
-      // 해당 주소의 판매 컨트랙트를 승인
-      // const contractMethod = getSsafyNftContract().methods.setApprovalForAll(
-      //   SALE_NFT_CONTRACT_ADDRESS,
-      //   true,
-      // );
-      getSsafyNftContract().methods.setApprovalForAll(SALE_NFT_CONTRACT_ADDRESS, true);
+      console.log(artNftContract.methods);
+      console.log(currentWallet);
 
-      // const gasEstimate = await contractMethod.estimateGas({ from: nowWalletAddress });
-
-      // const tx = {
-      //   from: nowWalletAddress,
-      //   to: SSAFY_NFT_CONTRACT_ADDRESS,
-      //   gas: gasEstimate,
-      //   data: contractMethod.encodeABI(),
-      // };
-
-      // await walletAccount
-      //   .signTransaction(tx)
-      //   .then(async (signedTx) => {
-      //     await web3.eth.sendSignedTransaction(signedTx.rawTransaction).on('receipt', console.log);
-      //   })
-      //   .then((res) => {
-      //     console.log(res);
-      //     // alert('NFT 판매 등록이 완료되었습니다.');
-      //   })
-      //   .catch((err) => {
-      //     console.log(err);
-      //     alert('판매 등록 승인 에러 발생!');
-      //   });
+      const response = artNftContract.methods
+        .setApprovalForAll(SALE_NFT_CONTRACT_ADDRESS, true)
+        .send({ from: currentWallet });
+      console.log(response);
     } catch (error) {
       console.log(error);
+      setLoading(false);
+      alert('판매 등록 에러 발생!');
     }
   };
 
   const saleRegist = async () => {
     try {
-      if (!account) return;
-      console.log('😀😀😀');
+      if (!account) {
+        alert('지갑을 연결해주세요.');
+        return;
+      }
+      if (sellPrice === '') {
+        alert('가격을 입력해주세요.');
+        return;
+      }
+      setLoading(true);
 
-      // const nowWalletAddress = account.walletAddress;
-      // 해당 tokenId에 해당하는 토큰에 입력한 가격으로 판매 등록
-      // const contractMethod = saleArtTokenContracts.methods.setForSaleArtToken(2, sellPrice);
-      saleArtTokenContracts.methods.setForSaleArtToken(2, sellPrice);
-      console.log(saleArtTokenContracts.methods);
+      // console.log(saleArtTokenContracts.methods);
+      const currentProvider = detectCurrentProvider();
+      if (!currentProvider) return;
+
+      const accounts = await currentProvider.request({ method: 'eth_requestAccounts' });
+      const currentWallet = accounts[0];
+      console.log(currentWallet);
+
+      const web3 = new Web3(currentProvider);
+      const {
+        CONTRACT_ABI: { SALE_ABI, NFT_ABI },
+      } = ABI;
+
+      const saleArtContract = new web3.eth.Contract(SALE_ABI, SALE_NFT_CONTRACT_ADDRESS);
+      const artNftContract = new web3.eth.Contract(NFT_ABI, SSAFY_NFT_CONTRACT_ADDRESS);
+
+      const saleAuth = await artNftContract.methods
+        .isApprovedForAll(currentWallet, SALE_NFT_CONTRACT_ADDRESS)
+        .call();
+      console.log(saleAuth);
+      if (!saleAuth) await approveToggle(artNftContract, currentWallet);
+
+      const response = await saleArtContract.methods
+        .setForSaleArtToken(2, sellPrice)
+        .send({ from: currentWallet });
+      // .then( async () => {
+      //   await saveSaleNFT();
+      // });
+      console.log(response);
 
       // 해당 주소 토큰 개수 확인
-      // const balance = await ssafyNftContract.methods.balanceOf(nowWalletAddress).call();
-      // console.log(balance);
-
-      await approveToggle();
-
-      // const gasEstimate = await contractMethod.estimateGas({ from: nowWalletAddress });
-
-      // const tx = {
-      //   from: nowWalletAddress,
-      //   to: SALE_NFT_CONTRACT_ADDRESS,
-      //   gas: gasEstimate,
-      //   data: contractMethod.encodeABI(),
-      // };
-      // // console.log(walletAccount);
-
-      // await walletAccount
-      //   .signTransaction(tx)
-      //   .then(async (signedTx) => {
-      //     await web3.eth.sendSignedTransaction(signedTx.rawTransaction).on('receipt', console.log);
-      //   })
-      //   .then((res) => {
-      //     console.log(res);
-      //     alert('NFT 판매 등록이 완료되었습니다.');
-      //   })
-      //   .catch((err) => {
-      //     console.log(err);
-      //     alert('판매 등록 에러 발생!');
-      //   });
+      const balance = await artNftContract.methods.balanceOf(currentWallet).call();
+      console.log(balance);
 
       // 해당 tokenId에 해당하는 토큰 가격 확인
-      // const price = await saleArtTokenContracts.methods.getArtTokenPrice(2).call();
-      // console.log(price);
+      const price = await saleArtContract.methods.getArtTokenPrice(2).call();
+      console.log(price);
+
+      setLoading(false);
+      alert('NFT 판매 등록이 완료되었습니다.');
     } catch (error) {
       console.log(error);
+      setLoading(false);
+      alert('판매 등록 에러 발생!');
     }
   };
 
-  // useEffect(async () => {
-  //   // if (account == null) {
-  //   //   history.push("/");
-  //   // }
-  //   approveToggle();
-  //   // getIsApprovedForAll();
-  //   const balance = await ssafyNftContract.methods.balanceOf(account.walletAddress).call();
-
-  //   console.log(balance);
-  //   const artPrice = await saleArtTokenContracts.methods.artTokenPrices(2).call();
-  //   console.log(artPrice);
-  // }, []);
+  // 백엔드에 판매 정보 등록하는 함수
+  // const saveSaleNFT = () => {
+  //   Axios.post(
+  //     `${API_URL}/nfts/sales`,
+  //     {
+  //       basePrice: sellPrice,
+  //       contractAddress: SALE_NFT_CONTRACT_ADDRESS,
+  //       saleType: 'AUCTION',
+  //       sellerId: 0,
+  //       tokenId: 0,
+  //     },
+  //     {
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       withCredentials: true,
+  //     },
+  //   )
+  //     .then((res) => {
+  //       console.log(res);
+  //     })
+  //     .catch((err) => {
+  //       console.log(`err: ${err}`);
+  //       // 만약 NFT생성은 완료 되었는데 서버전송에서 오류날 경우따로 DB저장 처리 가능한 함수 필요
+  //     });
+  // };
 
   return (
     <PanelLayout title="작품 판매">
@@ -255,13 +254,20 @@ const Sell = () => {
 
                 <div className="spacer-10"></div>
 
-                <input
-                  type="button"
-                  id="submit"
-                  className="btn-main"
-                  value="판매 등록"
-                  onClick={saleRegist}
-                />
+                {loading ? (
+                  <div className="m-4 d-flex justify-content-center">
+                    <Spinner animation="border" />
+                    <span className="m-1">판매 등록 중입니다.</span>
+                  </div>
+                ) : (
+                  <input
+                    type="button"
+                    id="submit"
+                    className="btn-main"
+                    value="판매 등록"
+                    onClick={saleRegist}
+                  />
+                )}
               </div>
             </form>
           </div>

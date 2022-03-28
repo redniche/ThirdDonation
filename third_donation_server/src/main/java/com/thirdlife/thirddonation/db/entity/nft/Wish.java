@@ -1,9 +1,9 @@
 package com.thirdlife.thirddonation.db.entity.nft;
 
 import com.thirdlife.thirddonation.db.entity.user.User;
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -14,34 +14,25 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * NFT 작품을 위한 엔티티.
+ * NFT 찜하기 엔티티.
  */
 @Builder
 @Data
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Nft {
+public class Wish {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String tokenUri;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "owner_id", referencedColumnName = "id")
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
-    @Column(nullable = false)
-    private Boolean isMintSold;
+    @ManyToOne
+    @JoinColumn(name = "token_id", referencedColumnName = "id")
+    private Nft nft;
 
-    private Integer wishCount;
-
-    public void increaseWishCount() {
-        wishCount++;
-    }
-
-    public void decreaseWishCount() {
-        wishCount--;
-    }
 }

@@ -1,6 +1,7 @@
 package com.thirdlife.thirddonation.db.entity.user;
 
 import com.thirdlife.thirddonation.db.entity.nft.Sales;
+import com.thirdlife.thirddonation.db.entity.nft.Wish;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -68,6 +69,11 @@ public class User implements UserDetails {
     @Builder.Default
     @OneToMany(mappedBy = "user")
     private List<Follow> follows = new ArrayList<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "user")
+    private List<Wish> wishes = new ArrayList<>();
+
 
     @Builder.Default
     @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)

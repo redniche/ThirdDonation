@@ -3,9 +3,11 @@ package com.thirdlife.thirddonation.api.controller;
 import com.thirdlife.thirddonation.api.dto.NftInfoDto;
 import com.thirdlife.thirddonation.api.dto.request.nft.NftMintRequest;
 import com.thirdlife.thirddonation.api.dto.request.nft.NftSalesRegisterRequest;
+import com.thirdlife.thirddonation.api.dto.request.nft.WishRequest;
 import com.thirdlife.thirddonation.api.dto.response.nft.NftListResponse;
 import com.thirdlife.thirddonation.api.dto.response.nft.NftResponse;
 import com.thirdlife.thirddonation.api.service.nft.NftService;
+import com.thirdlife.thirddonation.api.service.nft.WishService;
 import com.thirdlife.thirddonation.api.service.user.UserService;
 import com.thirdlife.thirddonation.common.model.response.BaseResponseBody;
 import com.thirdlife.thirddonation.db.entity.nft.Nft;
@@ -45,8 +47,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class NftController {
 
-    private final UserService userService;
     private final NftService nftService;
+    private final WishService wishService;
 
     /**
      * Post 요청시 전송받은 정보로 NFT를 등록합니다.
@@ -188,5 +190,51 @@ public class NftController {
                 .body(NftResponse.builder().statusCode(200).message("Success")
                         .data(NftInfoDto.of(nft))
                         .build());
+    }
+
+    /**
+     * 찜하기 데이터 등록 요청을 처리합니다.
+     *
+     * @param wishRequest WishRequest
+     * @return ResponseEntity
+     */
+    @PostMapping("/wish")
+    @ApiOperation(value = "찜하기 등록")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 404, message = "사용자 없음"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<BaseResponseBody> createWish(
+            @Valid @RequestBody @ApiParam(value = "찜하기 등록 데이터", required = true)
+                    WishRequest wishRequest) {
+
+        wishService.createWish(wishRequest);
+
+        return ResponseEntity.status(200)
+                .body(BaseResponseBody.builder().statusCode(200).message("Success").build());
+    }
+
+    /**
+     * 찜하기 데이터 해제 요청을 처리합니다.
+     *
+     * @param wishRequest WishRequest
+     * @return ResponseEntity
+     */
+    @DeleteMapping("/wish")
+    @ApiOperation(value = "찜하기 해제")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 404, message = "사용자 없음"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<BaseResponseBody> deleteWish(
+            @Valid @RequestBody @ApiParam(value = "찜하기 삭제 데이터", required = true)
+                    WishRequest wishRequest) {
+
+        wishService.deleteWish(wishRequest);
+
+        return ResponseEntity.status(200)
+                .body(BaseResponseBody.builder().statusCode(200).message("Success").build());
     }
 }

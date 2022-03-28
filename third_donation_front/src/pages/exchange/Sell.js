@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import * as selectors from '../../store/selectors';
 import {
-  ssafyNftContract,
+  getSsafyNftContract,
   saleArtTokenContracts,
   saleArtTokenContractAddress,
 } from '../../contracts';
@@ -17,7 +17,7 @@ import PanelLayout from '../../components/layout/PanelLayout';
 const Sell = () => {
   const { data: account } = useSelector(selectors.accountState);
   console.log(account.walletAddress);
-  console.log(ssafyNftContract.methods);
+  console.log(getSsafyNftContract().methods);
 
   // const [artPrice, setArtPrice] = useState('');
   const [sellPrice, setSellPrice] = useState('');
@@ -44,8 +44,8 @@ const Sell = () => {
 
   const getIsApprovedForAll = async () => {
     try {
-      const response = await ssafyNftContract.methods
-        .isApprovedForAll(account.walletAddress, saleArtTokenContractAddress)
+      const response = await getSsafyNftContract()
+        .methods.isApprovedForAll(account.walletAddress, saleArtTokenContractAddress)
         .call();
       console.log(response);
     } catch (error) {
@@ -57,7 +57,7 @@ const Sell = () => {
     try {
       if (!account) return;
 
-      const response = await ssafyNftContract.methods.setApprovalForAll(
+      const response = await getSsafyNftContract().methods.setApprovalForAll(
         saleArtTokenContractAddress,
         true,
       );
@@ -89,7 +89,7 @@ const Sell = () => {
     // }
     approveToggle();
     getIsApprovedForAll();
-    const balance = await ssafyNftContract.methods.balanceOf(account.walletAddress).call();
+    const balance = await getSsafyNftContract().methods.balanceOf(account.walletAddress).call();
 
     console.log(balance);
     const artPrice = await saleArtTokenContracts.methods.artTokenPrices(2).call();

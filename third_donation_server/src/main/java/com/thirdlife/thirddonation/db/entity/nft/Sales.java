@@ -1,5 +1,6 @@
 package com.thirdlife.thirddonation.db.entity.nft;
 
+import com.thirdlife.thirddonation.db.entity.charity.Charity;
 import com.thirdlife.thirddonation.db.entity.user.User;
 import java.time.LocalDateTime;
 import javax.persistence.Column;

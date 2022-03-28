@@ -1,4 +1,4 @@
-package com.thirdlife.thirddonation.api.dto.response;
+package com.thirdlife.thirddonation.api.dto.response.user;
 
 import com.thirdlife.thirddonation.api.dto.UserInfoDto;
 import com.thirdlife.thirddonation.common.model.response.BaseResponseBody;

@@ -25,7 +25,7 @@ public class CharityInfoDto {
     public static CharityInfoDto of(Charity charity) {
         CharityInfoDto charifyInfoDto = new CharityInfoDto();
         charifyInfoDto.setName(charity.getName());
-//        charifyInfoDto.setWalletAddress(charity.getWalletAddress());
+        //charifyInfoDto.setWalletAddress(charity.getWalletAddress());
 
         return charifyInfoDto;
     }

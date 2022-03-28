@@ -54,6 +54,7 @@ public class NftServiceImpl implements NftService {
 
         Nft nft = nftMintRequest.toEntity();
         nft.setUser(owner);
+        nft.setArtist(owner);
 
         nftRepository.save(nft);
     }
@@ -106,8 +107,22 @@ public class NftServiceImpl implements NftService {
     public Page<NftInfoDto> getNftListByUserId(Long userId, Pageable pageable) {
         Page<Nft> page = nftRepository.findAllByUserId(userId, pageable)
                 .orElseThrow(() -> new CustomException(ErrorCode.NFT_NOT_FOUND));
-        Page<NftInfoDto> infoPage = page.map(NftInfoDto::of);
-        return infoPage;
+        return page.map(NftInfoDto::of);
+    }
+
+    /**
+     * NFT 리스트 조회 메서드입니다.
+     * 아티스트의 유저 id로 해당 유저가 만든 NFT 를 조회합니다.
+     *
+     * @param artistId Long
+     * @param pageable Pageable
+     * @return List of Nft
+     */
+    @Override
+    public Page<NftInfoDto> getNftListByArtistId(Long artistId, Pageable pageable) {
+        Page<Nft> page = nftRepository.findAllByArtistId(artistId, pageable)
+                .orElseThrow(() -> new CustomException(ErrorCode.NFT_NOT_FOUND));
+        return page.map(NftInfoDto::of);
     }
 
     /**

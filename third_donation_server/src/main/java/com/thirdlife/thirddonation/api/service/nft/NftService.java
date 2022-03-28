@@ -44,6 +44,16 @@ public interface NftService {
     Page<NftInfoDto> getNftListByUserId(Long userId, Pageable pageable);
 
     /**
+     * NFT 리스트 조회 메서드입니다.
+     * 아티스트의 유저 id로 해당 유저가 만든 NFT 를 조회합니다.
+     *
+     * @param artistId Long
+     * @param pageable Pageable
+     * @return List of Nft
+     */
+    Page<NftInfoDto> getNftListByArtistId(Long artistId, Pageable pageable);
+
+    /**
      * NFT 정보 조회 메서드입니다.
      * Nft 의 id로 해당 NFT의 정보를 조회합니다.
      *

@@ -14,4 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public interface NftRepository extends JpaRepository<Nft, Long> {
     Optional<Page<Nft>> findAllByUserId(Long userId, Pageable pageable);
+
+    Optional<Page<Nft>> findAllByArtistId(Long userId, Pageable pageable);
 }

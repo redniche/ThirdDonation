@@ -14,7 +14,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +26,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -128,14 +126,16 @@ public class NftController {
     /**
      * 유저가 소유한 NFT 리스트를 반환합니다.
      * userId와 pageable 을 입력받아 NFT 리스트 반환
+     * isArtist 가 true 이면 해당 아티스트가 제작한 nft 를 조회합니다.
      *
      * @param userId   Long 유저아이디
      * @param pageable Pageable 페이지
+     * @param isArtist boolean
      * @return ResponseEntity BaseResponseBody
      */
     @GetMapping("/items/{userId}")
     @ApiOperation(value = "NFT 리스트 조회",
-            notes = "<strong>NFT 리스트</strong>를 조회한다.<br>http://{서버 주소}/api/chat/message/1?page=0&size=5&sort=id")
+            notes = "<strong>userId로 NFT 리스트</strong>를 조회한다. 아티스트 기준이면 isArtist=true 를 넣어준다. <br>http://{서버 주소}/api/chat/message/1?page=0&size=5&sort=id?isArtist=false")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
             @ApiResponse(code = 401, message = "인증 실패"),
@@ -146,12 +146,13 @@ public class NftController {
             @Positive @PathVariable @ApiParam(value = "유저아이디", required = true)
                     Long userId,
             @PageableDefault(sort = "id", direction = Sort.Direction.ASC)
-            @ApiParam(value = "페이지네이션", required = true) final Pageable pageable) {
+            @ApiParam(value = "페이지네이션", required = true) final Pageable pageable,
+            @ApiParam(value = "아티스트조회여부", defaultValue = "false") final boolean isArtist) {
 
         //nftPage
-        Page<NftInfoDto> nftPage = nftService.getNftListByUserId(userId, pageable);
+        Page<NftInfoDto> nftPage = isArtist ? nftService.getNftListByArtistId(userId, pageable) :
+                nftService.getNftListByUserId(userId, pageable);
 
-        //Builder 패턴으로 List<NftInfoDto> 를 담은 NftListResponse 을 담은 ResponseEntity 반환
         NftListResponse response =
                 NftListResponse.builder().statusCode(100).message("Success")
                         .data(nftPage.getContent())

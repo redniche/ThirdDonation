@@ -30,6 +30,7 @@ public class NftMintRequest {
                 .id(id)
                 .tokenUri(tokenUri)
                 .isMintSold(false)
+                .wishCount(0)
                 .build();
     }
 }

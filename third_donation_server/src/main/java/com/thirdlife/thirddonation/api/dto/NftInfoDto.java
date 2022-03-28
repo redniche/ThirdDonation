@@ -36,7 +36,7 @@ public class NftInfoDto {
                 .tokenUri(nft.getTokenUri())
                 .artist(nft.getArtist())
                 .user(nft.getUser())
-                .isMintSold(nft.isMintSold())
+                .isMintSold(nft.getIsMintSold())
                 .build();
     }
 }

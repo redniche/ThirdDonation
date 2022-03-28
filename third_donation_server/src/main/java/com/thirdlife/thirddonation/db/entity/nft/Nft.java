@@ -1,9 +1,9 @@
 package com.thirdlife.thirddonation.db.entity.nft;
 
 import com.thirdlife.thirddonation.db.entity.user.User;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -28,14 +28,24 @@ public class Nft {
     @Column(nullable = false)
     private String tokenUri;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "artist_id", referencedColumnName = "id")
     private User artist;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id", referencedColumnName = "id")
     private User user;
 
     @Column(nullable = false)
-    private boolean isMintSold;
+    private Boolean isMintSold;
+
+    private Integer wishCount;
+
+    public void increaseWishCount() {
+        wishCount++;
+    }
+
+    public void decreaseWishCount() {
+        wishCount--;
+    }
 }

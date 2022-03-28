@@ -4,7 +4,7 @@ import com.thirdlife.thirddonation.api.dto.request.charity.CharityRegisterReques
 import com.thirdlife.thirddonation.api.dto.response.CharityResponse;
 import com.thirdlife.thirddonation.api.service.charity.CharityService;
 import com.thirdlife.thirddonation.common.model.response.BaseResponseBody;
-import com.thirdlife.thirddonation.db.entity.nft.Charity;
+import com.thirdlife.thirddonation.db.entity.charity.Charity;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -56,7 +56,8 @@ public class CharityController {
 
         charityService.createCharity(charityRegisterRequest);
 
-        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+        return ResponseEntity.status(200)
+                .body(BaseResponseBody.builder().statusCode(200).message("Success").build());
     }
 
     /**
@@ -73,7 +74,9 @@ public class CharityController {
     public ResponseEntity<CharityResponse> getCharityList() {
         List<Charity> charityList = charityService.getCharityList();
 
-        return ResponseEntity.status(200).body(CharityResponse.of(200, "Success", charityList));
+        return ResponseEntity.status(200)
+                .body(CharityResponse.builder().statusCode(200).message("Success").data(charityList)
+                        .build());
     }
 
     /**
@@ -94,6 +97,7 @@ public class CharityController {
 
         charityService.deleteCharity(walletAddress);
 
-        return ResponseEntity.status(200).body(CharityResponse.of(200, "Success"));
+        return ResponseEntity.status(200)
+                .body(BaseResponseBody.builder().statusCode(200).message("Success").build());
     }
 }

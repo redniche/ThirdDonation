@@ -20,18 +20,10 @@ import lombok.experimental.SuperBuilder;
 public class BaseResponseBody {
 
     @ApiModelProperty(name = "응답 메시지", example = "정상")
-    private String message = null;
+    private String message;
 
     @ApiModelProperty(name = "응답 코드", example = "200")
-    private Integer statusCode = null;
+    private Integer statusCode;
 
-    /**
-     * 응답 코드 매개변수로 받는 생성자입니다.
-     *
-     * @param statusCode Integer
-     */
-    public BaseResponseBody(Integer statusCode) {
-        this.statusCode = statusCode;
-    }
 }
 

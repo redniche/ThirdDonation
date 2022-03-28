@@ -1,6 +1,6 @@
 package com.thirdlife.thirddonation.api.dto.request.charity;
 
-import com.thirdlife.thirddonation.db.entity.nft.Charity;
+import com.thirdlife.thirddonation.db.entity.charity.Charity;
 import javax.validation.constraints.NotBlank;
 import lombok.Getter;
 

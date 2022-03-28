@@ -1,4 +1,4 @@
-package com.thirdlife.thirddonation.db.entity.nft;
+package com.thirdlife.thirddonation.db.entity.charity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

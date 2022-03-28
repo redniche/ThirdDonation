@@ -3,7 +3,7 @@ package com.thirdlife.thirddonation.api.service.charity;
 import com.thirdlife.thirddonation.api.dto.request.charity.CharityRegisterRequest;
 import com.thirdlife.thirddonation.api.exception.CustomException;
 import com.thirdlife.thirddonation.api.exception.ErrorCode;
-import com.thirdlife.thirddonation.db.entity.nft.Charity;
+import com.thirdlife.thirddonation.db.entity.charity.Charity;
 import com.thirdlife.thirddonation.db.repository.CharityRepository;
 import java.util.List;
 import lombok.AllArgsConstructor;

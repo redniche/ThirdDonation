@@ -20,6 +20,7 @@ import lombok.NoArgsConstructor;
 public class NftInfoDto {
     private Long id;
     private String tokenUri;
+    private User artist;
     private User user;
     private boolean isMintSold;
 
@@ -33,6 +34,7 @@ public class NftInfoDto {
         return NftInfoDto.builder()
                 .id(nft.getId())
                 .tokenUri(nft.getTokenUri())
+                .artist(nft.getArtist())
                 .user(nft.getUser())
                 .isMintSold(nft.getIsMintSold())
                 .build();

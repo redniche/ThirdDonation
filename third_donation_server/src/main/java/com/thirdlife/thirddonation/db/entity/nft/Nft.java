@@ -29,6 +29,10 @@ public class Nft {
     private String tokenUri;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "artist_id", referencedColumnName = "id")
+    private User artist;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id", referencedColumnName = "id")
     private User user;
 

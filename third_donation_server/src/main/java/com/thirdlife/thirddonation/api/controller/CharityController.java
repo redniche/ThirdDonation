@@ -1,9 +1,27 @@
 package com.thirdlife.thirddonation.api.controller;
 
-import io.swagger.annotations.*;
+import com.thirdlife.thirddonation.api.dto.request.charity.CharityRegisterRequest;
+import com.thirdlife.thirddonation.api.dto.response.CharityResponse;
+import com.thirdlife.thirddonation.api.service.charity.CharityService;
+import com.thirdlife.thirddonation.common.model.response.BaseResponseBody;
+import com.thirdlife.thirddonation.db.entity.nft.Charity;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import java.util.List;
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,48 +32,68 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @Api(tags = "자선단체 관리")
 @RestController
-@RequestMapping("${request.path.api}${request.path.users}")
+@RequestMapping("${request.path.api}${request.path.charities}")
 @RequiredArgsConstructor
 public class CharityController {
 
-//    private final UserService userService;
-//    private final PasswordEncoder passwordEncoder;
-//
-//    /**
-//     * Post 요청시 전송받은 정보로 user를 찾고 만약 없으면 회원가입을 시도합니다.
-//     * 만약 있다면 ResponseEntity&lt;UserRequestDto>&gt; 객체를 반환합니다.
-//     *
-//     * @param userRequest UserProfileResponseDto
-//     * @return ResponseEntity&lt;UserProfileResponse&gt;
-//     */
-//    @PostMapping
-//    @ApiOperation(value = "회원 가입 및 로그인",
-//            notes = "<strong>지갑주소와 해싱된개인키</strong>를 통해 회원가입 또는 로그인 한다.")
-//    @ApiResponses({
-//            @ApiResponse(code = 200, message = "성공"),
-//            @ApiResponse(code = 401, message = "인증 실패"),
-//            @ApiResponse(code = 404, message = "사용자 없음"),
-//            @ApiResponse(code = 500, message = "서버 오류")
-//    })
-//    public ResponseEntity<UserProfileResponse> login(
-//            @Valid @RequestBody @ApiParam(value = "회원 정보를 입력받음", required = true)
-//                    UserRequest userRequest) {
-//
-//        String walletAddress = userRequest.getWalletAddress();
-//        String privateHash = userRequest.getPrivateHash();
-//
-//        User user = userService.getUserByWalletAddress(walletAddress);
-//
-//        if (user == null) {
-//            user = userService.createUser(userRequest);
-//
-//            return ResponseEntity.status(200).body(UserProfileResponse.of(200, "Success", user));
-//        }
-//
-//        if (passwordEncoder.matches(privateHash, user.getPrivateHash())) {
-//            // 유효한 privateHash 맞는 경우, 로그인 성공으로 응답.(액세스 토큰을 포함하여 응답값 전달)
-//            return ResponseEntity.ok(UserProfileResponse.of(200, "Success", user));
-//        }
-//        throw new CustomException(ErrorCode.USER_NOT_FOUND);
-//    }
+    private final CharityService charityService;
+
+    /**
+     * Post 요청시 전송받은 정보로 자선 단체 리스트를 조회합니다.
+     *
+     * @param charityRegisterRequest CharityRegisterRequest
+     * @return ResponseEntity&lt;BaseResponseBody&gt;
+     */
+    @PostMapping
+    @ApiOperation(value = "자선단체 등록")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<BaseResponseBody> createCharity(
+            @Valid @RequestBody @ApiParam(value = "자선단체 정보", required = true)
+                    CharityRegisterRequest charityRegisterRequest) {
+
+        charityService.createCharity(charityRegisterRequest);
+
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+    }
+
+    /**
+     * 자선 단체 리스트를 반환합니다.
+     *
+     * @return ResponseEntity
+     */
+    @GetMapping
+    @ApiOperation(value = "자선단체 리스트 조회")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<CharityResponse> getCharityList() {
+        List<Charity> charityList = charityService.getCharityList();
+
+        return ResponseEntity.status(200).body(CharityResponse.of(200, "Success", charityList));
+    }
+
+    /**
+     * 지갑 주소 받아와서 자선 단체를 삭제한다.
+     *
+     * @param walletAddress String
+     * @return ResponseEntity
+     */
+    @DeleteMapping("/{walletAddress}")
+    @ApiOperation(value = "자선단체 삭제")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<BaseResponseBody> deleteCharity(
+            @NotBlank @PathVariable @ApiParam(value = "자선 단체 지갑 주소", required = true)
+                    String walletAddress) {
+
+        charityService.deleteCharity(walletAddress);
+
+        return ResponseEntity.status(200).body(CharityResponse.of(200, "Success"));
+    }
 }

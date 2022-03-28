@@ -1,11 +1,13 @@
 package com.thirdlife.thirddonation.api.controller;
 
+import com.thirdlife.thirddonation.api.dto.request.user.ArtistRegisterRequest;
 import com.thirdlife.thirddonation.api.dto.request.user.UserImgRequest;
 import com.thirdlife.thirddonation.api.dto.request.user.UserRequest;
 import com.thirdlife.thirddonation.api.dto.response.user.UserProfileResponse;
 import com.thirdlife.thirddonation.api.dto.response.user.UserResponse;
 import com.thirdlife.thirddonation.api.exception.CustomException;
 import com.thirdlife.thirddonation.api.exception.ErrorCode;
+import com.thirdlife.thirddonation.api.service.user.ArtistService;
 import com.thirdlife.thirddonation.api.service.user.UserService;
 import com.thirdlife.thirddonation.common.model.response.BaseResponseBody;
 import com.thirdlife.thirddonation.db.entity.user.User;
@@ -15,8 +17,6 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +27,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -42,7 +41,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     private final UserService userService;
-    private final PasswordEncoder passwordEncoder;
+    private final ArtistService artistService;
 
     /**
      * Post 요청시 전송받은 정보로 user를 찾고 만약 없으면 회원가입을 시도합니다.
@@ -119,6 +118,27 @@ public class UserController {
     public ResponseEntity<BaseResponseBody> img(@Valid @RequestBody UserImgRequest userImgRequest) {
 
         userService.uploadProfileImage(userImgRequest);
+
+        return ResponseEntity.status(200)
+                .body(BaseResponseBody.builder().statusCode(200).message("Success").build());
+    }
+
+    /**
+     * 장애인 예술가 등록 신청 메서드.
+     *
+     * @param artistRegisterRequest ArtistRegisterRequest
+     * @return ResponseEntity
+     */
+    @PostMapping("/artists")
+    @ApiOperation(value = "장애인 예술가 등록 신청")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<BaseResponseBody> registerArtist(@Valid @RequestBody
+                                                                   ArtistRegisterRequest artistRegisterRequest) {
+
+        artistService.createArtist(artistRegisterRequest);
 
         return ResponseEntity.status(200)
                 .body(BaseResponseBody.builder().statusCode(200).message("Success").build());

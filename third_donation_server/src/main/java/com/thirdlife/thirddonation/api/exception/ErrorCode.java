@@ -37,6 +37,7 @@ public enum ErrorCode {
 
     /* 409 CONFLICT : Resource 의 현재 상태와 충돌. 보통 중복된 데이터 존재 */
     USER_ID_DUPLICATE(CONFLICT, "중복된 사용자 Wallet address 입니다."),
+    ARTIST_DUPLICATE(CONFLICT, "이미 장애인 예술가 등록 (신청)된 사용자입니다."),
     FALLOW_DUPLICATE(CONFLICT, "이미 등록된 팔로워입니다."),
 
     /* 500 ERROR : 서버에서 예기치 않은 에러 발생 */

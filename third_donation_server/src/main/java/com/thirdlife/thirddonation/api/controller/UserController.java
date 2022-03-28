@@ -120,6 +120,7 @@ public class UserController {
 
         userService.uploadProfileImage(userImgRequest);
 
-        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+        return ResponseEntity.status(200)
+                .body(BaseResponseBody.builder().statusCode(200).message("Success").build());
     }
 }

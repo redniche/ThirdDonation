@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import PanelLayout from '../../components/layout/PanelLayout';
-import { API_URL, Axios } from './../../core/axios';
-import { Ipfs } from './../../core/ipfs';
+import apis, { API_URL, Axios, API_TIME_SOURCE } from './../../core/axios';
+import ipfs_apis, { Ipfs } from './../../core/ipfs';
 import { getSsafyNftContract2 } from '../../contracts';
 import { useNavigate } from '@reach/router';
 import { useSelector } from 'react-redux';
@@ -72,14 +72,14 @@ const Mint = () => {
       await getHash(Buffer(fileResult))
         .then(({ fileHash, tokenUriHash }) => {
           console.log(fileHash, tokenUriHash);
-          const tokenUri = `https://ipfs.io/ipfs/${tokenUriHash}`;
+          const tokenUri = `${ipfs_apis.https_public}/${tokenUriHash}`;
           return { fileHash, tokenUri };
         })
-        .then(({ fileHash, tokenUri }) => {
+        .then(async ({ fileHash, tokenUri }) => {
           // mint함수 부르기
           if (fileHash && tokenUri) {
             //fileHash랑 tokenUri가 null이 아니어야 작동.
-            if (sendMintTx(fileHash, tokenUri)) {
+            if (await sendMintTx(fileHash, tokenUri)) {
               alert('NFT 생성에 성공했습니다!');
               navigate('/');
             } else {
@@ -108,7 +108,7 @@ const Mint = () => {
           console.log(`hash: ${fileHash}`);
           // metadata생성하기
 
-          const timeData = await Axios.get('https://worldtimeapi.org/api/timezone/Asia/Seoul', {
+          const timeData = await Axios.get(API_TIME_SOURCE, {
             headers: {
               'Content-type': 'application/json',
             },
@@ -121,7 +121,7 @@ const Mint = () => {
             title,
             description,
             hash: fileHash,
-            image: `https://ipfs.io/ipfs/${fileHash}`,
+            image: `${ipfs_apis.https_public}/${fileHash}`,
             author: account,
             create_date: time,
           };
@@ -180,7 +180,7 @@ const Mint = () => {
     const handleSaveNFT = (tokenId, tokenUri) => {
       if (tokenId !== 0 && tokenUri !== '')
         Axios.post(
-          `${API_URL}/nfts/items`,
+          `${API_URL}${apis.nfts.items}`,
           {
             id: tokenId,
             tokenUri: tokenUri,

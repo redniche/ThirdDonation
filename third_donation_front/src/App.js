@@ -11,6 +11,7 @@ import Profile from './pages/profile/Profile';
 import EditProfile from './pages/profile/EditProfile';
 import Sell from './pages/exchange/Sell';
 import Mint from './pages/nfts/Mint';
+import ArtistRecord from './pages/artist/ArtistRecord';
 import ArtistRegistration from './pages/artist/ArtistRegistration';
 import CharityRegistration from './pages/charity/CharityRegistration';
 import NftDetail from './pages/nfts/NftDetail';
@@ -61,6 +62,7 @@ const App = () => (
         <EditProfile path="/editProfile/:authorId" />
         <Sell path="/sell" />
         <Mint path="/mint" />
+        <ArtistRecord path="/ArtistRecord" />
         <Donation path="/donation" />
         <ArtistRegistration path="/artistRegistration" />
         <CharityRegistration path="/charityRegistration" />

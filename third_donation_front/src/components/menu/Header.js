@@ -219,6 +219,9 @@ const Header = ({ className }) => {
                             <NavLink to="/mint" onClick={() => setMenu(!menu)}>
                               작품 등록
                             </NavLink>
+                            <NavLink to="/ArtistRecord" onClick={() => setMenu(!menu)}>
+                              구매자 기록
+                            </NavLink>
                             <NavLink to="#" onClick={() => setMenu(!menu)}>
                               장애인 예술가 메뉴1
                             </NavLink>
@@ -334,6 +337,7 @@ const Header = ({ className }) => {
                         <div className="item-dropdown">
                           <div className="dropdown" onClick={closeArtistMenu}>
                             <NavLink to="/mint">작품 등록</NavLink>
+                            <NavLink to="/ArtistRecord">구매자 기록</NavLink>
                             <NavLink to="#">장애인 예술가 메뉴</NavLink>
                           </div>
                         </div>

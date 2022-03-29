@@ -34,7 +34,7 @@ public class Nft {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id", referencedColumnName = "id")
-    private User user;
+    private User owner;
 
     @Column(nullable = false)
     private Boolean isMintSold;

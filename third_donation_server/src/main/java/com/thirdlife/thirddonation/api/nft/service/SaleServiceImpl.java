@@ -1,5 +1,6 @@
 package com.thirdlife.thirddonation.api.nft.service;
 
+import com.thirdlife.thirddonation.api.nft.dto.SaleInfoDto;
 import com.thirdlife.thirddonation.api.nft.dto.request.SalesRegisterRequest;
 import com.thirdlife.thirddonation.common.exception.CustomException;
 import com.thirdlife.thirddonation.common.exception.ErrorCode;
@@ -11,6 +12,8 @@ import com.thirdlife.thirddonation.db.user.entity.User;
 import com.thirdlife.thirddonation.db.user.repository.UserRepository;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 /**
@@ -40,6 +43,10 @@ public class SaleServiceImpl implements SaleService {
         final Nft nft = nftRepository.findById(tokenId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NFT_NOT_FOUND));
 
+        if (!seller.equals(nft.getOwner())) {
+            throw new CustomException(ErrorCode.CANNOT_SELL_OTHERS);
+        }
+
         Sales sales = nftSalesRegisterRequest.toEntity();
         sales.setSeller(seller);
         sales.setNft(nft);
@@ -59,5 +66,36 @@ public class SaleServiceImpl implements SaleService {
 
         sales.setEnabled(false);
         salesRepository.save(sales);
+    }
+
+    /**
+     * 판매 리스트 조회 메서드.
+     *
+     * @param pageable Pageable
+     * @return List of Sales
+     */
+    @Override
+    public Page<SaleInfoDto> getSalesList(Pageable pageable) {
+        Page<Sales> page = salesRepository.findAllBySoldOutAndEnabled(false, true, pageable);
+
+        return page.map(SaleInfoDto::of);
+    }
+
+    /**
+     * 특정 판매자의 판매 리스트 조회 메서드.
+     *
+     * @param sellerId Long
+     * @param pageable Pageable
+     * @return List of Sales
+     */
+    @Override
+    public Page<SaleInfoDto> getSalesListBySellerId(Long sellerId, Pageable pageable) {
+        final User seller = userRepository.findById(sellerId)
+                .orElseThrow(() -> new CustomException(ErrorCode.SELLER_NOT_FOUND));
+
+        Page<Sales> page = salesRepository
+                .findAllBySellerAndSoldOutAndEnabled(seller, false, true, pageable);
+
+        return page.map(SaleInfoDto::of);
     }
 }

@@ -21,11 +21,11 @@ public interface NftService {
      * NFT 리스트 조회 메서드입니다.
      * 유저 id로 해당 유저가 가진 NFT 를 조회합니다.
      *
-     * @param userId Long
+     * @param ownerId Long
      * @param pageable Pageable
      * @return List of Nft
      */
-    Page<NftInfoDto> getNftListByUserId(Long userId, Pageable pageable);
+    Page<NftInfoDto> getNftListByOwnerId(Long ownerId, Pageable pageable);
 
     /**
      * NFT 리스트 조회 메서드입니다.

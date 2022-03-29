@@ -5,9 +5,8 @@ import com.thirdlife.thirddonation.api.nft.dto.request.NftMintRequest;
 import com.thirdlife.thirddonation.common.exception.CustomException;
 import com.thirdlife.thirddonation.common.exception.ErrorCode;
 import com.thirdlife.thirddonation.db.nft.entity.Nft;
-import com.thirdlife.thirddonation.db.user.entity.User;
 import com.thirdlife.thirddonation.db.nft.repository.NftRepository;
-import com.thirdlife.thirddonation.db.nft.repository.SalesRepository;
+import com.thirdlife.thirddonation.db.user.entity.User;
 import com.thirdlife.thirddonation.db.user.repository.UserRepository;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +23,6 @@ import org.springframework.stereotype.Service;
 public class NftServiceImpl implements NftService {
 
     private final NftRepository nftRepository;
-    private final SalesRepository salesRepository;
     private final UserRepository userRepository;
 
     /**
@@ -42,7 +40,7 @@ public class NftServiceImpl implements NftService {
         }
 
         Nft nft = nftMintRequest.toEntity();
-        nft.setUser(owner);
+        nft.setOwner(owner);
         nft.setArtist(owner);
 
         nftRepository.save(nft);
@@ -52,13 +50,13 @@ public class NftServiceImpl implements NftService {
      * NFT 리스트 조회 메서드입니다.
      * 유저 id로 해당 유저가 가진 NFT 를 조회합니다.
      *
-     * @param userId   Long
+     * @param ownerId   Long
      * @param pageable Pageable
      * @return List of Nft
      */
     @Override
-    public Page<NftInfoDto> getNftListByUserId(Long userId, Pageable pageable) {
-        Page<Nft> page = nftRepository.findAllByUserId(userId, pageable)
+    public Page<NftInfoDto> getNftListByOwnerId(Long ownerId, Pageable pageable) {
+        Page<Nft> page = nftRepository.findAllByOwnerId(ownerId, pageable)
                 .orElseThrow(() -> new CustomException(ErrorCode.NFT_NOT_FOUND));
         return page.map(NftInfoDto::of);
     }

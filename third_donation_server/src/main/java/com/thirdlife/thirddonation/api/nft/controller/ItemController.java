@@ -73,11 +73,13 @@ public class ItemController {
      *
      * @param userId   Long 유저아이디
      * @param pageable Pageable 페이지
-     * @param isArtist boolean
+     * @param artist   boolean
      * @return ResponseEntity BaseResponseBody
      */
     @GetMapping("/{userId}")
-    @ApiOperation(value = "NFT 리스트 조회", notes = "<strong>userId로 NFT 리스트</strong>를 조회한다. 아티스트 기준이면 isArtist=true 를 넣어준다. <br>http://{서버 주소}/api/nfts/items/1?page=0&size=5&sort=id?isArtist=false")
+    @ApiOperation(value = "NFT 리스트 조회",
+            notes = "<strong>userId로 NFT 리스트</strong>를 조회한다. 아티스트 기준이면 artist=true 를 넣어준다."
+                    + "<br>/api/nfts/items/1?page=0&size=5&sort=id?artist=false")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
             @ApiResponse(code = 404, message = "사용자 없음"),
@@ -87,13 +89,12 @@ public class ItemController {
             @Positive @PathVariable @ApiParam(value = "유저아이디", required = true) Long userId,
             @PageableDefault(sort = "id", direction = Sort.Direction.ASC)
             @ApiParam(value = "페이지네이션", required = true) final Pageable pageable,
-            @ApiParam(value = "아티스트조회여부", defaultValue = "false") final boolean isArtist) {
+            @ApiParam(value = "아티스트조회여부", defaultValue = "false") final boolean artist) {
 
-        //nftPage
-        Page<NftInfoDto> nftPage = isArtist ? nftService.getNftListByArtistId(userId, pageable) :
-                nftService.getNftListByUserId(userId, pageable);
+        Page<NftInfoDto> nftPage = artist ? nftService.getNftListByArtistId(userId, pageable) :
+                nftService.getNftListByOwnerId(userId, pageable);
 
-        NftListResponse response = NftListResponse.builder().statusCode(100).message("Success")
+        NftListResponse response = NftListResponse.builder().statusCode(200).message("Success")
                 .data(nftPage.getContent()).build();
 
         return ResponseEntity.status(200).body(response);

@@ -39,7 +39,7 @@ public class WishServiceImpl implements WishService {
         Nft nft = nftRepository.findById(wishRequest.getTokenId())
                 .orElseThrow(() -> new CustomException(ErrorCode.NFT_NOT_FOUND));
 
-        if (user.equals(nft.getUser())) {
+        if (user.equals(nft.getOwner())) {
             throw new CustomException(ErrorCode.CANNOT_WISH_MYSELF);
         }
 

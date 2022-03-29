@@ -47,6 +47,8 @@ public class Sales {
 
     private LocalDateTime bidClosingTime;
 
+    private String message;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "seller_id", referencedColumnName = "id", nullable = false)
     private User seller;

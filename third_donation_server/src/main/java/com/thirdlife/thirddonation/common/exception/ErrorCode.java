@@ -19,6 +19,7 @@ public enum ErrorCode {
     /* 400 BAD_REQUEST : 잘못된 요청 */
     CANNOT_FOLLOW_MYSELF(BAD_REQUEST, "자기 자신은 팔로우할 수 없습니다"),
     CANNOT_WISH_MYSELF(BAD_REQUEST, "자기 자신의 토큰은 찜할 수 없습니다"),
+    CANNOT_SELL_OTHERS(BAD_REQUEST, "소유자와 판매자가 일치하지 않습니다"),
 
     /* 401 UNAUTHORIZED : 인증되지 않은 사용자 */
     UNAUTHORIZED_MEMBER(UNAUTHORIZED, "현재 내 계정 정보가 존재하지 않습니다"),

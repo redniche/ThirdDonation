@@ -1,6 +1,8 @@
 package com.thirdlife.thirddonation.api.nft.controller;
 
+import com.thirdlife.thirddonation.api.nft.dto.SaleInfoDto;
 import com.thirdlife.thirddonation.api.nft.dto.request.SalesRegisterRequest;
+import com.thirdlife.thirddonation.api.nft.dto.response.SaleListResponse;
 import com.thirdlife.thirddonation.api.nft.service.SaleService;
 import com.thirdlife.thirddonation.common.model.response.BaseResponseBody;
 import io.swagger.annotations.Api;
@@ -11,8 +13,13 @@ import io.swagger.annotations.ApiResponses;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -56,6 +63,36 @@ public class SaleController {
 
         return ResponseEntity.status(200)
                 .body(BaseResponseBody.builder().statusCode(200).message("Success").build());
+    }
+
+    /**
+     * 판매중인 NFT 리스트 조회합니다.
+     *
+     * @param pageable Pageable
+     * @return ResponseEntity
+     */
+    @GetMapping
+    @ApiOperation(
+            value = "NFT 판매 리스트",
+            notes = "판매자 조회시 sellerId 붙여줌니다. <br>/api/nfts/sales?page=0&size=5&sellerId=9")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 404, message = "사용자 없음"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<SaleListResponse> getSalesList(
+            @PageableDefault(sort = "id", direction = Sort.Direction.DESC)
+            @ApiParam(value = "페이지네이션", required = true) final Pageable pageable,
+            @ApiParam(value = "조회할 판매자 ID") final Long sellerId) {
+
+        Page<SaleInfoDto> salesList =
+                sellerId != null ? saleService.getSalesListBySellerId(sellerId, pageable) :
+                        saleService.getSalesList(pageable);
+
+        return ResponseEntity.status(200).body(
+                SaleListResponse.builder()
+                        .statusCode(200).message("Success").data(salesList.getContent()).build()
+        );
     }
 
     /**

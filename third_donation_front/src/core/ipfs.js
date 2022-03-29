@@ -5,3 +5,11 @@ export const Ipfs = create({
   port: 5001,
   protocol: 'http',
 });
+
+const apis = {
+  https_public: 'https://ipfs.io/ipfs',
+  http_local: 'http://j6e207.p.ssafy.io:8080',
+  ipfs: 'ipfs://',
+};
+
+export default apis;

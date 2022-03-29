@@ -29,7 +29,7 @@ export const getSsafyNftContract = () => {
   return new GetWeb3().eth.Contract(NFT_ABI, SSAFY_NFT_CONTRACT_ADDRESS);
 };
 
-// export const saleArtTokenContracts = new web3.eth.Contract(SALE_ABI, SALE_NFT_CONTRACT_ADDRESS);
-
-export const web = new Web3(detectCurrentProvider());
-export const saleArtTokenContracts = new web3.eth.Contract(SALE_ABI, SALE_NFT_CONTRACT_ADDRESS);
+export const getSsafyNftContract2 = (provider) => {
+  const web3 = new Web3(provider);
+  return new web3.eth.Contract(NFT_ABI, SSAFY_NFT_CONTRACT_ADDRESS);
+};

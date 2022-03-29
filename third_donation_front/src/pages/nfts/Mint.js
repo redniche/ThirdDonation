@@ -1,17 +1,16 @@
 import { useCallback, useState } from 'react';
 import PanelLayout from '../../components/layout/PanelLayout';
-import { API_URL, Axios } from './../../core/axios';
-import { Ipfs } from './../../core/ipfs';
-import { getSsafyNftContract, SSAFY_NFT_CONTRACT_ADDRESS } from '../../contracts';
-import Web3 from 'web3';
+import apis, { API_URL, Axios, API_TIME_SOURCE } from './../../core/axios';
+import ipfs_apis, { Ipfs } from './../../core/ipfs';
+import { getSsafyNftContract2 } from '../../contracts';
 import { useNavigate } from '@reach/router';
 import { useSelector } from 'react-redux';
 import * as selectors from '../../store/selectors';
-import ABI from '../../common/ABI';
 import { detectCurrentProvider } from '../../core/ethereum';
 
 /**
  * NFT 민팅을 할 수 있는 페이지 컴포넌트
+ *
  * @returns
  */
 
@@ -24,6 +23,12 @@ const Mint = () => {
   const [description, setDescription] = useState('');
   const navigate = useNavigate();
 
+  /**
+   * 파일 추가 버튼 onClick시 이벤트 동작부.
+   *
+   * @param {} e event
+   * @returns
+   */
   const fileRegist = (e) => {
     let tempFile = e.target.files[0];
     if (!tempFile) return;
@@ -40,41 +45,26 @@ const Mint = () => {
     setPreview(fileURL);
   };
 
+  /**
+   * 모든 입력값이 채워져있는지 보는 메서드.
+   *
+   */
   const isEmpty = useCallback(() => {
     return !file || title.trim() === '' || description.trim() === '';
   }, [file, title, description]);
 
+  /**
+   * 민팅 버튼 onClick시 이벤트 동작부.
+   *
+   * @returns
+   */
   const submitMint = async () => {
     const currentProvider = detectCurrentProvider();
     if (!currentProvider) return;
 
     const accounts = await currentProvider.request({ method: 'eth_requestAccounts' });
-    const currentWallet = accounts[0];
 
-    const web3 = new Web3(currentProvider);
-    const {
-      CONTRACT_ABI: { NFT_ABI },
-    } = ABI;
-
-    const myTicketContract = new web3.eth.Contract(NFT_ABI, SSAFY_NFT_CONTRACT_ADDRESS);
-    console.log(currentWallet);
-    try {
-      const response = await myTicketContract.methods
-        .create(currentWallet, 'asdfsadf', 'asdasd')
-        .send({ from: currentWallet });
-      console.log(response);
-
-      if (response.status) {
-        const tokenId = response.events.Transfer.returnValues.tokenId;
-        console.log(`발행한 tokenId: ${tokenId}`);
-        const balanceLength = await myTicketContract.methods.balanceOf(account).call();
-        console.log(`해당 주소가 보유하고있는 NFT 토큰의 개수: ${balanceLength}`);
-      }
-    } catch (err) {
-      console.error(err);
-    }
-
-    const nowWalletAddress = account.walletAddress;
+    const nowWalletAddress = accounts[0];
     const reader = new window.FileReader();
     reader.readAsArrayBuffer(file);
     reader.onload = async (e) => {
@@ -82,21 +72,33 @@ const Mint = () => {
       await getHash(Buffer(fileResult))
         .then(({ fileHash, tokenUriHash }) => {
           console.log(fileHash, tokenUriHash);
-          const tokenUri = `https://ipfs.io/ipfs/${tokenUriHash}`;
+          const tokenUri = `${ipfs_apis.https_public}/${tokenUriHash}`;
           return { fileHash, tokenUri };
         })
-        .then(({ fileHash, tokenUri }) => {
+        .then(async ({ fileHash, tokenUri }) => {
           // mint함수 부르기
           if (fileHash && tokenUri) {
             //fileHash랑 tokenUri가 null이 아니어야 작동.
-            sendMintTx(fileHash, tokenUri);
+            if (await sendMintTx(fileHash, tokenUri)) {
+              alert('NFT 생성에 성공했습니다!');
+              navigate('/');
+            } else {
+              alert('NFT 생성에 실패했습니다');
+            }
+          } else {
+            alert('NFT 생성에 실패했습니다');
           }
         })
         .catch((err) => alert(err));
     };
 
-    // ipfs로 file 업로드
-    // ipfs로 tokenUri 생성
+    /**
+     * buffer를 ipfs로 file 업로드.
+     * ipfs로 tokenUri 생성
+     *
+     * @param {Buffer} buffer Buffer값
+     * @returns
+     */
     const getHash = async (buffer) => {
       try {
         const uploadResult = await Ipfs.add(buffer);
@@ -106,7 +108,7 @@ const Mint = () => {
           console.log(`hash: ${fileHash}`);
           // metadata생성하기
 
-          const timeData = await Axios.get('https://worldtimeapi.org/api/timezone/Asia/Seoul', {
+          const timeData = await Axios.get(API_TIME_SOURCE, {
             headers: {
               'Content-type': 'application/json',
             },
@@ -119,9 +121,9 @@ const Mint = () => {
             title,
             description,
             hash: fileHash,
-            image: `https://ipfs.io/ipfs/${fileHash}`,
+            image: `${ipfs_apis.https_public}/${fileHash}`,
             author: account,
-            create_date: timeData,
+            create_date: time,
           };
           // tokenUri생성하기
           const tokenUriHash = await Ipfs.add(JSON.stringify(metadata)).then((res) => {
@@ -137,81 +139,48 @@ const Mint = () => {
     };
 
     // NFT 컨트랙트 실행
+    /**
+     * 생성된 fileHash와 tokenUri를 민팅할 때 사용한다.
+     * 민팅시에 해당 값이 중복됐는지 체크함.
+     *
+     * @param {String} fileHash
+     * @param {String} tokenUri
+     * @returns
+     */
     const sendMintTx = async (fileHash, tokenUri) => {
       if (fileHash && tokenUri) {
-        const nonce = await web3.eth.getTransactionCount(nowWalletAddress, 'latest');
-        const tx = {
-          from: nowWalletAddress,
-          to: SSAFY_NFT_CONTRACT_ADDRESS,
-          nonce: nonce.toString(),
-          gas: '1000000',
-          data: getSsafyNftContract.methods
+        const ssafyNftContract = getSsafyNftContract2(currentProvider);
+        console.log(nowWalletAddress);
+        try {
+          const response = await ssafyNftContract.methods
             .create(nowWalletAddress, fileHash, tokenUri)
-            .encodeABI(),
-        };
+            .send({ from: nowWalletAddress });
+          console.log(response);
 
-        tx;
-        // console.log(ssafyNftContract);
+          if (response.status) {
+            const tokenId = response.events.Transfer.returnValues.tokenId;
 
-        // if (ssafyNftContract) return;
-
-        // // const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        // console.log(accounts);
-        // const signer = await provider.getSigner();
-        // console.log('Account:', await signer.getAddress());
-
-        // signer;
-        // // mintNFT;
-        // await signer.signTransaction(tx).then((signedTx) => {
-        //   if (signedTx == null) throw new Error('TransactionSignFailedException');
-
-        //   let tran = web3.eth.sendSignedTransaction(signedTx.rawTransaction);
-
-        //   tran
-        //     .sendTransaction(tx)
-        //     .then((res) => {
-        //       console.log(res);
-        //       const tokenId = ssafyNftContract.methods.current().call();
-        //       return tokenId;
-        //     })
-        //     .then((res) => {
-        //       handleSaveNFT(res, tokenUri);
-        //       alert('NFT가 생성되었습니다!');
-        //     })
-        //     .catch((err) => {
-        //       alert('에러 발생!');
-        //       console.log(err);
-        //     });
-        // });
-
-        // console.log(tx);
-        // // mintNFT;
-        // await web3.eth
-        //   .sendTransaction(tx)
-        //   .then((res) => {
-        //     console.log(res);
-        //     const tokenId = ssafyNftContract.methods.current().call();
-        //     return tokenId;
-        //   })
-        //   .then((res) => {
-        //     handleSaveNFT(res, tokenUri);
-        //     alert('NFT가 생성되었습니다!');
-        //   })
-        //   .catch((err) => {
-        //     alert('에러 발생!');
-        //     console.log(err);
-        //   });
-        navigate();
-      } else {
-        console.log('fileHash, tokenUri 가 빈 값임');
+            handleSaveNFT(tokenId, tokenUri);
+            console.log(`발행한 tokenId: ${tokenId}`);
+            // const balanceLength = await myTicketContract.methods.balanceOf(account).call();
+            // console.log(`해당 주소가 보유하고있는 NFT 토큰의 개수: ${balanceLength}`);
+            return true;
+          }
+        } catch (err) {
+          console.error(err);
+        }
       }
     };
 
-    // request server with NFTInfo
+    /**
+     * 민팅 종료시 이를 백엔드에 저장한다.
+     * @param {String} tokenId
+     * @param {String} tokenUri
+     */
     const handleSaveNFT = (tokenId, tokenUri) => {
       if (tokenId !== 0 && tokenUri !== '')
         Axios.post(
-          `${API_URL}/nfts/items`,
+          `${API_URL}${apis.nfts.items}`,
           {
             id: tokenId,
             tokenUri: tokenUri,
@@ -232,7 +201,6 @@ const Mint = () => {
             // 만약 NFT생성은 완료 되었는데 서버전송에서 오류날 경우따로 DB저장 처리 가능한 함수 필요
           });
     };
-    handleSaveNFT;
   };
 
   return (

@@ -19,6 +19,12 @@ import GrantCharity from './pages/admin/GrantCharity';
 
 import Donation from './pages/nfts/SendToken';
 
+import Recommended from './pages/nfts/Recommended';
+import Notice from './pages/board/Board';
+
+import NoticeView from './pages/board/BoardView';
+import NoticeWrite from './pages/board/BoardNew';
+
 const GlobalStyles = createGlobalStyle`
   :root {
     scroll-behavior: unset;
@@ -67,6 +73,11 @@ const App = () => (
         <NftDetail path="/nftDetail/:nftId" />
         <GrantArtist path="/admin/grantArtist" />
         <GrantCharity path="/admin/grantCharity" />
+        <Recommended path="/recommended" />
+        <Notice path="/notice" />
+        <NoticeWrite path="/noticeWrite" />
+        <NoticeView path="/noticeView/:no" />
+        {/* <NoticeView path="/boardView/:no" componenet={NoticeView} /> */}
       </ScrollTop>
     </PosedRouter>
     <ScrollToTopBtn />

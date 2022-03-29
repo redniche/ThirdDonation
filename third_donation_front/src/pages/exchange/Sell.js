@@ -8,10 +8,12 @@ import {
   // getSaleNftContract,
   // saleArtTokenContracts,
   SALE_NFT_CONTRACT_ADDRESS,
-  SSAFY_NFT_CONTRACT_ADDRESS,
+  // SSAFY_NFT_CONTRACT_ADDRESS,
+  getSsafyNftContract2,
+  getSaleNftContract,
 } from '../../contracts';
-import Web3 from 'web3';
-import ABI from '../../common/ABI';
+// import Web3 from 'web3';
+// import ABI from '../../common/ABI';
 import { detectCurrentProvider } from '../../core/ethereum';
 
 // import { API_URL, Axios } from './../../core/axios';
@@ -25,6 +27,7 @@ import PanelLayout from '../../components/layout/PanelLayout';
  */
 const Sell = () => {
   const { data: account } = useSelector(selectors.accountState);
+  console.log(account.id);
 
   // const privateKey = '0x94fa80f5c0885863488f5e0975929faa53b83a5791b098b85d0b7326f174a38e';
   // const walletAccount = web3.eth.accounts.privateKeyToAccount(privateKey);
@@ -91,13 +94,15 @@ const Sell = () => {
       const currentWallet = accounts[0];
       console.log(currentWallet);
 
-      const web3 = new Web3(currentProvider);
-      const {
-        CONTRACT_ABI: { SALE_ABI, NFT_ABI },
-      } = ABI;
+      // const web3 = new Web3(currentProvider);
+      // const {
+      //   CONTRACT_ABI: { SALE_ABI, NFT_ABI },
+      // } = ABI;
 
-      const saleArtContract = new web3.eth.Contract(SALE_ABI, SALE_NFT_CONTRACT_ADDRESS);
-      const artNftContract = new web3.eth.Contract(NFT_ABI, SSAFY_NFT_CONTRACT_ADDRESS);
+      // const saleArtContract = new web3.eth.Contract(SALE_ABI, SALE_NFT_CONTRACT_ADDRESS);
+      // const artNftContract = new web3.eth.Contract(NFT_ABI, SSAFY_NFT_CONTRACT_ADDRESS);
+      const saleArtContract = getSaleNftContract(currentProvider);
+      const artNftContract = getSsafyNftContract2(currentProvider);
 
       const saleAuth = await artNftContract.methods
         .isApprovedForAll(currentWallet, SALE_NFT_CONTRACT_ADDRESS)
@@ -106,7 +111,7 @@ const Sell = () => {
       if (!saleAuth) await approveToggle(artNftContract, currentWallet);
 
       const response = await saleArtContract.methods
-        .setForSaleArtToken(2, sellPrice)
+        .setForSaleArtToken(1, sellPrice)
         .send({ from: currentWallet });
       // .then( async () => {
       //   await saveSaleNFT();
@@ -118,7 +123,7 @@ const Sell = () => {
       console.log(balance);
 
       // 해당 tokenId에 해당하는 토큰 가격 확인
-      const price = await saleArtContract.methods.getArtTokenPrice(2).call();
+      const price = await saleArtContract.methods.getArtTokenPrice(1).call();
       console.log(price);
 
       setLoading(false);
@@ -138,7 +143,7 @@ const Sell = () => {
   //       basePrice: sellPrice,
   //       contractAddress: SALE_NFT_CONTRACT_ADDRESS,
   //       saleType: 'AUCTION',
-  //       sellerId: 0,
+  //       sellerId: account.id,
   //       tokenId: 0,
   //     },
   //     {

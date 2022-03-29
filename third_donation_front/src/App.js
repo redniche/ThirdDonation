@@ -16,7 +16,7 @@ import CharityRegistration from './pages/charity/CharityRegistration';
 import NftDetail from './pages/nfts/NftDetail';
 import GrantArtist from './pages/admin/GrantArtist';
 import GrantCharity from './pages/admin/GrantCharity';
-
+import ChartProfile from './pages/profile/ChartProfile';
 import Donation from './pages/nfts/SendToken';
 
 const GlobalStyles = createGlobalStyle`
@@ -59,6 +59,7 @@ const App = () => (
         <Explore path="/explore" />
         <Profile path="/profile/:authorId" />
         <EditProfile path="/editProfile/:authorId" />
+        <ChartProfile path="/chart/:authorId" />
         <Sell path="/sell" />
         <Mint path="/mint" />
         <Donation path="/donation" />

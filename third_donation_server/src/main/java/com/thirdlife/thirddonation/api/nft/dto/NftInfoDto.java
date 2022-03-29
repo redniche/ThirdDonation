@@ -1,6 +1,7 @@
 package com.thirdlife.thirddonation.api.nft.dto;
 
 
+import com.thirdlife.thirddonation.api.user.dto.UserInfoDto;
 import com.thirdlife.thirddonation.db.nft.entity.Nft;
 import com.thirdlife.thirddonation.db.user.entity.User;
 import lombok.AccessLevel;
@@ -20,8 +21,8 @@ import lombok.NoArgsConstructor;
 public class NftInfoDto {
     private Long id;
     private String tokenUri;
-    private User artist;
-    private User user;
+    private UserInfoDto artist;
+    private UserInfoDto user;
     private boolean isMintSold;
 
     /**
@@ -34,8 +35,8 @@ public class NftInfoDto {
         return NftInfoDto.builder()
                 .id(nft.getId())
                 .tokenUri(nft.getTokenUri())
-                .artist(nft.getArtist())
-                .user(nft.getUser())
+                .artist(UserInfoDto.of(nft.getArtist()))
+                .user(UserInfoDto.of(nft.getUser()))
                 .isMintSold(nft.getIsMintSold())
                 .build();
     }

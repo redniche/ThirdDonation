@@ -1,10 +1,8 @@
 import { useState, useEffect } from 'react';
-// import { Link } from 'react-router-dom';
 import Table from '../../components/board/Table';
 import Col from '../../components/board/Col';
 import Row from '../../components/board/Row';
 import { postList } from './Data';
-// import { Link } from '@reach/router';
 
 function NoticeWrite() {
   window.location.href = '/noticeWrite';

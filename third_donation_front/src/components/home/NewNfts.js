@@ -1,10 +1,17 @@
 import { memo, useState } from 'react';
+// import { memo, useState, useEffect } from 'react';
 import Slider from 'react-slick';
 import styled from 'styled-components';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import Clock from '../nfts/Clock';
 import { carouselNew } from '../constants';
+
+// import { fetchNftsBreakdown } from '../../store/actions/thunks';
+// import { useSelector, useDispatch } from 'react-redux';
+// import * as selectors from '../../store/selectors';
+
+// import api from '../../core/api';
 
 const Outer = styled.div`
   display: flex;
@@ -119,6 +126,19 @@ const NewNfts = () => {
       likes: '50',
     },
   ];
+
+  // const dispatch = useDispatch();
+  // const nftsState = useSelector(selectors.nftBreakdownState);
+  // const nfts = nftsState.data ? nftsState.data : [];
+
+  // console.log('log');
+  // console.log(nfts);
+
+  // nfts.sort(function (a, b) {
+  //   a = new Date(a.dateModified);
+  //   b = new Date(b.dateModified);
+  //   return a > b ? -1 : a < b ? 1 : 0;
+  // });
 
   const [height, setHeight] = useState(0);
 

@@ -4,6 +4,13 @@ import useOnclickOutside from 'react-cool-onclickoutside';
 import Wallet from '../accounts/Wallet';
 import { clearAccount } from '../../store/actions';
 
+function Profile() {
+  window.location.href = '/profile/1';
+}
+function EditProfile() {
+  window.location.href = '/editProfile/1';
+}
+
 const ProfilePopup = () => {
   const dispatch = useDispatch();
   const [profilePopup, setProfilePopup] = useState(false);
@@ -34,12 +41,12 @@ const ProfilePopup = () => {
           <div className="d-line"></div>
 
           <ul className="de-submenu-profile">
-            <li>
+            <li onClick={() => Profile()}>
               <span>
                 <i className="fa fa-user"></i> 나의 프로필
               </span>
             </li>
-            <li>
+            <li onClick={() => EditProfile()}>
               <span>
                 <i className="fa fa-pencil"></i> 프로필 수정하기
               </span>

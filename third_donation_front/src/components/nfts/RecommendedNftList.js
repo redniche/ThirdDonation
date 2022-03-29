@@ -5,18 +5,27 @@ import * as actions from '../../store/actions/thunks';
 import { clearNfts, clearFilter } from '../../store/actions';
 import NftCard from './NftCard';
 import { shuffleArray } from '../../store/utils';
-// import NftMusicCard from './NftMusicCard';
 
 /**
  * NFT리스트들을 표시하기 위한 컴포넌트
  * @param {*} param0
  * @returns
  */
-const NftList = ({ showLoadMore = true, shuffle = false, authorId = null }) => {
+const RecommendedNftList = ({ showLoadMore = true, shuffle = false, authorId = null }) => {
   const dispatch = useDispatch();
   const nftItems = useSelector(selectors.nftItems);
   const nfts = nftItems ? (shuffle ? shuffleArray(nftItems) : nftItems) : [];
   const [height, setHeight] = useState(0);
+
+  nfts.sort((a, b) => {
+    if (a.likes > b.likes) {
+      return -1;
+    } else if (a.likes < b.likes) {
+      return 1;
+    } else {
+      return 0;
+    }
+  });
 
   const onImgLoad = ({ target: img }) => {
     let currentHeight = height;
@@ -59,4 +68,4 @@ const NftList = ({ showLoadMore = true, shuffle = false, authorId = null }) => {
   );
 };
 
-export default memo(NftList);
+export default memo(RecommendedNftList);

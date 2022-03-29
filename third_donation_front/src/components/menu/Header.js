@@ -86,6 +86,7 @@ const Header = ({ className }) => {
         } else {
           alert('메타마스크 지갑을 설치하세요!');
         }
+        window.ethereum.on('accountsChanged', (account) => dispatch(fetchAccount(account[0])));
       })
       .catch((error) => console.log(error));
   };

@@ -16,3 +16,19 @@ export const connectWallet = () =>
       });
     }
   });
+
+export const detectCurrentProvider = () => {
+  let provider;
+  if (window.ethereum) {
+    provider = window.ethereum;
+    // ethereum 관련 아닐 때
+  } else if (window.web3) {
+    provider = window.web3.currentProvider;
+    // metamask가 깔려있지 않을 때 -> 메타마스크 설치 페이지로 이동
+  } else {
+    alert('Install Metamask!');
+    window.location =
+      'https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn/';
+  }
+  return provider;
+};

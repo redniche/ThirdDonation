@@ -396,8 +396,8 @@ const Header = ({ className }) => {
                           <div className="dropdown" onClick={closeTestMenu}>
                             <NavLink to="/ItemDetail/1">아이템 상세</NavLink>
                             <NavLink to="/nftDetail/1">소유 NFT 상세</NavLink>
-                            <NavLink to="/profile/1">프로필</NavLink>
-                            <NavLink to="/editProfile/1">프로필변경</NavLink>
+                            <NavLink to={'/profile/' + account.id}>프로필</NavLink>
+                            <NavLink to={'/editProfile/' + account.id}>프로필변경</NavLink>
                             <NavLink to="/donation">후원하기</NavLink>
                             <NavLink to="/sell">작품 판매</NavLink>
                             <NavLink to="/artistRegistration">예술가 등록</NavLink>

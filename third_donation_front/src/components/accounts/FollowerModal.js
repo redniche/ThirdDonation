@@ -124,7 +124,6 @@ const renderItem = ({ item }) => {
 };
 
 const FollowerModal = (props) => {
-  console.log(props.open);
   const { user, open, close, header } = props;
   var followers = user;
   followers;

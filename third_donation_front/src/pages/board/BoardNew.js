@@ -21,7 +21,7 @@ const WrtieNotice = () => {
             <br />
             <br />
             <button type="button" id="writeButton" className="btn-main" onClick={() => Notice()}>
-              작품 등록
+              공지 등록
             </button>
             <br />
           </div>

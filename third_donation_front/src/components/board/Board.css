@@ -6,8 +6,19 @@
 .post-view-go-list-btn {
   border: 0;
   padding: 10px;
-  background-color: #834aff;
+  background-color: #8364e2;
   color: white;
+  margin: 5px;
+  margin-top: 10px;
+}
+
+.post-view-delete-btn {
+  border: 0;
+  padding: 10px;
+  background-color: red;
+  color: white;
+  margin: 5px;
+  margin-top: 10px;
 }
 
 .post-view-row {

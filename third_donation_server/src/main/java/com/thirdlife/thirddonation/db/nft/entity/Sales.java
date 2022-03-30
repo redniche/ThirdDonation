@@ -57,7 +57,6 @@ public class Sales {
     @JoinColumn(name = "buyer_id", referencedColumnName = "id")
     private User buyer;
 
-    @Column(nullable = false)
     private String contractAddress;
 
     @ManyToOne(fetch = FetchType.LAZY)

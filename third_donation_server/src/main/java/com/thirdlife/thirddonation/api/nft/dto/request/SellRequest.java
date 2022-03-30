@@ -12,7 +12,7 @@ import lombok.ToString;
  */
 @ToString
 @Getter
-public class SalesRegisterRequest {
+public class SellRequest {
 
     @NotNull
     private Long tokenId;

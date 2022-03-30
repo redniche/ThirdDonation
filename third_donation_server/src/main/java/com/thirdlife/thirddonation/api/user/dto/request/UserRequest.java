@@ -3,6 +3,7 @@ package com.thirdlife.thirddonation.api.user.dto.request;
 import com.thirdlife.thirddonation.db.user.entity.Authority;
 import com.thirdlife.thirddonation.db.user.entity.User;
 import io.swagger.annotations.ApiModelProperty;
+import java.time.LocalDateTime;
 import javax.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,6 +32,7 @@ public class UserRequest {
                 .username("Unnamed")
                 .enabled(true)
                 .authority(Authority.NORMAL)
+                .dateCreated(LocalDateTime.now())
                 .followerCount(0)
                 .build();
     }

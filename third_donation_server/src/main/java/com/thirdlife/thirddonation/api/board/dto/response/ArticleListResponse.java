@@ -1,6 +1,6 @@
-package com.thirdlife.thirddonation.api.nft.dto.response;
+package com.thirdlife.thirddonation.api.board.dto.response;
 
-import com.thirdlife.thirddonation.api.nft.dto.SaleInfoDto;
+import com.thirdlife.thirddonation.api.board.dto.ArticleInfoDto;
 import com.thirdlife.thirddonation.common.model.response.BaseResponseBody;
 import io.swagger.annotations.ApiModel;
 import java.util.List;
@@ -9,14 +9,12 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
 
 /**
- * NFT 의 리스트를 반환합니다.
+ * 자선 단체 리스트를 반환하는 DTO.
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
 @SuperBuilder
-@ApiModel("SaleList")
-public class SaleListResponse extends BaseResponseBody {
-
-    private List<SaleInfoDto> data;
-
+@ApiModel("ArticleList")
+public class ArticleListResponse extends BaseResponseBody {
+    private List<ArticleInfoDto> data;
 }

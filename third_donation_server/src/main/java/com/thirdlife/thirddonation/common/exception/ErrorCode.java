@@ -23,7 +23,8 @@ public enum ErrorCode {
 
     /* 401 UNAUTHORIZED : 인증되지 않은 사용자 */
     UNAUTHORIZED_MEMBER(UNAUTHORIZED, "현재 내 계정 정보가 존재하지 않습니다"),
-    USER_PW_INVALID(UNAUTHORIZED, "사용자의 privateHash 가 일치하지 않습니다."),
+    USER_INVALID(UNAUTHORIZED, "사용자가 일치하지 않습니다."),
+    AUTHORITY_INVALID(UNAUTHORIZED, "사용자의 권한 수준이 낮습니다."),
 
     /* 404 NOT_FOUND : Resource 를 찾을 수 없음 */
     USER_NOT_FOUND(NOT_FOUND, "해당 유저의 정보를 찾을 수 없습니다."),
@@ -36,6 +37,8 @@ public enum ErrorCode {
     ARTIST_NOT_FOUND(NOT_FOUND, "해당 예술가를 찾을 수 없습니다."),
     FOLLOW_NOT_FOUND(NOT_FOUND, "follow 정보를 찾을 수 없습니다."),
     WISH_NOT_FOUND(NOT_FOUND, "찜하기 정보를 찾을 수 없습니다."),
+    CATEGORY_NOT_FOUND(NOT_FOUND, "해당 카테고리를 찾을 수 없습니다."),
+    ARTICLE_NOT_FOUND(NOT_FOUND, "해당 글을 찾을 수 없습니다."),
 
     /* 409 CONFLICT : Resource 의 현재 상태와 충돌. 보통 중복된 데이터 존재 */
     USER_ID_DUPLICATE(CONFLICT, "중복된 사용자 Wallet address 입니다."),

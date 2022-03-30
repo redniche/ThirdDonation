@@ -6,6 +6,7 @@ import { useParams } from '@reach/router';
 import { useSelector } from 'react-redux';
 import * as selectors from '../../store/selectors';
 import { Link } from '@reach/router';
+import ReactMarkdown from 'react-markdown';
 
 function Delete() {
   window.location.href = '/notice';
@@ -47,10 +48,12 @@ const BoardView = () => {
                 <label>조회수</label>
                 <label>{data.readCount}</label>
               </div>
-              <div className="post-view-row">
-                <label>내용</label>
-                <div>{data.content}</div>
-              </div>
+              <section className="containerWrap">
+                <section>
+                  {/* ReactMarkdown code */}
+                  <ReactMarkdown>{data.content}</ReactMarkdown>
+                </section>
+              </section>
             </div>
           ) : (
             '해당 게시글을 찾을 수 없습니다.'

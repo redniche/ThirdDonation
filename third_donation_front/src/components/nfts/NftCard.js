@@ -29,6 +29,7 @@ const NftCard = ({
   onFileLoad,
 }) => {
   const [tokenUri, setTokenUri] = useState(null);
+  console.log(nft);
 
   const navigateTo = (link) => {
     navigate(link);
@@ -44,7 +45,7 @@ const NftCard = ({
 
   return (
     tokenUri && (
-      <div className={className}>
+      <div className={className} onClick={() => navigateTo(`/ItemDetail/${nft.id}`)}>
         <div className="nft__item m-0">
           {nft.item_type === 'single_items' ? (
             <div className="icontype">

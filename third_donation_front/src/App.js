@@ -65,7 +65,7 @@ const App = () => (
         <Explore path="/explore" />
         <Profile path="/profile/:authorId" />
         <EditProfile path="/editProfile/:authorId" />
-        <Sell path="/sell" />
+        <Sell path="/sell/:nftId" />
         <Mint path="/mint" />
         <Donation path="/donation" />
         <ArtistRegistration path="/artistRegistration" />

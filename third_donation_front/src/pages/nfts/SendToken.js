@@ -1,18 +1,22 @@
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import * as selectors from '../../store/selectors';
 import PanelLayout from '../../components/layout/PanelLayout';
-// import SsafyToken from '../../common/ABI';
-// import SsafyToken from '../../core/nft/SsafyToken.json';
-import { web3, ssafyTokenContract } from '../../contracts';
-// import Web3 from 'web3';
+import { web3, ssafyTokenContract, SSAFY_TOKEN_CONTRACT_ADDRESS } from '../../contracts';
 
+// 내 계좌
 const Account = '0x019fd08EBA0560271EDd8821fd07483a6dC38e74';
+// 내 계좌 privatekey
 const PrivateKey = '0x888804e3288b1f2a0455ed136e1a2c7d55c837d6afe690eb3cab2192b91d6843';
-const tokenAddress = '0x6C927304104cdaa5a8b3691E0ADE8a3ded41a333';
 
 function Main() {
   //set params
   const [receiverAddress, setReceiverAddress] = useState('');
   const [transferAmount, setTransferAmount] = useState('');
+
+  const { data: account } = useSelector(selectors.accountState);
+
+  const tokenAddress = SSAFY_TOKEN_CONTRACT_ADDRESS;
 
   //transfer eth from one account to other
   async function transfer() {
@@ -63,7 +67,9 @@ function Main() {
                     id="account_address"
                     className="form-control"
                     onChange={(event) => setReceiverAddress(event.target.value)}
-                    placeholder="후원을 할 사람의 계좌를 입력하세요. (이후에는 데이터를 들고오게 할 것)"
+                    // placeholder="후원을 할 사람의 계좌를 입력하세요. (이후에는 데이터를 들고오게 할 것)"
+                    // {Todo : 지금 현재는 자신의 주소를 들고오는 데 이건 프로필에서 눌렀을때 가져오도록 해야 함}
+                    value={account.walletAddress}
                   />
 
                   <div className="de_tab_content pt-3">

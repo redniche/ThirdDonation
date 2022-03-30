@@ -84,7 +84,7 @@ strong {
   font-weight: bold;
 }
 section {
-  padding: 90px 0;
+  padding: 20px 0;
   &.no-top {
     padding-top: 0 !important;
   }
@@ -3257,7 +3257,7 @@ i.font60 {
   position: relative;
 }
 .d_profile {
-  margin-bottom: 40px;
+  margin-bottom: 0px;
 }
 .profile_avatar {
   display: flex;
@@ -3336,6 +3336,23 @@ i.font60 {
   display: inline-block;
   float: none;
 }
+
+.profile_description {
+  background-color: #00000018;
+  white-space: pre-line;
+  border-radius: 20px;
+  margin: 10px 20px 0px 20px;
+  padding: 10px 30px;
+  font-size: 15px;
+  display: block;
+  max-width: fit-content;
+  color: #727272;
+}
+
+.result_log {
+  text-align: center;
+}
+
 #btn_copy {
   position: absolute;
   font-size: 12px;

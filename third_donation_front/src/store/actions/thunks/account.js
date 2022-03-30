@@ -10,6 +10,7 @@ export const fetchAccount = (walletAddress) => async (dispatch) => {
       walletAddress,
     });
     dispatch(actions.getAccount.success(data));
+    console.log(data);
   } catch (err) {
     dispatch(actions.getAccount.failure(err));
   }

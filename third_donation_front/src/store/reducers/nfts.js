@@ -8,6 +8,7 @@ import {
 } from '../utils';
 
 export const defaultState = {
+  nftPage: initEntityState(0),
   nftBreakdown: initEntityState(null),
   nftDetail: initEntityState(null),
   nftShowcase: initEntityState(null),
@@ -43,6 +44,15 @@ const states = (state = defaultState, action) => {
 
     case getType(actions.clearNfts):
       return { ...state, nftBreakdown: initEntityState(null) };
+
+    case getType(actions.clearPage):
+      return { ...state, nftPage: initEntityState(0) };
+
+    case getType(actions.increasePage):
+      return {
+        ...state,
+        nftPage: entityLoadingStarted(state.nftPage, ++state.nftPage.data),
+      };
 
     default:
       return state;

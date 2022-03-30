@@ -62,6 +62,8 @@ export const getAccount = asyncAction(
   'account/GET_ACCOUNT_FAIL',
 )();
 
+export const increasePage = action('nft/INCREASE_PAGE')();
+export const clearPage = action('nft/CLEAR_PAGE')();
 export const clearNfts = action('nft/CLEAR_ALL_NFTS')();
 export const clearFilter = action('nft/CLEAR_FILTER')();
 export const filterCategories = action('nft/FILTER_CATEGORIES')();

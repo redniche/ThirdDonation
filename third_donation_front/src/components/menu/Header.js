@@ -48,6 +48,7 @@ const Header = ({ className }) => {
   const dispatch = useDispatch();
   const { data: account } = useSelector(selectors.accountState);
 
+  const [exploreMenu, setExploreMenu] = useState(false);
   const [statMenu, setStatMenu] = useState(false);
   const [supportMenu, setSupportMenu] = useState(false);
   const [adminMenu, setAdminMenu] = useState(false);
@@ -56,18 +57,21 @@ const Header = ({ className }) => {
   /* 모바일 뷰 메뉴 */
   const [menu, setMenu] = useState(false);
 
+  const onExploreMenuClick = () => setExploreMenu(!exploreMenu);
   const onStatMenuClick = () => setStatMenu(!statMenu);
   const onSupportMenuClick = () => setSupportMenu(!supportMenu);
   const onAdminMenuClick = () => setAdminMenu(!adminMenu);
   const onTestMenuClick = () => setTestMenu(!testMenu);
   const onArtistMenuClick = () => setArtistMenu(!artistMenu);
 
+  const closeExploreMenu = () => setExploreMenu(false);
   const closeStatMenu = () => setStatMenu(false);
   const closeSupportMenu = () => setSupportMenu(false);
   const closeAdminMenu = () => setAdminMenu(false);
   const closeTestMenu = () => setTestMenu(false);
   const closeArtistMenu = () => setArtistMenu(false);
 
+  const refExploreMenu = useOnclickOutside(() => closeExploreMenu());
   const refStatMenu = useOnclickOutside(() => closeStatMenu());
   const refSupportMenu = useOnclickOutside(() => closeSupportMenu());
   const refAdminMenu = useOnclickOutside(() => closeAdminMenu());
@@ -82,6 +86,7 @@ const Header = ({ className }) => {
         } else {
           alert('메타마스크 지갑을 설치하세요!');
         }
+        window.ethereum.on('accountsChanged', (account) => dispatch(fetchAccount(account[0])));
       })
       .catch((error) => console.log(error));
   };
@@ -136,9 +141,25 @@ const Header = ({ className }) => {
               {menu && (
                 <div className="menu">
                   <div className="navbar-item">
-                    <NavLink to="/explore" onClick={() => setMenu(!menu)}>
-                      Marketplace
-                    </NavLink>
+                    <div ref={refExploreMenu}>
+                      <div
+                        className="dropdown-custom dropdown-toggle btn"
+                        onClick={onExploreMenuClick}>
+                        Marketplace
+                      </div>
+                      {exploreMenu && (
+                        <div className="item-dropdown">
+                          <div className="dropdown" onClick={closeExploreMenu}>
+                            <NavLink to="/explore" onClick={() => setMenu(!menu)}>
+                              Explore
+                            </NavLink>
+                            <NavLink to="/recommended" onClick={() => setMenu(!menu)}>
+                              추천 NFT
+                            </NavLink>
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </div>
                   <div className="navbar-item">
                     <div ref={refStatMenu}>
@@ -171,7 +192,10 @@ const Header = ({ className }) => {
                       {supportMenu && (
                         <div className="item-dropdown">
                           <div className="dropdown" onClick={closeSupportMenu}>
-                            <NavLink to="#" onClick={() => setMenu(!menu)}>
+                            {/* <NavLink to="#" onClick={() => setMenu(!menu)}>
+                              공지사항
+                            </NavLink> */}
+                            <NavLink to="/notice" onClick={() => setMenu(!menu)}>
                               공지사항
                             </NavLink>
                             <NavLink to="#" onClick={() => setMenu(!menu)}>
@@ -193,11 +217,11 @@ const Header = ({ className }) => {
                       {adminMenu && (
                         <div className="item-dropdown">
                           <div className="dropdown" onClick={closeAdminMenu}>
-                            <NavLink to="#" onClick={() => setMenu(!menu)}>
-                              관리자메뉴1
+                            <NavLink to="/admin/grantArtist" onClick={() => setMenu(!menu)}>
+                              예술가 승인
                             </NavLink>
-                            <NavLink to="#" onClick={() => setMenu(!menu)}>
-                              관리자기능2
+                            <NavLink to="/admin/grantCharity" onClick={() => setMenu(!menu)}>
+                              자선 단체 승인
                             </NavLink>
                           </div>
                         </div>
@@ -245,6 +269,9 @@ const Header = ({ className }) => {
                             <NavLink to="/sell" onClick={() => setMenu(!menu)}>
                               작품 판매
                             </NavLink>
+                            {/* <NavLink to="/recommended" onClick={() => setMenu(!menu)}>
+                              추천 NFT
+                            </NavLink> */}
                           </div>
                         </div>
                       )}
@@ -257,10 +284,23 @@ const Header = ({ className }) => {
             <Breakpoint xl>
               <div className="menu">
                 <div className="navbar-item">
-                  <NavLink to="/explore">
-                    Marketplace
-                    <span className="lines"></span>
-                  </NavLink>
+                  <div ref={refExploreMenu}>
+                    <div
+                      className="dropdown-custom dropdown-toggle btn"
+                      onMouseEnter={onExploreMenuClick}
+                      onMouseLeave={closeExploreMenu}>
+                      Marketplace
+                      <span className="lines"></span>
+                      {exploreMenu && (
+                        <div className="item-dropdown">
+                          <div className="dropdown" onClick={closeExploreMenu}>
+                            <NavLink to="/explore">Explore</NavLink>
+                            <NavLink to="/recommended">추천 NFT</NavLink>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 </div>
                 <div className="navbar-item">
                   <div ref={refStatMenu}>
@@ -292,7 +332,8 @@ const Header = ({ className }) => {
                       {supportMenu && (
                         <div className="item-dropdown">
                           <div className="dropdown" onClick={closeSupportMenu}>
-                            <NavLink to="#">공지 사항</NavLink>
+                            {/* <NavLink to="/#">공지 사항</NavLink> */}
+                            <NavLink to="/notice">공지 사항</NavLink>
                             <NavLink to="#">FAQ</NavLink>
                           </div>
                         </div>
@@ -314,6 +355,8 @@ const Header = ({ className }) => {
                           <div className="dropdown" onClick={closeAdminMenu}>
                             <NavLink to="#">회원 관리</NavLink>
                             <NavLink to="#">장애인</NavLink>
+                            <NavLink to="/admin/grantArtist">예술가 승인</NavLink>
+                            <NavLink to="/admin/grantCharity">자선단체 승인</NavLink>
                           </div>
                         </div>
                       )}
@@ -353,14 +396,15 @@ const Header = ({ className }) => {
                           <div className="dropdown" onClick={closeTestMenu}>
                             <NavLink to="/ItemDetail/1">아이템 상세</NavLink>
                             <NavLink to="/nftDetail/1">소유 NFT 상세</NavLink>
-                            <NavLink to="/profile/1">프로필</NavLink>
-                            <NavLink to="/editProfile/1">프로필변경</NavLink>
+                            {account && <NavLink to={'/profile/' + account.id}>프로필</NavLink>}
+                            {account && (
+                              <NavLink to={'/editProfile/' + account.id}>프로필변경</NavLink>
+                            )}
                             <NavLink to="/donation">후원하기</NavLink>
                             <NavLink to="/sell">작품 판매</NavLink>
                             <NavLink to="/artistRegistration">예술가 등록</NavLink>
-                            <NavLink to="/admin/grantArtist">예술가 승인</NavLink>
                             <NavLink to="/charityRegistration">자선단체 등록</NavLink>
-                            <NavLink to="/admin/grantCharity">자선단체 승인</NavLink>
+                            {/* <NavLink to="/recommended">추천 NFT</NavLink> */}
                           </div>
                         </div>
                       )}

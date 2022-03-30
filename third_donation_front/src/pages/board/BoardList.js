@@ -3,6 +3,7 @@ import Table from '../../components/board/Table';
 import Col from '../../components/board/Col';
 import Row from '../../components/board/Row';
 import { postList } from './Data';
+import { Link } from '@reach/router';
 
 function NoticeWrite() {
   window.location.href = '/noticeWrite';
@@ -24,7 +25,7 @@ const BoardList = () => {
               <Row key={index}>
                 <Col>{item.no}</Col>
                 <Col>
-                  <a href={`/noticeView/${item.no}`}>{item.title}</a>
+                  <Link to={`/noticeView/${item.no}`}>{item.title}</Link>
                 </Col>
                 <Col>{item.createDate}</Col>
                 <Col>{item.readCount}</Col>

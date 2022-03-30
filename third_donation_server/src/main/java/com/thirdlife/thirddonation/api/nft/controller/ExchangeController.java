@@ -1,7 +1,8 @@
 package com.thirdlife.thirddonation.api.nft.controller;
 
 import com.thirdlife.thirddonation.api.nft.dto.SaleInfoDto;
-import com.thirdlife.thirddonation.api.nft.dto.request.SalesRegisterRequest;
+import com.thirdlife.thirddonation.api.nft.dto.request.BuyRequest;
+import com.thirdlife.thirddonation.api.nft.dto.request.SellRequest;
 import com.thirdlife.thirddonation.api.nft.dto.response.SaleListResponse;
 import com.thirdlife.thirddonation.api.nft.service.SaleService;
 import com.thirdlife.thirddonation.common.model.response.BaseResponseBody;
@@ -34,9 +35,9 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @Api(tags = "NFT 판매 관리")
 @RestController
-@RequestMapping("${request.path.api}${request.path.nfts}/sales")
+@RequestMapping("${request.path.api}${request.path.nfts}/exchange")
 @RequiredArgsConstructor
-public class SaleController {
+public class ExchangeController {
 
     private final SaleService saleService;
 
@@ -44,10 +45,10 @@ public class SaleController {
      * Post 요청시 전송받은 정보로 NFT 판매 정보를 등록합니다.
      * 만약 있다면 ResponseEntity 객체를 반환합니다.
      *
-     * @param salesRegisterRequest SalesRegisterRequest
+     * @param sellRequest SellRequest
      * @return ResponseEntity
      */
-    @PostMapping
+    @PostMapping("/sell")
     @ApiOperation(value = "NFT 판매 등록",
             notes = "<strong>NFT 판매 정보</strong>를 등록한다.")
     @ApiResponses({
@@ -55,11 +56,34 @@ public class SaleController {
             @ApiResponse(code = 404, message = "사용자 없음"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    public ResponseEntity<BaseResponseBody> createSales(
+    public ResponseEntity<BaseResponseBody> sell(
             @Valid @RequestBody @ApiParam(value = "NFT 판매 정보", required = true)
-                    SalesRegisterRequest salesRegisterRequest) {
+                    SellRequest sellRequest) {
 
-        saleService.createSales(salesRegisterRequest);
+        saleService.sell(sellRequest);
+
+        return ResponseEntity.status(200)
+                .body(BaseResponseBody.builder().statusCode(200).message("Success").build());
+    }
+
+    /**
+     * NFT 구입 정보 등록합니다.
+     *
+     * @param buyRequest BuyRequest
+     * @return ResponseEntity
+     */
+    @PostMapping("/buy")
+    @ApiOperation(value = "NFT 구입")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 404, message = "사용자 없음"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<BaseResponseBody> buy(
+            @Valid @RequestBody @ApiParam(value = "NFT 구입 정보", required = true)
+                    BuyRequest buyRequest) {
+
+        saleService.buy(buyRequest);
 
         return ResponseEntity.status(200)
                 .body(BaseResponseBody.builder().statusCode(200).message("Success").build());
@@ -71,7 +95,7 @@ public class SaleController {
      * @param pageable Pageable
      * @return ResponseEntity
      */
-    @GetMapping
+    @GetMapping("/sales")
     @ApiOperation(
             value = "NFT 판매 리스트",
             notes = "판매자 조회시 sellerId 붙여줌니다. <br>/api/nfts/sales?page=0&size=5&sellerId=9")
@@ -101,7 +125,7 @@ public class SaleController {
      * @param salesId Long
      * @return ResponseEntity
      */
-    @PatchMapping("/{salesId}/cancel")
+    @PatchMapping("/sales/{salesId}/cancel")
     @ApiOperation(value = "NFT 판매 중지",
             notes = "<strong>NFT 판매</strong>를 중지한다.")
     @ApiResponses({

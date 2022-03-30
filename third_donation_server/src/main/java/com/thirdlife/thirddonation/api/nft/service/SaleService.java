@@ -1,7 +1,8 @@
 package com.thirdlife.thirddonation.api.nft.service;
 
 import com.thirdlife.thirddonation.api.nft.dto.SaleInfoDto;
-import com.thirdlife.thirddonation.api.nft.dto.request.SalesRegisterRequest;
+import com.thirdlife.thirddonation.api.nft.dto.request.BuyRequest;
+import com.thirdlife.thirddonation.api.nft.dto.request.SellRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -12,9 +13,16 @@ public interface SaleService {
     /**
      * NFT 판매 정보를 등록하는 메서드입니다.
      *
-     * @param nftSalesRegisterRequest NftSalesRegisterRequest
+     * @param sellRequest SellRequest
      */
-    void createSales(SalesRegisterRequest nftSalesRegisterRequest);
+    void sell(SellRequest sellRequest);
+
+    /**
+     * NFT 구입 처리 메서드.
+     *
+     * @param buyRequest BuyRequest
+     */
+    void buy(BuyRequest buyRequest);
 
     /**
      * NFT 판매 중지 메서드입니다.

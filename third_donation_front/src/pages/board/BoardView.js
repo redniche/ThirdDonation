@@ -3,14 +3,19 @@ import { getPostByNo } from './Data';
 import PanelLayout from '../../components/layout/PanelLayout';
 import '../../components/board/Board.css';
 import { useParams } from '@reach/router';
+import { useSelector } from 'react-redux';
+import * as selectors from '../../store/selectors';
+import { Link } from '@reach/router';
 
-function Notice() {
+function Delete() {
   window.location.href = '/notice';
+  // 삭제 기능 호출하는 것 추가해야함
 }
 
 // const BoardView = ({ history, match }) => {
 const BoardView = () => {
   const [data, setData] = useState({});
+  const { data: wallet } = useSelector(selectors.accountState);
 
   const no = useParams().no;
 
@@ -19,8 +24,6 @@ const BoardView = () => {
   useEffect(() => {
     setData(getPostByNo(no));
   }, []);
-
-  console.log(data);
 
   return (
     <PanelLayout title="상세정보">
@@ -52,9 +55,16 @@ const BoardView = () => {
           ) : (
             '해당 게시글을 찾을 수 없습니다.'
           )}
-          <button className="post-view-go-list-btn" onClick={() => Notice()}>
-            목록으로 돌아가기
-          </button>
+          <Link to="/notice">
+            <button className="post-view-go-list-btn">목록으로 돌아가기</button>
+          </Link>
+
+          {/* 관리자인지 확인하는 구문 */}
+          {wallet != null && wallet.authority == 'ADMIN' && (
+            <button className="post-view-delete-btn" onClick={() => Delete()}>
+              삭제하기
+            </button>
+          )}
         </div>
       </section>
     </PanelLayout>

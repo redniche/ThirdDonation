@@ -1,4 +1,4 @@
-import BoardList from './BoardList';
+import BoardList from '../../components/board/BoardList';
 import PanelLayout from '../../components/layout/PanelLayout';
 
 const Board = () => {

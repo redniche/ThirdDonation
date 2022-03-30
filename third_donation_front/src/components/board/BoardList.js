@@ -1,16 +1,15 @@
 import { useState, useEffect } from 'react';
-import Table from '../../components/board/Table';
-import Col from '../../components/board/Col';
-import Row from '../../components/board/Row';
-import { postList } from './Data';
+import Table from './Table';
+import Col from './Col';
+import Row from './Row';
+import { postList } from '../../pages/board/Data';
 import { Link } from '@reach/router';
-
-function NoticeWrite() {
-  window.location.href = '/noticeWrite';
-}
+import { useSelector } from 'react-redux';
+import * as selectors from '../../store/selectors';
 
 const BoardList = () => {
   const [data, setDataList] = useState([]);
+  const { data: wallet } = useSelector(selectors.accountState);
 
   useEffect(() => {
     setDataList(postList);
@@ -34,9 +33,11 @@ const BoardList = () => {
           })}
       </Table>
 
-      <button className="post-view-go-list-btn" onClick={() => NoticeWrite()}>
-        작성하기
-      </button>
+      {wallet != null && wallet.authority == 'ADMIN' && (
+        <Link to="/noticeWrite">
+          <button className="post-view-go-list-btn">작성하기</button>
+        </Link>
+      )}
     </div>
   );
 };

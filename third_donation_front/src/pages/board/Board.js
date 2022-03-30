@@ -3,7 +3,7 @@ import PanelLayout from '../../components/layout/PanelLayout';
 
 const Board = () => {
   return (
-    <PanelLayout title="게시판">
+    <PanelLayout title="공지사항">
       <section className="container">
         <BoardList />
       </section>

@@ -1,8 +1,30 @@
+import React from 'react';
+
 import PanelLayout from '../../components/layout/PanelLayout';
+import '@toast-ui/editor/dist/toastui-editor.css';
+import { Editor } from '@toast-ui/react-editor';
+
+import Prism from 'prismjs';
+import 'prismjs/themes/prism.css';
+
+// code-syntax-highlight
+import '@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight.css';
+import codeSyntaxHighlight from '@toast-ui/editor-plugin-code-syntax-highlight';
+
+// color-syntax
+import 'tui-color-picker/dist/tui-color-picker.css';
+import '@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css';
+import colorSyntax from '@toast-ui/editor-plugin-color-syntax';
 
 function Notice() {
   window.location.href = '/notice';
 }
+
+const editorRef = React.createRef();
+
+// const onChangeEditorTextHandler = () => {
+//   console.log(editorRef.current.getInstance().getMarkdown());
+// };
 
 /**
  * NFT 민팅을 할 수 있는 페이지 컴포넌트
@@ -14,16 +36,37 @@ const WrtieNotice = () => {
       <section className="container">
         <div className="Notice">
           <div>
-            <h2>제목</h2>
-            <input className="form-control" type="text" placeholder="제목을 입력해주세요." />
-            <h2>내용</h2>
-            <textarea className="form-control" type="text" placeholder="내용을 입력해주세요." />
-            <br />
-            <br />
-            <button type="button" id="writeButton" className="btn-main" onClick={() => Notice()}>
-              공지 등록
-            </button>
-            <br />
+            <div>
+              <textarea
+                type="title"
+                className="form-control"
+                placeholder="제목을 입력하세요."></textarea>
+              <Editor
+                previewStyle="vertical"
+                height="79vh"
+                initialEditType="markdown"
+                ref={editorRef}
+                toolbarItems={[
+                  ['heading', 'bold', 'italic', 'strike'],
+                  ['hr', 'quote'],
+                  ['ul', 'ol', 'task', 'indent', 'outdent'],
+                  ['table', 'link'],
+                  ['code', 'codeblock'],
+                ]}
+                plugins={[colorSyntax, [codeSyntaxHighlight, { highlighter: Prism }]]}
+                // onChange={onChangeEditorTextHandler}
+              />
+              <button
+                variant="primary"
+                type="submit"
+                className="post-view-go-list-btn"
+                onClick={() => Notice()}>
+                등록하기
+              </button>
+              <button variant="primary" className="post-view-delete-btn">
+                등록취소
+              </button>
+            </div>
           </div>
         </div>
       </section>

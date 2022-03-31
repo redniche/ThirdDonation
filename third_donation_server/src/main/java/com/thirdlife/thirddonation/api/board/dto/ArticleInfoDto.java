@@ -3,6 +3,7 @@ package com.thirdlife.thirddonation.api.board.dto;
 import com.thirdlife.thirddonation.api.user.dto.UserInfoDto;
 import com.thirdlife.thirddonation.db.board.entity.Article;
 import com.thirdlife.thirddonation.db.board.entity.Content;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,6 +31,10 @@ public class ArticleInfoDto {
 
     private String contentText;
 
+    private LocalDateTime dateCreated;
+
+    private LocalDateTime dateLastUpdated;
+
     private Boolean isReply;
 
     /**
@@ -45,6 +50,7 @@ public class ArticleInfoDto {
                 .categoryName(article.getCategory().getName())
                 .title(article.getTitle())
                 .views(article.getViews())
+                .dateCreated(article.getDateCreated())
                 .build();
     }
 
@@ -55,15 +61,17 @@ public class ArticleInfoDto {
      * @return CherityInfoDto 자선단체 정보 Dto
      */
     public static ArticleInfoDto of2(Article article) {
-        Content temp = article.getContent();
+        Content content = article.getContent();
         return ArticleInfoDto.builder()
                 .id(article.getId())
                 .user(UserInfoDto.of(article.getUser()))
                 .categoryName(article.getCategory().getName())
                 .title(article.getTitle())
                 .views(article.getViews())
-                .contentText(temp.getText())
-                .isReply(temp.getIsReply())
+                .contentText(content.getText())
+                .isReply(content.getIsReply())
+                .dateCreated(article.getDateCreated())
+                .dateLastUpdated(content.getDateLastUpdated())
                 .build();
     }
 }

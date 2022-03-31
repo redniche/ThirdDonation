@@ -1,11 +1,12 @@
 package com.thirdlife.thirddonation.common.scheduler.service;
 
-import com.thirdlife.thirddonation.common.scheduler.dto.LogByDayDto;
+import com.thirdlife.thirddonation.db.log.document.DailyIncome;
 import com.thirdlife.thirddonation.db.log.document.IncomeLog;
 import java.time.LocalDate;
 import java.util.List;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.AddFieldsOperation;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.aggregation.GroupOperation;
@@ -21,45 +22,49 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional
-@AllArgsConstructor
-public class IncomeLogAggregationImpl implements IncomeLogAggregation {
+@RequiredArgsConstructor
+public class IncomeLogServiceImpl implements IncomeLogService {
 
-    private MongoTemplate mongoTemplate;
+    private final MongoTemplate mongoTemplate;
 
     /**
-     * 집계함수로 로깅합니다.
+     * 집계함수로 일별 사용자 수익을 로깅합니다.
      *
      * @return List of LogByDayDto
      */
-    public List<LogByDayDto> aggregateByDay(Long userId) {
+    public List<DailyIncome> aggregateByDay() {
+
         ProjectionOperation dateProjection =
                 Aggregation.project().and("userId").previousOperation()
-                        .and("tradingDates").as("tradingDates")
-                        .and("tokenIds").as("tokenIds")
-                        .and("sumIncome").as("sumIncome");
+                        .and("income").as("income")
+                        .and("tradingDate").as("tradingDate");
 
-        //현재는 거래로그가 너무 적어서 하루로 하면 너무 적게 찍힘
-        LocalDate startDay = LocalDate.parse("2022-03-01");
-        LocalDate date = LocalDate.now();
+        LocalDate yesterday = LocalDate.now().minusDays(1);
 
         //날짜로 조회한다는 가정. 당일로 할거면 둘 다 date.atTime하면 당일임!
         Criteria criteria = new Criteria().andOperator(
-                Criteria.where("tradingDate").gte(startDay.atTime(0, 0, 0))
-                        .lte(date.atTime(23, 59, 59))
+                Criteria.where("tradingDate").gte(yesterday.atTime(0, 0, 0))
+                        .lte(yesterday.atTime(23, 59, 59))
         );
 
-        MatchOperation where = Aggregation.match(//조건절 설정
+        //조건절 설정
+        MatchOperation where = Aggregation.match(
                 criteria
         );
 
+        //공통 칼럼 추가 (거래일)
+        AddFieldsOperation addFields =
+                Aggregation.addFields().addField("tradingDate").withValueOf(yesterday).build();
+
+        //그룹핑
         GroupOperation groupBy =
                 Aggregation.group("userId")
-                        .sum("income").as("sumIncome")
-                        .addToSet("tokenId").as("tokenIds")
-                        .push("tradingDate").as("tradingDates");
+                        .sum("income").as("income")
+                        .first("tradingDate").as("tradingDate");
 
         TypedAggregation<IncomeLog> textAggregation =
                 Aggregation.newAggregation(IncomeLog.class,
+                        addFields,
                         where,
                         groupBy,
                         dateProjection);
@@ -67,10 +72,13 @@ public class IncomeLogAggregationImpl implements IncomeLogAggregation {
         String temp = textAggregation.toString();
         System.out.println(temp);
 
-        AggregationResults<LogByDayDto> results =
-                mongoTemplate.aggregate(textAggregation, LogByDayDto.class);
+        AggregationResults<DailyIncome> results =
+                mongoTemplate.aggregate(textAggregation, DailyIncome.class);
+
+        for (DailyIncome dailyIncome : results.getMappedResults()) {
+            mongoTemplate.insert(dailyIncome);
+        }
 
         return results.getMappedResults();
     }
-
 }

@@ -3,6 +3,7 @@ package com.thirdlife.thirddonation.api.user.controller;
 import com.thirdlife.thirddonation.api.user.dto.request.ArtistRegisterRequest;
 import com.thirdlife.thirddonation.api.user.dto.request.FollowRequest;
 import com.thirdlife.thirddonation.api.user.dto.request.UserImgRequest;
+import com.thirdlife.thirddonation.api.user.dto.request.UserProfileModifyRequest;
 import com.thirdlife.thirddonation.api.user.dto.request.UserRequest;
 import com.thirdlife.thirddonation.api.user.dto.response.ArtistListResponse;
 import com.thirdlife.thirddonation.api.user.dto.response.UserDailyIncomeResponse;
@@ -39,7 +40,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 회원 관련의 요청을 처리하는 컨트롤러입니다.
@@ -115,9 +118,35 @@ public class UserController {
     }
 
     /**
+     * Patch 요청시 프로필을 업데이트 한다.
+     * 만약 있다면 ResponseEntity of UserProfileResponse 객체를 반환합니다.
+     *
+     * @param userProfileModifyRequest UserProfileModifyRequest
+     * @return ResponseEntity of UserProfileResponse
+     */
+    @PatchMapping("/profile}")
+    @ApiOperation(value = "회원 프로필 업데이트",
+            notes = "<strong>회원 id</strong>를 통해 회원 프로필을 조회한다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 404, message = "사용자 없음"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<BaseResponseBody> profileUpdate(
+            @RequestBody @ApiParam(value = "조회할 회원 id를 입력받음", required = true)
+                    UserProfileModifyRequest userProfileModifyRequest) {
+
+        userService.updateProfile(userProfileModifyRequest);
+
+        return ResponseEntity.status(200)
+                .body(BaseResponseBody.builder().statusCode(200).message("Success").build());
+    }
+
+    /**
      * 유저의 이미지 정보를 업로드하는 메서드입니다.
      *
-     * @param userImgRequest UserImgRequest
+     * @param userId Long
+     * @param img    MultipartFile
      * @return ResponseEntity&lt;BaseResponseBody&gt;
      */
     @PostMapping("/img")
@@ -128,9 +157,10 @@ public class UserController {
             @ApiResponse(code = 404, message = "사용자 없음"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    public ResponseEntity<BaseResponseBody> img(@Valid @RequestBody UserImgRequest userImgRequest) {
+    public ResponseEntity<BaseResponseBody> img(@ApiParam(value = "id") @RequestParam Long userId,
+                                                @RequestPart("img") MultipartFile img) {
 
-        userService.uploadProfileImage(userImgRequest);
+        userService.uploadProfileImage(userId, img);
 
         return ResponseEntity.status(200)
                 .body(BaseResponseBody.builder().statusCode(200).message("Success").build());

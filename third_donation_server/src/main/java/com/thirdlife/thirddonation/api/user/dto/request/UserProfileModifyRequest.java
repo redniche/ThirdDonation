@@ -12,11 +12,12 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserProfileModifyRequest {
 
     @NotBlank
+    @ApiModelProperty(name = "유저아이디", example = "아이디를 입력하세요")
+    private Long id;
+    
+    @NotBlank
     @ApiModelProperty(name = "닉네임", example = "닉네임을 입력하세요.")
     private String userName;
-
-    @ApiModelProperty(name = "Multipart 이미지 파일", example = "이미지 파일을 업로드합니다.")
-    private MultipartFile imageFile;
 
     @ApiModelProperty(name = "자기 소개", example = "자신에 대해 나타내주세요.")
     private String description;

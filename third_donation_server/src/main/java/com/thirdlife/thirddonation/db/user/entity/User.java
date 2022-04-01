@@ -14,7 +14,9 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -56,8 +58,9 @@ public class User implements UserDetails {
     @Column(length = 300)
     private String description;
 
-    @Column(columnDefinition = "TEXT")
-    private String imageBase64;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_img_id")
+    private UserImg userImg;
 
     @Column
     private Integer followerCount;
@@ -111,6 +114,10 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return enabled;
+    }
+
+    public void changeUserImg(UserImg userImg){
+        this.userImg = userImg;
     }
 
 }

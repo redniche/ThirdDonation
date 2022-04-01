@@ -5,6 +5,7 @@ import com.thirdlife.thirddonation.api.user.dto.request.FollowRequest;
 import com.thirdlife.thirddonation.api.user.dto.request.UserImgRequest;
 import com.thirdlife.thirddonation.api.user.dto.request.UserRequest;
 import com.thirdlife.thirddonation.api.user.dto.response.ArtistListResponse;
+import com.thirdlife.thirddonation.api.user.dto.response.UserDailyIncomeResponse;
 import com.thirdlife.thirddonation.api.user.dto.response.UserProfileResponse;
 import com.thirdlife.thirddonation.api.user.dto.response.UserResponse;
 import com.thirdlife.thirddonation.api.user.service.ArtistService;
@@ -13,13 +14,16 @@ import com.thirdlife.thirddonation.api.user.service.UserService;
 import com.thirdlife.thirddonation.common.exception.CustomException;
 import com.thirdlife.thirddonation.common.exception.ErrorCode;
 import com.thirdlife.thirddonation.common.model.response.BaseResponseBody;
+import com.thirdlife.thirddonation.db.log.document.DailyIncome;
 import com.thirdlife.thirddonation.db.user.entity.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import java.util.List;
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -193,7 +197,18 @@ public class UserController {
     }
 
 
+    /**
+     * 팔로우 등록.
+     *
+     * @param followRequest FollowRequest
+     * @return ResponseEntity
+     */
     @PostMapping("/follow")
+    @ApiOperation(value = "장애인 예술가 팔로우")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
     public ResponseEntity<BaseResponseBody> followArtist(
             @Valid @RequestBody FollowRequest followRequest) {
 
@@ -210,7 +225,18 @@ public class UserController {
                 .body(BaseResponseBody.builder().statusCode(200).message("Success").build());
     }
 
+    /**
+     * 팔로우 헤재.
+     *
+     * @param followRequest FollowRequest
+     * @return BaseResponseBody
+     */
     @DeleteMapping("/follow")
+    @ApiOperation(value = "장애인 예술가 언팔로우")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
     public ResponseEntity<BaseResponseBody> unfollowArtist(
             @Valid @RequestBody FollowRequest followRequest) {
 
@@ -225,5 +251,23 @@ public class UserController {
 
         return ResponseEntity.status(200)
                 .body(BaseResponseBody.builder().statusCode(200).message("Success").build());
+    }
+
+    /**
+     * 일별 수익을 반환합니다.
+     *
+     * @param userId Long
+     * @return UserDailyIncomeResponse
+     */
+    @GetMapping("/daily/income/{userId}")
+    public ResponseEntity<UserDailyIncomeResponse> getDailyIncome(
+            @Positive @PathVariable @ApiParam(value = "조회할 회원 id를 입력받음", required = true)
+                    Long userId) {
+
+        List<DailyIncome> incomeList = userService.getDailyIncome(userId);
+
+        return ResponseEntity.status(200)
+                .body(UserDailyIncomeResponse.builder().statusCode(200).message("Success")
+                        .data(incomeList).build());
     }
 }

@@ -2,7 +2,9 @@ package com.thirdlife.thirddonation.api.user.service;
 
 import com.thirdlife.thirddonation.api.user.dto.request.UserImgRequest;
 import com.thirdlife.thirddonation.api.user.dto.request.UserRequest;
+import com.thirdlife.thirddonation.db.log.document.DailyIncome;
 import com.thirdlife.thirddonation.db.user.entity.User;
+import java.util.List;
 
 /**
  * 유저 서비스입니다.
@@ -46,4 +48,12 @@ public interface UserService {
      * @return User
      */
     User getUserById(Long id);
+
+    /**
+     * 최근 1주일간 사용자의 수익을 반환하는 메서드.
+     *
+     * @param userId Long
+     * @return List of DailyIncome
+     */
+    List<DailyIncome> getDailyIncome(Long userId);
 }

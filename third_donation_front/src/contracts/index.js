@@ -12,7 +12,7 @@ export const SSAFY_TOKEN_CONTRACT_ADDRESS = '0x6C927304104cdaa5a8b3691E0ADE8a3de
 
 export const SSAFY_NFT_CONTRACT_ADDRESS = '0xa060801c3714A2C8B4277866CB0B5310c790e4fB';
 
-export const saleArtTokenContractAddress = '';
+export const SALE_NFT_CONTRACT_ADDRESS = '0x348f19ed0Fb196C0a70D23B578F173bE55099142';
 
 const ssafyTokenProvider = new Web3.providers.HttpProvider(rpcHttpUrl);
 
@@ -25,6 +25,11 @@ export const GetWeb3 = () => {
 
 export const ssafyTokenContract = new web3.eth.Contract(TOKEN_ABI, SSAFY_TOKEN_CONTRACT_ADDRESS);
 
+export const saleArtTokenContractAddress = new web3.eth.Contract(
+  SALE_ABI,
+  SALE_NFT_CONTRACT_ADDRESS,
+);
+
 export const getSsafyNftContract = () => {
   return new GetWeb3().eth.Contract(NFT_ABI, SSAFY_NFT_CONTRACT_ADDRESS);
 };
@@ -32,6 +37,11 @@ export const getSsafyNftContract = () => {
 export const getSsafyNftContract2 = (provider) => {
   const web3 = new Web3(provider);
   return new web3.eth.Contract(NFT_ABI, SSAFY_NFT_CONTRACT_ADDRESS);
+};
+
+export const getSaleNftContract = (provider) => {
+  const web3 = new Web3(provider);
+  return new web3.eth.Contract(SALE_ABI, SALE_NFT_CONTRACT_ADDRESS);
 };
 
 export const saleArtTokenContracts = new web3.eth.Contract(SALE_ABI, saleArtTokenContractAddress);

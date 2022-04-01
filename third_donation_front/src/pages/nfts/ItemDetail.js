@@ -1,17 +1,30 @@
 import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import * as selectors from '../../store/selectors';
 import BasicLayout from './../../components/layout/BasicLayout';
 import { useParams } from '@reach/router';
 import { Axios } from './../../core/axios';
 import { navigate } from '@reach/router';
+import { detectCurrentProvider } from '../../core/ethereum';
+import { getSsafyNftContract2, getSaleNftContract } from '../../contracts';
+
+import Spinner from 'react-bootstrap/Spinner';
 
 /**
  * NFT의 상세 정보를 보여주는 페이지 컴포넌트
  * @returns
  */
 const ItemDetail = function () {
+  const { data: account } = useSelector(selectors.accountState);
+  // console.log(account.id);
+
   const [tokenUri, setTokenUri] = useState(null);
 
   const [nft, setNft] = useState({});
+  const [owner, setOwner] = useState(false);
+  const [sale, setSale] = useState(false);
+  const [saleId, setSaleId] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   // 파라미터 id값 받아오기
   const nftId = useParams().nftId;
@@ -21,26 +34,96 @@ const ItemDetail = function () {
     navigate(link);
   };
 
+  const getSaleId = () => {
+    if (!account) return;
+    Axios.get(`/nfts/exchange/sales?sellerId=${account.id}`)
+      .then((data) => data)
+      .then(async (res) => {
+        const sellData = res.data.data;
+        for (let i = 0; i < sellData.length; i++) {
+          const sellNftId = sellData[i].nft.id;
+          if (sellNftId == nftId) {
+            setSaleId(sellData[i].id);
+            console.log(sellData[i].id);
+            return;
+          }
+        }
+      })
+      .catch((err) => {
+        console.log(`err: ${err}`);
+        // 만약 NFT생성은 완료 되었는데 서버전송에서 오류날 경우따로 DB저장 처리 가능한 함수 필요
+      });
+  };
+
+  // 토큰 ID에 해당하는 NFT 정보 받아오기
   const getNFT = () => {
     Axios.get(`/nfts/items/info/${nftId}`)
       .then((data) => data)
       .then(async (res) => {
         const nftData = res.data.data;
-
         setNft(nftData);
-        // console.log(nftData);
-        // console.log(nftData.tokenUri);
+      })
+      .catch((err) => {
+        console.log(`err: ${err}`);
+        // 만약 NFT생성은 완료 되었는데 서버전송에서 오류날 경우따로 DB저장 처리 가능한 함수 필요
+      });
+  };
 
-        try {
-          const { data: tokenUriJson } = await Axios.get(nftData.tokenUri, { params: [] });
-          setTokenUri(tokenUriJson);
-          // console.log(tokenUri);
-        } catch (err) {
-          console.log(err);
-        }
-        // setNft(res.data.data, () => {
-        //   console.log(nft);
-        // });
+  const currentProvider = detectCurrentProvider();
+  if (!currentProvider) return;
+  const artNftContract = getSsafyNftContract2(currentProvider);
+  const saleArtContract = getSaleNftContract(currentProvider);
+
+  // 스마트 컨트랙트에서 토큰 ID에 해당하는 tokenURI 가져오는 함수
+  const getContractData = async () => {
+    try {
+      // 토큰 ID에 해당하는 tokenURI 가져오기
+      const tokenUri = await artNftContract.methods.getTokenURI(nftId).call();
+      console.log(tokenUri);
+      const { data: tokenUriJson } = await Axios.get(tokenUri, { params: [] });
+      setTokenUri(tokenUriJson);
+
+      const price = await saleArtContract.methods.artTokenPrices(nftId).call();
+      console.log(price);
+      // 판매 중인 NFT라면
+      if (price != 0) setSale(true);
+    } catch (error) {
+      console.log(error);
+      alert('정보 가져오기 실패!');
+    }
+  };
+
+  // 판매 취소하는 함수
+  const cancelSale = async () => {
+    try {
+      setLoading(true);
+
+      const accounts = await currentProvider.request({ method: 'eth_requestAccounts' });
+      const currentWallet = accounts[0];
+      const response = await saleArtContract.methods
+        .cancelSaleArtToken(nftId)
+        .send({ from: currentWallet })
+        .then(() => {
+          saveCancelSale();
+        });
+
+      console.log(response);
+
+      setLoading(false);
+      alert('판매 취소가 완료되었습니다.');
+      navigateTo('/explore');
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+      alert('판매 취소 실패!');
+    }
+  };
+
+  // 백엔드에 판매 취소 전송
+  const saveCancelSale = () => {
+    Axios.patch(`/nfts/exchange/sales/${saleId}/cancel`)
+      .then((res) => {
+        console.log(res);
       })
       .catch((err) => {
         console.log(`err: ${err}`);
@@ -50,11 +133,22 @@ const ItemDetail = function () {
 
   useEffect(async () => {
     getNFT();
+    getContractData();
+    getSaleId();
   }, []);
 
+  useEffect(async () => {
+    if (!account) return;
+    if (nft.owner && account.id == nft.owner.id) setOwner(true);
+    else setOwner(false);
+    console.log(owner);
+  }, [nft]);
+
+  if (nft.owner) console.log(nft.owner.id);
   return (
     <BasicLayout>
       {console.log(nft)}
+
       {console.log(tokenUri)}
       <section className="container mt-4">
         <div className="row mt-md-5 pt-md-4">
@@ -135,11 +229,26 @@ const ItemDetail = function () {
                   {/* button for checkout */}
                   <div className="d-flex flex-row mt-5">
                     {/* 판매버튼 */}
-                    <button
-                      className="btn-main lead mb-5 mr15"
-                      onClick={() => navigateTo(`/sell/${nft.id}`)}>
-                      판매 하기
-                    </button>
+                    {!owner ? (
+                      <button className="btn-main lead mb-5 mr15">구매하기</button>
+                    ) : sale ? (
+                      loading ? (
+                        <div className="m-4 d-flex justify-content-center">
+                          <Spinner animation="border" />
+                          <span className="m-1">판매 취소 중입니다.</span>
+                        </div>
+                      ) : (
+                        <button className="btn-main lead mb-5 mr15" onClick={cancelSale}>
+                          판매 취소
+                        </button>
+                      )
+                    ) : (
+                      <button
+                        className="btn-main lead mb-5 mr15"
+                        onClick={() => navigateTo(`/sell/${nft.id}`)}>
+                        판매 하기
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>

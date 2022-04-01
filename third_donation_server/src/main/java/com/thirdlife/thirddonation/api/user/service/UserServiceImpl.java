@@ -141,7 +141,6 @@ public class UserServiceImpl implements UserService {
                     new File(WebMvcConfig.ABSOLUTE_PATH + WebMvcConfig.UPLOAD_PATH + File.separator,
                             fileUrl);
             if (file.exists()) {
-                System.out.println("존재한다.");
                 if (!file.delete()) {
                     log.trace("파일 삭제 실패");
                     throw new CustomException(ErrorCode.SPRING_SERVER_ERROR);

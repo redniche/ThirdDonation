@@ -1,6 +1,7 @@
 package com.thirdlife.thirddonation.config;
 
-import org.springframework.beans.factory.annotation.Value;
+import java.io.File;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.resource.PathResourceResolver;
@@ -8,17 +9,30 @@ import org.springframework.web.servlet.resource.PathResourceResolver;
 /**
  * 파일 저장을 위한  WebMvcConfig.
  */
+@Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 
-    @Value("${app.path.upload.file}")
-    private String uploadPath;
+    public static final String UPLOAD_PATH = "/upload/file";
+
+    public static final String ABSOLUTE_PATH = new File("").getAbsolutePath().replace('\\', '/');
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/upload/file/**")
-                .addResourceLocations("file:///" + uploadPath + "/")
-                .setCachePeriod(3600)
-                .resourceChain(true)
-                .addResolver(new PathResourceResolver());
+        String os = System.getProperty("os.name").toLowerCase();
+
+        if (os.contains("win")) {
+            registry.addResourceHandler(UPLOAD_PATH + "/**")
+                    .addResourceLocations("file:///" + ABSOLUTE_PATH + UPLOAD_PATH + "/")
+                    .setCachePeriod(3600)
+                    .resourceChain(true)
+                    .addResolver(new PathResourceResolver());
+        } else {
+            registry.addResourceHandler(UPLOAD_PATH + "/**")
+                    .addResourceLocations("file:///" + ABSOLUTE_PATH + UPLOAD_PATH + "/")
+                    .setCachePeriod(3600)
+                    .resourceChain(true)
+                    .addResolver(new PathResourceResolver());
+        }
+
     }
 }

@@ -1,10 +1,12 @@
 package com.thirdlife.thirddonation.api.user.service;
 
 import com.thirdlife.thirddonation.api.user.dto.request.UserImgRequest;
+import com.thirdlife.thirddonation.api.user.dto.request.UserProfileModifyRequest;
 import com.thirdlife.thirddonation.api.user.dto.request.UserRequest;
 import com.thirdlife.thirddonation.db.log.document.DailyIncome;
 import com.thirdlife.thirddonation.db.user.entity.User;
 import java.util.List;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 유저 서비스입니다.
@@ -34,12 +36,17 @@ public interface UserService {
      */
     User getUserByWalletAddress(String walletAddress);
 
+
+    void updateProfile(UserProfileModifyRequest userProfileModifyRequest);
+
     /**
      * 유저의 이미지 정보를 업로드하는 메서드입니다.
      *
-     * @param userImgRequest UserImgRequest
+      * @param userId Long
+     * @param multipartFile MultipartFile
+     * @return String
      */
-    void uploadProfileImage(UserImgRequest userImgRequest);
+    String uploadProfileImage(Long userId, MultipartFile multipartFile);
 
     /**
      * id로 찾아 유저를 반환하는 메서드입니다.

@@ -1,58 +1,95 @@
 import { useEffect, useState } from 'react';
-import { getPostByNo } from './Data';
 import PanelLayout from '../../components/layout/PanelLayout';
 import '../../components/board/Board.css';
 import { useParams } from '@reach/router';
 import { useSelector } from 'react-redux';
 import * as selectors from '../../store/selectors';
 import { Link } from '@reach/router';
-import ReactMarkdown from 'react-markdown';
+import { Axios } from '../../core/axios';
 
-function Delete() {
-  window.location.href = '/notice';
-  // 삭제 기능 호출하는 것 추가해야함
-}
+import { Viewer } from '@toast-ui/react-editor';
+// 여기 css를 수정해서 코드 하이라이팅 커스텀 가능
+import 'prismjs/themes/prism.css';
+import Prism from 'prismjs';
 
-// const BoardView = ({ history, match }) => {
+import '@toast-ui/editor/dist/toastui-editor.css';
+
+import '@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight.css';
+import codeSyntaxHighlight from '@toast-ui/editor-plugin-code-syntax-highlight';
+
 const BoardView = () => {
-  const [data, setData] = useState({});
   const { data: wallet } = useSelector(selectors.accountState);
+  const [article, setArticle] = useState({});
 
   const no = useParams().no;
 
-  console.log(no);
+  function getArticle() {
+    Axios.get('/board/article/detail', {
+      params: {
+        articleId: no,
+      },
+    })
+      .then((data) => data)
+      .then(async (res) => {
+        setArticle(res.data.data);
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log('에러 발생' + err);
+      });
+  }
+
+  function Delete() {
+    Axios.delete('/board/article', {
+      params: {
+        articleId: no,
+        userId: 11,
+      },
+    })
+      .then(async () => {
+        window.location.href = '/notice';
+      })
+      .catch((err) => {
+        console.log('에러 발생' + err);
+      });
+  }
 
   useEffect(() => {
-    setData(getPostByNo(no));
+    getArticle();
   }, []);
 
   return (
     <PanelLayout title="상세정보">
       <section className="container">
         <div className="post-view-wrapper">
-          {data ? (
+          {article ? (
             <div>
               <div className="post-view-row">
-                <label>게시글 번호</label>
-                <label>{data.no}</label>
-              </div>
-              <div className="post-view-row">
                 <label>제목</label>
-                <label>{data.title}</label>
+                <label>{article.title}</label>
               </div>
               <div className="post-view-row">
                 <label>작성일</label>
-                <label>{data.createDate}</label>
+                {/* <label>{article.dateCreated.substr(0, 10)}</label> */}
+                <label>{article.dateCreated}</label>
+              </div>
+              <div className="post-view-row">
+                <label>수정일</label>
+                {article.dateLastUpdated != null && <label>{article.dateLastUpdated}</label>}
+                {/* <label>{article.dateLastUpdated.substr(0, 10)}</label> */}
               </div>
               <div className="post-view-row">
                 <label>조회수</label>
-                <label>{data.readCount}</label>
+                <label>{article.views}</label>
               </div>
               <section className="containerWrap">
-                <section>
-                  {/* ReactMarkdown code */}
-                  <ReactMarkdown>{data.content}</ReactMarkdown>
-                </section>
+                {article.contentText && (
+                  <Viewer
+                    plugins={[[codeSyntaxHighlight, { highlighter: Prism }]]}
+                    initialValue={article.contentText}
+                    // initialValue="가나다라마바사"
+                  />
+                )}
               </section>
             </div>
           ) : (

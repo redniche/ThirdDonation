@@ -18,21 +18,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        String os = System.getProperty("os.name").toLowerCase();
-
-        if (os.contains("win")) {
-            registry.addResourceHandler(UPLOAD_PATH + "/**")
-                    .addResourceLocations("file:///" + ABSOLUTE_PATH + UPLOAD_PATH + "/")
-                    .setCachePeriod(3600)
-                    .resourceChain(true)
-                    .addResolver(new PathResourceResolver());
-        } else {
-            registry.addResourceHandler(UPLOAD_PATH + "/**")
-                    .addResourceLocations("file:///" + ABSOLUTE_PATH + UPLOAD_PATH + "/")
-                    .setCachePeriod(3600)
-                    .resourceChain(true)
-                    .addResolver(new PathResourceResolver());
-        }
-
+        registry.addResourceHandler(UPLOAD_PATH + "/**")
+                .addResourceLocations("file:///" + ABSOLUTE_PATH + UPLOAD_PATH + "/")
+                .setCachePeriod(3600)
+                .resourceChain(true)
+                .addResolver(new PathResourceResolver());
     }
 }

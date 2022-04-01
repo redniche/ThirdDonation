@@ -1,4 +1,4 @@
-import NftList from '../../components/nfts/NftList';
+import SaleNftList from '../../components/nfts/SaleNftList';
 import TopFilterBar from '../../components/nfts/TopFilterBar';
 import PanelLayout from '../../components/layout/PanelLayout';
 
@@ -14,7 +14,7 @@ const Explore = () => (
           <TopFilterBar />
         </div>
       </div>
-      <NftList />
+      <SaleNftList />
     </section>
   </PanelLayout>
 );

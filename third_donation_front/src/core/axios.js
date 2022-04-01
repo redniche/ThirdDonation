@@ -9,12 +9,14 @@ export const Canceler = axios.CancelToken.source();
 
 const nft_base = '/nfts';
 const user_base = '/users';
+const nft_sale_base = '/nfts/exchange';
 
 const apis = {
   nfts: {
     items: `${nft_base}/items`,
     list: `${nft_base}/nft`,
     sales: `${nft_base}/sales`,
+    saleList: `${nft_sale_base}/sales`,
   },
   users: {
     user: `${user_base}`,

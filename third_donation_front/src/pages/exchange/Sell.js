@@ -1,25 +1,18 @@
 // import { Component, useState } from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { useParams } from '@reach/router';
+import { Axios } from './../../core/axios';
 import * as selectors from '../../store/selectors';
 import {
-  // GetWeb3,
-  // getSsafyNftContract,
-  // getSaleNftContract,
-  // saleArtTokenContracts,
   SALE_NFT_CONTRACT_ADDRESS,
-  // SSAFY_NFT_CONTRACT_ADDRESS,
   getSsafyNftContract2,
   getSaleNftContract,
 } from '../../contracts';
-// import Web3 from 'web3';
-// import ABI from '../../common/ABI';
 import { detectCurrentProvider } from '../../core/ethereum';
-
-// import { API_URL, Axios } from './../../core/axios';
+import { navigate } from '@reach/router';
 import Spinner from 'react-bootstrap/Spinner';
 
-import Clock from '../../components/nfts/Clock';
 import PanelLayout from '../../components/layout/PanelLayout';
 
 /**
@@ -29,6 +22,13 @@ const Sell = () => {
   const { data: account } = useSelector(selectors.accountState);
   console.log(account.id);
 
+  const [tokenUri, setTokenUri] = useState(null);
+  const [nft, setNft] = useState({});
+
+  // 파라미터 id값 받아오기
+  const nftId = useParams().nftId;
+  console.log(nftId);
+
   // const privateKey = '0x94fa80f5c0885863488f5e0975929faa53b83a5791b098b85d0b7326f174a38e';
   // const walletAccount = web3.eth.accounts.privateKeyToAccount(privateKey);
 
@@ -36,6 +36,10 @@ const Sell = () => {
   // const [account, setAccount] = useState('');
   const [sellPrice, setSellPrice] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const navigateTo = (link) => {
+    navigate(link);
+  };
 
   const onChangeSellPrice = (e) => {
     setSellPrice(e.target.value);
@@ -109,13 +113,14 @@ const Sell = () => {
         .call();
       console.log(saleAuth);
       if (!saleAuth) await approveToggle(artNftContract, currentWallet);
+      console.log(saleAuth);
 
       const response = await saleArtContract.methods
-        .setForSaleArtToken(1, sellPrice)
-        .send({ from: currentWallet });
-      // .then( async () => {
-      //   await saveSaleNFT();
-      // });
+        .setForSaleArtToken(nft.id, sellPrice)
+        .send({ from: currentWallet })
+        .then(() => {
+          saveSaleNFT();
+        });
       console.log(response);
 
       // 해당 주소 토큰 개수 확인
@@ -123,11 +128,12 @@ const Sell = () => {
       console.log(balance);
 
       // 해당 tokenId에 해당하는 토큰 가격 확인
-      const price = await saleArtContract.methods.getArtTokenPrice(1).call();
+      const price = await saleArtContract.methods.getArtTokenPrice(nft.id).call();
       console.log(price);
 
       setLoading(false);
       alert('NFT 판매 등록이 완료되었습니다.');
+      navigateTo('/explore');
     } catch (error) {
       console.log(error);
       setLoading(false);
@@ -136,34 +142,62 @@ const Sell = () => {
   };
 
   // 백엔드에 판매 정보 등록하는 함수
-  // const saveSaleNFT = () => {
-  //   Axios.post(
-  //     `${API_URL}/nfts/sales`,
-  //     {
-  //       basePrice: sellPrice,
-  //       contractAddress: SALE_NFT_CONTRACT_ADDRESS,
-  //       saleType: 'AUCTION',
-  //       sellerId: account.id,
-  //       tokenId: 0,
-  //     },
-  //     {
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       withCredentials: true,
-  //     },
-  //   )
-  //     .then((res) => {
-  //       console.log(res);
-  //     })
-  //     .catch((err) => {
-  //       console.log(`err: ${err}`);
-  //       // 만약 NFT생성은 완료 되었는데 서버전송에서 오류날 경우따로 DB저장 처리 가능한 함수 필요
-  //     });
-  // };
+  const saveSaleNFT = () => {
+    Axios.post(
+      '/nfts/exchange/sell',
+      {
+        basePrice: sellPrice,
+        contractAddress: SALE_NFT_CONTRACT_ADDRESS,
+        saleType: 'TRADING',
+        sellerId: account.id,
+        tokenId: nft.id,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true,
+      },
+    )
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(`err: ${err}`);
+        // 만약 NFT생성은 완료 되었는데 서버전송에서 오류날 경우따로 DB저장 처리 가능한 함수 필요
+      });
+  };
+
+  const getNFT = () => {
+    Axios.get(`/nfts/items/info/${nftId}`)
+      .then((data) => data)
+      .then(async (res) => {
+        const nftData = res.data.data;
+
+        setNft(nftData);
+
+        try {
+          const { data: tokenUriJson } = await Axios.get(nftData.tokenUri, { params: [] });
+          setTokenUri(tokenUriJson);
+        } catch (err) {
+          console.log(err);
+        }
+      })
+      .catch((err) => {
+        console.log(`err: ${err}`);
+        // 만약 NFT생성은 완료 되었는데 서버전송에서 오류날 경우따로 DB저장 처리 가능한 함수 필요
+      });
+  };
+
+  useEffect(async () => {
+    getNFT();
+    console.log(account.id);
+  }, []);
 
   return (
     <PanelLayout title="작품 판매">
+      {console.log(nft)}
+      {console.log(tokenUri)}
       <section className="container">
         <div className="row justify-content-center">
           <div className="col-lg-7 offset-lg-1 mb-5">
@@ -280,19 +314,16 @@ const Sell = () => {
           <div className="col-lg-3 col-sm-6 col-xs-12">
             <h5>Preview item</h5>
             <div className="nft__item m-0">
-              <div className="de_countdown">
-                <Clock deadline="December, 30, 2021" />
-              </div>
               <div className="author_list_pp">
                 <span>
-                  <img className="lazy" src="./img/author/author-1.jpg" alt="" />
+                  <img className="lazy" src="../img/author/author-1.jpg" alt="" />
                   <i className="fa fa-check"></i>
                 </span>
               </div>
               <div className="nft__item_wrap">
                 <span>
                   <img
-                    src="./img/collections/coll-item-3.jpg"
+                    src={tokenUri && tokenUri.image}
                     id="get_file_2"
                     className="lazy nft__item_preview"
                     alt=""
@@ -301,10 +332,10 @@ const Sell = () => {
               </div>
               <div className="nft__item_info">
                 <span>
-                  <h4>Pinky Ocean</h4>
+                  <h4>{tokenUri && tokenUri.title}</h4>
                 </span>
                 <div className="nft__item_price">
-                  0.08 ETH
+                  {sellPrice ? <span>{sellPrice} SSF</span> : <span>0 SSF</span>}
                   {/* <span>1/20</span> */}
                 </div>
                 {/* <div className="nft__item_action">

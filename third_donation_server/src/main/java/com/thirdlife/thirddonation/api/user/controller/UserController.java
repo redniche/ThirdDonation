@@ -4,6 +4,7 @@ import com.thirdlife.thirddonation.api.user.dto.request.ArtistRegisterRequest;
 import com.thirdlife.thirddonation.api.user.dto.request.FollowRequest;
 import com.thirdlife.thirddonation.api.user.dto.request.UserImgRequest;
 import com.thirdlife.thirddonation.api.user.dto.request.UserRequest;
+import com.thirdlife.thirddonation.api.user.dto.response.ArtistListResponse;
 import com.thirdlife.thirddonation.api.user.dto.response.UserDailyIncomeResponse;
 import com.thirdlife.thirddonation.api.user.dto.response.UserProfileResponse;
 import com.thirdlife.thirddonation.api.user.dto.response.UserResponse;
@@ -25,14 +26,19 @@ import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -142,14 +148,54 @@ public class UserController {
             @ApiResponse(code = 200, message = "성공"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    public ResponseEntity<BaseResponseBody> registerArtist(@Valid @RequestBody
-                                                                   ArtistRegisterRequest artistRegisterRequest) {
+    public ResponseEntity<BaseResponseBody> registerArtist(
+            @Valid @RequestBody ArtistRegisterRequest artistRegisterRequest) {
 
         artistService.createArtist(artistRegisterRequest);
 
         return ResponseEntity.status(200)
                 .body(BaseResponseBody.builder().statusCode(200).message("Success").build());
     }
+
+    /**
+     * 장애인 예술가 등록 신청 리스트 조회 메서드.
+     *
+     * @return ResponseEntity
+     */
+    @GetMapping("/artists")
+    @ApiOperation(value = "장애인 예술가 신청 리스트 조회")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<ArtistListResponse> getRegisterArtistList(
+            @PageableDefault(sort = "dateCreated", direction = Sort.Direction.ASC)
+            @ApiParam(value = "페이지네이션", required = true) final Pageable pageable) {
+        return ResponseEntity.status(200)
+                .body(ArtistListResponse.builder().statusCode(200).message("Success")
+                        .data(artistService.getArtistList(pageable)).build());
+    }
+
+    /**
+     * 장애인 예술가 등록 허가 기능.
+     *
+     * @param userId Long
+     * @return ResponseEntity of BaseResponseBody
+     */
+    @PatchMapping("/artists")
+    @ApiOperation(value = "장애인 예술가 허가 토글")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<BaseResponseBody> enableArtist(
+            @ApiParam(value = "아티스트 신청 아이디", required = true)
+            @RequestParam(value = "userId") Long userId) {
+        artistService.enableArtist(userId);
+        return ResponseEntity.status(200)
+                .body(BaseResponseBody.builder().statusCode(200).message("Success").build());
+    }
+
 
     /**
      * 팔로우 등록.

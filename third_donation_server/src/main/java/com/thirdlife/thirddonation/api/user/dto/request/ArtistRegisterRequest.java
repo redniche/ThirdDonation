@@ -12,7 +12,7 @@ import lombok.Getter;
 public class ArtistRegisterRequest {
 
     @NotNull
-    private Long id;
+    private Long userId;
 
     @NotBlank
     private String name;

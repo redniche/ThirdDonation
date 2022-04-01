@@ -23,6 +23,7 @@ public enum ErrorCode {
     CANNOT_BUY_MINE(BAD_REQUEST, "판매자와 구매자가 같을 수 없습니다."),
     CANNOT_BUY_DISABLED(BAD_REQUEST, "판매 중지된 작품을 구입할 수 없습니다."),
     CANNOT_BUY_SOLD_OUT(BAD_REQUEST, "이미 판매 완료된 작품입니다."),
+    CANNOT_DOWN_AUTHORITY(BAD_REQUEST, "이미 관리자입니다."),
 
     /* 401 UNAUTHORIZED : 인증되지 않은 사용자 */
     UNAUTHORIZED_MEMBER(UNAUTHORIZED, "현재 내 계정 정보가 존재하지 않습니다"),
@@ -37,6 +38,7 @@ public enum ErrorCode {
     BUYER_NOT_FOUND(NOT_FOUND, "해당 Buyer 정보를 찾을 수 없습니다."),
     NFT_NOT_FOUND(NOT_FOUND, "해당 token id를 찾을 수 없습니다."),
     SALE_NOT_FOUND(NOT_FOUND, "판매 정보를 찾을 수 없습니다."),
+    ARTIST_REQUEST_NOT_FOUND(NOT_FOUND, "해당 예술가 신청을 찾을 수 없습니다."),
     ARTIST_NOT_FOUND(NOT_FOUND, "해당 예술가를 찾을 수 없습니다."),
     FOLLOW_NOT_FOUND(NOT_FOUND, "follow 정보를 찾을 수 없습니다."),
     WISH_NOT_FOUND(NOT_FOUND, "찜하기 정보를 찾을 수 없습니다."),

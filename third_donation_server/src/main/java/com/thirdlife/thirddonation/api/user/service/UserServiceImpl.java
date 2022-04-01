@@ -85,7 +85,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userImgRequest.getId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        user.setImagePath(userImgRequest.getImagePath());
+        user.setImageBase64(userImgRequest.getImageBase64());
 
         userRepository.save(user);
     }

@@ -56,8 +56,8 @@ public class User implements UserDetails {
     @Column(length = 300)
     private String description;
 
-    @Column(length = 300)
-    private String imagePath;
+    @Column(columnDefinition = "TEXT")
+    private String imageBase64;
 
     @Column
     private Integer followerCount;

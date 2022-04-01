@@ -14,5 +14,5 @@ public class UserImgRequest {
     private Long id;
 
     @NotBlank
-    private String imagePath;
+    private String imageBase64;
 }

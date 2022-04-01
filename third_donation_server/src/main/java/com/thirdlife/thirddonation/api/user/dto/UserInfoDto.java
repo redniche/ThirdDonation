@@ -1,6 +1,5 @@
 package com.thirdlife.thirddonation.api.user.dto;
 
-import com.thirdlife.thirddonation.api.nft.dto.NftInfoDto;
 import com.thirdlife.thirddonation.db.user.entity.Authority;
 import com.thirdlife.thirddonation.db.user.entity.User;
 import java.time.LocalDateTime;
@@ -26,7 +25,7 @@ public class UserInfoDto {
     private boolean enabled;
     private String username;
     private String description;
-    private String imagePath;
+    private String imageBase64;
     private Authority authority;
 
     /**
@@ -43,7 +42,7 @@ public class UserInfoDto {
                 .dateExchanged(user.getDateExchanged())
                 .enabled(user.getEnabled())
                 .username(user.getUsername())
-                .imagePath(user.getImagePath())
+                .imageBase64(user.getImageBase64())
                 .authority(user.getAuthority())
                 .build();
     }
@@ -63,7 +62,7 @@ public class UserInfoDto {
                 .dateExchanged(user.getDateExchanged())
                 .enabled(user.getEnabled())
                 .username(user.getUsername())
-                .imagePath(user.getImagePath())
+                .imageBase64(user.getImageBase64())
                 .description(user.getDescription())
                 .authority(user.getAuthority())
                 .build();

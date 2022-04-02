@@ -13,6 +13,7 @@ import lombok.Data;
 @Data
 public class NotificationInfoDto {
 
+    private Long id;
     private NotificationType type;
     private String description;
     private LocalDateTime dateCreated;
@@ -25,6 +26,7 @@ public class NotificationInfoDto {
      */
     public static NotificationInfoDto of(Notification notification) {
         return NotificationInfoDto.builder()
+                .id(notification.getId())
                 .type(notification.getType())
                 .description(notification.getDescription())
                 .dateCreated(notification.getDateCreated())

@@ -99,7 +99,7 @@ public class BoardController {
 
         ArticleListResponse response =
                 ArticleListResponse.builder().statusCode(200).message("Success")
-                        .data(articleInfoDtoPage.getContent()).build();
+                        .data(articleInfoDtoPage).build();
 
         return ResponseEntity.status(200).body(response);
     }

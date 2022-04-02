@@ -1,5 +1,7 @@
 package com.thirdlife.thirddonation.config;
 
+import com.thirdlife.thirddonation.api.user.service.UserService;
+import com.thirdlife.thirddonation.common.auth.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +25,7 @@ import org.springframework.web.filter.CorsFilter;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final CorsFilter corsFilter;
+    private final UserService userService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -35,9 +38,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.httpBasic().disable()
                 .csrf().disable()
                 .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 해시 기반 인증이므로 세션 사용 하지않음
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 토큰 기반 인증이므로 세션 사용 하지않음
                 .and()
                 .addFilter(corsFilter)
+                .addFilter(new JwtAuthenticationFilter(authenticationManager(), userService))
                 .authorizeRequests()
                 .antMatchers("/api/**").permitAll()
                 .anyRequest().permitAll()

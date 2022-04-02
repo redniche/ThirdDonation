@@ -5,7 +5,7 @@ import apis from './../../../core/axios';
 // import { useSelector } from 'react-redux';
 // import * as selectors from '../../selectors';
 
-export const fetchAuthorList = (authorId) => async (dispatch) => {
+export const fetchAuthor = (authorId) => async (dispatch) => {
   // await new Promise(() => alert('헬로'));
   dispatch(actions.getAuthorList.request(Canceler.cancel));
   try {

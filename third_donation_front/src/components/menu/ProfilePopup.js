@@ -1,8 +1,9 @@
 import { memo, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import useOnclickOutside from 'react-cool-onclickoutside';
 import Wallet from '../accounts/Wallet';
 import { clearAccount } from '../../store/actions';
+import * as selectors from '../../store/selectors';
 
 function Profile() {
   window.location.href = '/profile/1';
@@ -16,6 +17,8 @@ const ProfilePopup = () => {
   const [profilePopup, setProfilePopup] = useState(false);
   const closeProfilePopup = () => setProfilePopup(false);
   const refProfilePopup = useOnclickOutside(() => closeProfilePopup());
+
+  const { data: account } = useSelector(selectors.accountState);
   const onLogout = () => {
     dispatch(clearAccount());
   };
@@ -26,7 +29,14 @@ const ProfilePopup = () => {
       className="de-menu-profile"
       onClick={() => setProfilePopup(!profilePopup)}
       ref={refProfilePopup}>
-      <img src="../../img/author_single/author_thumbnail.jpg" alt="" />
+      <img
+        src={
+          account.imageBase64
+            ? account.imageBase64
+            : process.env.PUBLIC_URL + '/img/기본프로필이미지.png'
+        }
+        alt="프로필"
+      />
       {profilePopup && (
         <div className="popshow">
           <div className="d-name">

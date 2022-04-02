@@ -13,6 +13,9 @@ import com.thirdlife.thirddonation.db.nft.entity.Nft;
 import com.thirdlife.thirddonation.db.nft.entity.Sales;
 import com.thirdlife.thirddonation.db.nft.repository.NftRepository;
 import com.thirdlife.thirddonation.db.nft.repository.SalesRepository;
+import com.thirdlife.thirddonation.db.notification.entity.Notification;
+import com.thirdlife.thirddonation.db.notification.entity.NotificationType;
+import com.thirdlife.thirddonation.db.notification.repository.NotificationRepository;
 import com.thirdlife.thirddonation.db.user.entity.User;
 import com.thirdlife.thirddonation.db.user.repository.UserRepository;
 import java.time.LocalDateTime;
@@ -36,6 +39,7 @@ public class SaleServiceImpl implements SaleService {
     private final UserRepository userRepository;
     private final CharityRepository charityRepository;
     private final IncomeLogRepository incomeLogRepository;
+    private final NotificationRepository notificationRepository;
 
     /**
      * NFT 판매 정보를 등록하는 메서드입니다.
@@ -101,6 +105,14 @@ public class SaleServiceImpl implements SaleService {
                     .orElseThrow(() -> new CustomException(ErrorCode.CHARITY_NOT_FOUND));
             sales.setCharity(charity);
         }
+
+        // 알림 저장
+        notificationRepository.save(Notification.builder()
+                .user(seller)
+                .type(NotificationType.SELL_COMPLETE)
+                .description("NFT 판매 완료되었습니다.")
+                .build()
+        );
 
         final Nft nft = sales.getNft();
         final User nftArtist = nft.getArtist();

@@ -6,7 +6,6 @@ import { createGlobalStyle } from 'styled-components';
 import useOnclickOutside from 'react-cool-onclickoutside';
 import { fetchAccount } from '../../store/actions/thunks/account';
 import { connectWallet } from '../../core/ethereum';
-
 import * as selectors from '../../store/selectors';
 import NotificationPopup from './NotificationPopup';
 import ProfilePopup from './ProfilePopup';
@@ -269,6 +268,9 @@ const Header = ({ className }) => {
                             <NavLink to="/editProfile/1" onClick={() => setMenu(!menu)}>
                               프로필변경
                             </NavLink>
+                            <NavLink to="/chart/1" onClick={() => setMenu(!menu)}>
+                              통계차트
+                            </NavLink>
                             <NavLink to="/sell" onClick={() => setMenu(!menu)}>
                               작품 판매
                             </NavLink>
@@ -400,6 +402,7 @@ const Header = ({ className }) => {
                           <div className="dropdown" onClick={closeTestMenu}>
                             <NavLink to="/ItemDetail/1">아이템 상세</NavLink>
                             <NavLink to="/nftDetail/1">소유 NFT 상세</NavLink>
+                            <NavLink to="/chart/1">통계차트</NavLink>
                             {account && <NavLink to={'/profile/' + account.id}>프로필</NavLink>}
                             {account && (
                               <NavLink to={'/editProfile/' + account.id}>프로필변경</NavLink>

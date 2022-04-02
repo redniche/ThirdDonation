@@ -30,4 +30,12 @@ public interface CharityService {
      * @return List of Charity
      */
     Page<CharityInfoDto> getCharityList(Pageable pageable);
+
+    /**
+     * 허가된 자선 단체 리스트를 반환하는 메서드입니다.
+     *
+     * @param pageable Pageable
+     * @return List of Charity
+     */
+    Page<CharityInfoDto> getEnableCharityList(Pageable pageable);
 }

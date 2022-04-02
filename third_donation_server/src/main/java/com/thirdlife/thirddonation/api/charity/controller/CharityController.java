@@ -63,12 +63,12 @@ public class CharityController {
     }
 
     /**
-     * 자선 단체 리스트를 반환합니다.
+     * 자선 단체 리스트를 반환합니다. 관리자만 접근할 수 있습니다.
      *
      * @return ResponseEntity
      */
-    @GetMapping
-    @ApiOperation(value = "자선단체 리스트 조회")
+    @GetMapping("/all")
+    @ApiOperation(value = "자선단체 전체 리스트 조회")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
             @ApiResponse(code = 500, message = "서버 오류")
@@ -77,6 +77,27 @@ public class CharityController {
             @PageableDefault(sort = "dateCreated", direction = Sort.Direction.DESC)
             @ApiParam(value = "페이지네이션", required = true) final Pageable pageable) {
         Page<CharityInfoDto> charityList = charityService.getCharityList(pageable);
+
+        return ResponseEntity.status(200)
+                .body(CharityResponse.builder().statusCode(200).message("Success").data(charityList)
+                        .build());
+    }
+
+    /**
+     * 허가된 자선 단체 리스트를 반환합니다. 모든 사람이 접근할 수 있습니다.
+     *
+     * @return ResponseEntity
+     */
+    @GetMapping()
+    @ApiOperation(value = "허가된 자선단체 리스트 조회")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<CharityResponse> getEnableCharityList(
+            @PageableDefault(sort = "dateCreated", direction = Sort.Direction.DESC)
+            @ApiParam(value = "페이지네이션", required = true) final Pageable pageable) {
+        Page<CharityInfoDto> charityList = charityService.getEnableCharityList(pageable);
 
         return ResponseEntity.status(200)
                 .body(CharityResponse.builder().statusCode(200).message("Success").data(charityList)

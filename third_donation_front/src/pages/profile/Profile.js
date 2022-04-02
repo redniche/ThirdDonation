@@ -8,6 +8,8 @@ import { fetchAuthor } from '../../store/actions/thunks';
 import api from '../../core/api';
 import FollowerModal from '../../components/accounts/FollowerModal';
 import { clearFilter, clearNfts } from '../../store/actions';
+import { doCopy } from '../../common/utils';
+import LineChart from '../../components/nfts/chart/LineChart';
 
 /**
  * authorId를 받아 해당 유저의 프로필을 표시해주는 페이지 컴포넌트
@@ -15,9 +17,11 @@ import { clearFilter, clearNfts } from '../../store/actions';
  * @returns
  */
 const Profile = ({ authorId }) => {
-  const [openMenu, setOpenMenu] = useState(true);
-  const [openMenu1, setOpenMenu1] = useState(false);
-  const [openMenu2, setOpenMenu2] = useState(false);
+  const { data: account } = useSelector(selectors.accountState);
+  const [saleMenu, setSaleMenu] = useState(true);
+  const [productMenu, setProductMenu] = useState(false);
+  const [ownMenu, setOwnMenu] = useState(false);
+  const [chartMenu, setChartMenu] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
 
   const openModal = () => {
@@ -27,52 +31,48 @@ const Profile = ({ authorId }) => {
     setModalOpen(false);
   };
 
-  const handleBtnClick = () => {
-    setOpenMenu(!openMenu);
-    setOpenMenu1(false);
-    setOpenMenu2(false);
-    document.getElementById('Mainbtn').classList.add('active');
-    document.getElementById('Mainbtn1').classList.remove('active');
-    document.getElementById('Mainbtn2').classList.remove('active');
+  const saleBtnClick = () => {
+    setSaleMenu(!saleMenu);
+    (author.authority == 'ARTIST' || author.authority == 'ADMIN') && setProductMenu(false);
+    setOwnMenu(false);
+    setChartMenu(false);
+    document.getElementById('saleBtn').classList.add('active');
+    document.getElementById('chartBtn').classList.remove('active');
+    document.getElementById('ownBtn').classList.remove('active');
+    (author.authority == 'ARTIST' || author.authority == 'ADMIN') &&
+      document.getElementById('productBtn').classList.remove('active');
   };
-  const handleBtnClick1 = () => {
-    setOpenMenu1(!openMenu1);
-    setOpenMenu2(false);
-    setOpenMenu(false);
-    document.getElementById('Mainbtn1').classList.add('active');
-    document.getElementById('Mainbtn').classList.remove('active');
-    document.getElementById('Mainbtn2').classList.remove('active');
+  const productBtnClick = () => {
+    setProductMenu(!productMenu);
+    setOwnMenu(false);
+    setSaleMenu(false);
+    setChartMenu(false);
+    document.getElementById('productBtn').classList.add('active');
+    document.getElementById('saleBtn').classList.remove('active');
+    document.getElementById('ownBtn').classList.remove('active');
+    document.getElementById('chartBtn').classList.remove('active');
   };
-  const handleBtnClick2 = () => {
-    setOpenMenu2(!openMenu2);
-    setOpenMenu(false);
-    setOpenMenu1(false);
-    document.getElementById('Mainbtn2').classList.add('active');
-    document.getElementById('Mainbtn').classList.remove('active');
-    document.getElementById('Mainbtn1').classList.remove('active');
+  const ownBtnClick = () => {
+    setOwnMenu(!ownMenu);
+    setSaleMenu(false);
+    (author.authority == 'ARTIST' || author.authority == 'ADMIN') && setProductMenu(false);
+    setChartMenu(false);
+    document.getElementById('ownBtn').classList.add('active');
+    document.getElementById('saleBtn').classList.remove('active');
+    document.getElementById('chartBtn').classList.remove('active');
+    (author.authority == 'ARTIST' || author.authority == 'ADMIN') &&
+      document.getElementById('productBtn').classList.remove('active');
   };
-
-  const doCopy = (text) => {
-    if (!document.queryCommandSupported('copy')) {
-      return alert('복사하기가 지원되지 않는 브라우저입니다.');
-    }
-
-    const textarea = document.createElement('textarea');
-    textarea.value = text;
-    textarea.style.top = 0;
-    textarea.style.left = 0;
-    textarea.style.position = 'fixed';
-
-    document.body.appendChild(textarea);
-    // focus() -> 사파리 브라우저 서포팅
-    textarea.focus();
-    // select() -> 사용자가 입력한 내용을 영역을 설정할 때 필요
-    textarea.select();
-
-    document.execCommand('copy');
-
-    document.body.removeChild(textarea);
-    alert('지갑 주소가 클립보드에 복사되었습니다.');
+  const chartBtnClick = () => {
+    setChartMenu(!chartMenu);
+    setOwnMenu(false);
+    setSaleMenu(false);
+    (author.authority == 'ARTIST' || author.authority == 'ADMIN') && setProductMenu(false);
+    document.getElementById('chartBtn').classList.add('active');
+    document.getElementById('ownBtn').classList.remove('active');
+    document.getElementById('saleBtn').classList.remove('active');
+    (author.authority == 'ARTIST' || author.authority == 'ADMIN') &&
+      document.getElementById('productBtn').classList.remove('active');
   };
 
   // 리덕스 부분
@@ -80,7 +80,7 @@ const Profile = ({ authorId }) => {
   const authorsState = useSelector(selectors.authorsState);
 
   const author = authorsState.data;
-  console.log(author);
+  // console.log(author);
 
   useEffect(() => {
     dispatch(clearFilter());
@@ -168,36 +168,46 @@ const Profile = ({ authorId }) => {
               <div className="col-lg-12">
                 <div className="items_filter">
                   <ul className="de_nav text-left">
-                    <li id="Mainbtn" className="active">
-                      <span onClick={handleBtnClick}>판매 중</span>
+                    <li id="saleBtn" className="active">
+                      <span onClick={saleBtnClick}>판매 중</span>
                     </li>
                     {(author.authority == 'ARTIST' || author.authority == 'ADMIN') && (
-                      <li id="Mainbtn1" className="">
-                        <span onClick={handleBtnClick1}>만든 작품</span>
+                      <li id="productBtn" className="">
+                        <span onClick={productBtnClick}>만든 작품</span>
                       </li>
                     )}
-                    <li id="Mainbtn2" className="">
-                      <span onClick={handleBtnClick2}>소유 중</span>
+                    <li id="ownBtn" className="">
+                      <span onClick={ownBtnClick}>소유 중</span>
                     </li>
+                    {account.id == author.id && (
+                      <li id="chartBtn">
+                        <span onClick={chartBtnClick}>일별 수익 차트</span>
+                      </li>
+                    )}
                   </ul>
                 </div>
               </div>
             </div>
-            {openMenu && author.id && (
+            {saleMenu && author.id && (
               <div id="zero1" className="onStep fadeIn">
                 <NftList showLoadMore userId={author.id} sellFlag />
               </div>
             )}
-            {openMenu1 &&
+            {productMenu &&
               author.id &&
               (author.authority == 'ARTIST' || author.authority == 'ADMIN') && (
                 <div id="zero2" className="onStep fadeIn">
                   <NftList showLoadMore userId={author.id} artistFlag />
                 </div>
               )}
-            {openMenu2 && (
+            {ownMenu && (
               <div id="zero3" className="onStep fadeIn">
                 <NftList showLoadMore userId={author.id} />
+              </div>
+            )}
+            {chartMenu && (
+              <div className="onStep fadeIn">
+                <LineChart userId={author.id} />
               </div>
             )}
           </section>

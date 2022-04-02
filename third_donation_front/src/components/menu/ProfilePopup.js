@@ -5,13 +5,6 @@ import Wallet from '../accounts/Wallet';
 import { clearAccount } from '../../store/actions';
 import * as selectors from '../../store/selectors';
 
-function Profile() {
-  window.location.href = '/profile/1';
-}
-function EditProfile() {
-  window.location.href = '/editProfile/1';
-}
-
 const ProfilePopup = () => {
   const dispatch = useDispatch();
   const [profilePopup, setProfilePopup] = useState(false);
@@ -22,6 +15,15 @@ const ProfilePopup = () => {
   const onLogout = () => {
     dispatch(clearAccount());
   };
+
+  const { data: account } = useSelector(selectors.accountState);
+
+  function Profile() {
+    window.location.href = `/profile/${account.id}`;
+  }
+  function EditProfile() {
+    window.location.href = `/editProfile/${account.id}`;
+  }
 
   return (
     <div

@@ -1,81 +1,80 @@
-import { memo, useState } from 'react';
+import { memo, useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import useOnclickOutside from 'react-cool-onclickoutside';
+import * as selectors from '../../store/selectors';
+import { Axios } from '../../core/axios';
 
 const NotificationPopup = () => {
   const [notification, setNotification] = useState(false);
+  const [data, setData] = useState([]);
   const refNotification = useOnclickOutside(() => closeNotification());
   const closeNotification = () => setNotification(false);
+
+  const { data: account } = useSelector(selectors.accountState);
+
+  const fetchNotifications = async () => {
+    await Axios.get(`/notifications/${account.id}`)
+      .then(({ data }) => data)
+      .then(({ data }) => setData(data));
+  };
+
+  const readNotifications = async () => {
+    await Axios.patch(`/notifications/read/${account.id}`).then(() => setData([]));
+  };
+
+  const onIconClick = () => {
+    !notification && readNotifications();
+    notification && fetchNotifications();
+    setNotification(!notification);
+  };
+
+  const formatDate = (date) => {
+    let nDate = new Date(date);
+    let month = nDate.getMonth() + 1;
+    let day = nDate.getDay();
+    let hour = nDate.getHours();
+    let min = nDate.getMinutes();
+
+    return `${month}월 ${day}일 ${hour < 13 ? ` 오전 ${hour}` : ` 오후 ${hour - 12}`}시 ${min}분`;
+  };
+
+  useEffect(() => {
+    fetchNotifications();
+  }, []);
 
   return (
     <div
       id="de-click-menu-notification"
       className="de-menu-notification"
-      onClick={() => setNotification(!notification)}
+      onClick={() => onIconClick()}
       ref={refNotification}>
-      <div className="d-count">8</div>
+      {data.length ? <div className="d-count">{data.length}</div> : null}
       <i className="fa fa-bell"></i>
       {notification && (
         <div className="popshow">
           <div className="de-flex">
             <h4>알림</h4>
-            <span className="viewaall">전체보기</span>
           </div>
           <ul>
-            <li>
-              <div className="mainnot">
-                <img className="lazy" src="../../img/author/author-2.jpg" alt="" />
-                <div className="d-desc">
-                  <span className="d-name">
-                    <b>Mamie Barnett</b> started following you
-                  </span>
-                  <span className="d-time">1 hour ago</span>
+            {data.map((item) => (
+              <li key={item.id}>
+                <div className="mainnot">
+                  <div className="d-desc">
+                    <span className="d-name">{item.description}</span>
+                    <span className="d-time">{formatDate(item.dateCreated)}</span>
+                  </div>
                 </div>
-              </div>
-            </li>
-            <li>
-              <div className="mainnot">
-                <img className="lazy" src="../../img/author/author-3.jpg" alt="" />
-                <div className="d-desc">
-                  <span className="d-name">
-                    <b>Nicholas Daniels</b> liked your item
-                  </span>
-                  <span className="d-time">2 hours ago</span>
+              </li>
+            ))}
+            {!data.length && (
+              <li>
+                <div className="mainnot">
+                  <div className="d-desc">
+                    <span className="d-name">등록된 알림이 없습니다.</span>
+                  </div>
                 </div>
-              </div>
-            </li>
-            <li>
-              <div className="mainnot">
-                <img className="lazy" src="../../img/author/author-4.jpg" alt="" />
-                <div className="d-desc">
-                  <span className="d-name">
-                    <b>Lori Hart</b> started following you
-                  </span>
-                  <span className="d-time">18 hours ago</span>
-                </div>
-              </div>
-            </li>
-            <li>
-              <div className="mainnot">
-                <img className="lazy" src="../../img/author/author-5.jpg" alt="" />
-                <div className="d-desc">
-                  <span className="d-name">
-                    <b>Jimmy Wright</b> liked your item
-                  </span>
-                  <span className="d-time">1 day ago</span>
-                </div>
-              </div>
-            </li>
-            <li>
-              <div className="mainnot">
-                <img className="lazy" src="../../img/author/author-6.jpg" alt="" />
-                <div className="d-desc">
-                  <span className="d-name">
-                    <b>Karla Sharp</b> started following you
-                  </span>
-                  <span className="d-time">3 days ago</span>
-                </div>
-              </div>
-            </li>
+              </li>
+            )}
           </ul>
         </div>
       )}

@@ -91,17 +91,15 @@ const auth = {
     return null;
   },
 
-  setToken(value = '', isLocalStorage = false, tokenKey = TOKEN_KEY) {
+  setToken(value = '', isLocalStorage = true, tokenKey = TOKEN_KEY) {
     return auth.set(value, tokenKey, isLocalStorage);
   },
 
-  setUserInfo(value = '', isLocalStorage = false, userInfo = USER_INFO) {
+  setUserInfo(value = '', isLocalStorage = true, userInfo = USER_INFO) {
     return auth.set(value, userInfo, isLocalStorage);
   },
 };
 
-export const loginUrl = 'http://localhost:1337/auth/local';
-export const registerUrl = 'http://localhost:1337/auth/local/register';
 export const authorUrl = (authorId) => `http://localhost:1337/authors/${authorId}`;
 
 export default auth;

@@ -59,20 +59,7 @@ const GrantArtist = () => {
   };
 
   return (
-    <PanelLayout>
-      <section
-        className="jumbotron breadcumb no-bg"
-        style={{ backgroundImage: `url(${'../img/background/subheader.jpg'})` }}>
-        <div className="mainbreadcumb">
-          <div className="container">
-            <div className="row m-10-hor">
-              <div className="col-12">
-                <h1 className="text-center">관리자 </h1>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+    <PanelLayout title="예술가 관리">
       <section className="container">
         <div className="row">
           <div className="col-lg-12">

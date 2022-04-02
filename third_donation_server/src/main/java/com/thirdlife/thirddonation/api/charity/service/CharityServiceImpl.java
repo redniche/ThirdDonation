@@ -41,4 +41,9 @@ public class CharityServiceImpl implements CharityService {
     public Page<CharityInfoDto> getCharityList(Pageable pageable) {
         return charityRepository.findAll(pageable).map(CharityInfoDto::of);
     }
+
+    @Override
+    public Page<CharityInfoDto> getEnableCharityList(Pageable pageable) {
+        return charityRepository.findAllByEnabled(pageable, true).map(CharityInfoDto::of);
+    }
 }

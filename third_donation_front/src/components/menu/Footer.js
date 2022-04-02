@@ -4,6 +4,7 @@ import { Link } from '@reach/router';
  * Footer 컴포넌트
  * @returns
  */
+
 const Footer = () => (
   <footer className="footer-light">
     <div className="container">
@@ -15,13 +16,10 @@ const Footer = () => (
             <h5>NFT 시장</h5>
             <ul>
               <li>
-                <Link to="">전체</Link>
+                <Link to="/explore">찾아보기</Link>
               </li>
               <li>
-                <Link to="">그림</Link>
-              </li>
-              <li>
-                <Link to="">영상</Link>
+                <Link to="/recommended">추천 NFT</Link>
               </li>
             </ul>
           </div>
@@ -29,25 +27,13 @@ const Footer = () => (
         {/* 3개 분할 / 2번- Resources */}
         <div className="col-md-3 col-sm-6 col-xs-1">
           <div className="widget">
-            <h5>자원</h5>
+            <h5>내 정보</h5>
             <ul>
               <li>
-                <Link to="">지원센터</Link>
+                <Link to="/profile/:authorId">프로필</Link>
               </li>
               <li>
-                <Link to="">파트너사</Link>
-              </li>
-              <li>
-                <Link to="">제안</Link>
-              </li>
-              <li>
-                <Link to="">디스코드</Link>
-              </li>
-              <li>
-                <Link to="">문서</Link>
-              </li>
-              <li>
-                <Link to="">소식</Link>
+                <Link to="/editProfile/:authorId">프로필 변경</Link>
               </li>
             </ul>
           </div>
@@ -58,27 +44,21 @@ const Footer = () => (
             <h5>커뮤니티</h5>
             <ul>
               <li>
-                <Link to="">커뮤니티</Link>
+                <Link to="/notice">공지사항</Link>
               </li>
               <li>
-                <Link to="">문서</Link>
+                <Link to="/donation">후원하기</Link>
               </li>
               <li>
-                <Link to="">회사 자산</Link>
-              </li>
-              <li>
-                <Link to="">블로그</Link>
-              </li>
-              <li>
-                <Link to="">포럼</Link>
+                <Link to="/charityRegistration">자선단체 등록</Link>
               </li>
             </ul>
           </div>
         </div>
-        {/* <div className="col-md-3 col-sm-6 col-xs-1">
+        <div className="col-md-3 col-sm-6 col-xs-1">
           <div className="widget">
-            <h5>Newsletter</h5>
-            <p>Signup for our newsletter to get the latest news in your inbox.</p>
+            <h5>Third Donation</h5>
+            <p>장애인 예술가들을 위한 소중한 후원을 NFT로 간직하세요</p>
             <form
               action="#"
               className="row form-dark"
@@ -86,23 +66,18 @@ const Footer = () => (
               method="post"
               name="form_subscribe">
               <div className="col text-center">
-                <input
-                  className="form-control"
-                  id="txt_subscribe"
-                  name="txt_subscribe"
-                  placeholder="enter your email"
-                  type="text"
-                />
-                <Link to="" id="btn-subscribe">
+                <input className="form-control" placeholder="Go to register" type="text" />
+                <Link to="/artistRegistration" id="btn-subscribe">
                   <i className="arrow_right bg-color-secondary"></i>
                 </Link>
                 <div className="clearfix"></div>
               </div>
             </form>
-            <div className="spacer-10"></div>
-            <small>Your email is safe with us. We dont spam.</small>
+            <small>
+              본 서비스에 작품을 등록하기 위해선 예술가 등록과 장애인 증명이 완료되어야 합니다.
+            </small>
           </div>
-        </div> */}
+        </div>
       </div>
     </div>
 
@@ -117,7 +92,7 @@ const Footer = () => (
                   <img alt="" className="f-logo d-1" src="./img/logo.png" />
                   <img alt="" className="f-logo d-3" src="./img/logo-2-light.png" />
                   <img alt="" className="f-logo d-4" src="./img/logo-3.png" />
-                  <span className="copy">&copy; Copyright 2021 - Third Donation by SSAFY</span>
+                  <span className="copy">&copy; Copyright 2022 - Third Donation by SSAFY</span>
                 </span>
               </div>
             </div>

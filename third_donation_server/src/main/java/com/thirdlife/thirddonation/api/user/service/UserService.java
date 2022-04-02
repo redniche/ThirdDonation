@@ -5,6 +5,7 @@ import com.thirdlife.thirddonation.api.user.dto.request.UserProfileModifyRequest
 import com.thirdlife.thirddonation.api.user.dto.request.UserRequest;
 import com.thirdlife.thirddonation.db.log.document.DailyIncome;
 import com.thirdlife.thirddonation.db.user.entity.User;
+import java.security.SignatureException;
 import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -63,4 +64,7 @@ public interface UserService {
      * @return List of DailyIncome
      */
     List<DailyIncome> getDailyIncome(Long userId);
+
+    Boolean verifyAddressFromSignature(String address, String signature)
+            throws SignatureException;
 }

@@ -21,6 +21,10 @@ public class UserRequest {
     @ApiModelProperty(name = "유저 지갑 주소", example = "your_wallet_address")
     private String walletAddress;
 
+    @NotBlank
+    @ApiModelProperty(name = "사인 정보", example = "0x머시기머시기")
+    private String signature;
+
     /**
      * 요청 값을 기반으로 User Entity 를 반환합니다.
      *

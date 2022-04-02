@@ -2,7 +2,6 @@ package com.thirdlife.thirddonation.api.user.controller;
 
 import com.thirdlife.thirddonation.api.user.dto.request.ArtistRegisterRequest;
 import com.thirdlife.thirddonation.api.user.dto.request.FollowRequest;
-import com.thirdlife.thirddonation.api.user.dto.request.UserImgRequest;
 import com.thirdlife.thirddonation.api.user.dto.request.UserProfileModifyRequest;
 import com.thirdlife.thirddonation.api.user.dto.request.UserRequest;
 import com.thirdlife.thirddonation.api.user.dto.response.ArtistListResponse;
@@ -15,6 +14,7 @@ import com.thirdlife.thirddonation.api.user.service.UserService;
 import com.thirdlife.thirddonation.common.exception.CustomException;
 import com.thirdlife.thirddonation.common.exception.ErrorCode;
 import com.thirdlife.thirddonation.common.model.response.BaseResponseBody;
+import com.thirdlife.thirddonation.common.util.JwtTokenUtil;
 import com.thirdlife.thirddonation.db.log.document.DailyIncome;
 import com.thirdlife.thirddonation.db.user.entity.User;
 import io.swagger.annotations.Api;
@@ -22,11 +22,16 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import java.math.BigInteger;
+import java.security.SignatureException;
 import java.util.List;
+import java.util.Objects;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
+import org.apache.commons.codec.binary.Hex;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -43,6 +48,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.web3j.crypto.Hash;
+import org.web3j.crypto.Keys;
+import org.web3j.crypto.Sign;
+import org.web3j.crypto.Sign.SignatureData;
+import org.web3j.utils.Numeric;
 
 /**
  * 회원 관련의 요청을 처리하는 컨트롤러입니다.
@@ -79,14 +89,29 @@ public class UserController {
                     UserRequest userRequest) {
 
         String walletAddress = userRequest.getWalletAddress();
+        String signature = userRequest.getSignature();
 
+        try {
+            //요청 본인 확인
+            if (!userService.verifyAddressFromSignature(walletAddress, signature)) {
+                throw new CustomException(ErrorCode.USER_INVALID);
+            }
+        } catch (Exception ex) {
+            //본인 확인 중 에러 발생
+            throw new CustomException(ErrorCode.SPRING_SERVER_ERROR);
+        }
+
+        //로그인 혹은 생성
         User user = userService.getUserByWalletAddress(walletAddress);
-
         if (user == null) {
             user = userService.createUser(userRequest);
         }
 
-        return ResponseEntity.status(200).body(UserResponse.of(200, "Success", user));
+        //Jwt token 발행
+        String token = JwtTokenUtil.getToken(walletAddress);
+
+        return ResponseEntity.status(200).body(
+                UserResponse.of(200, "Success", token, user));
     }
 
     /**
@@ -300,4 +325,5 @@ public class UserController {
                 .body(UserDailyIncomeResponse.builder().statusCode(200).message("Success")
                         .data(incomeList).build());
     }
+
 }

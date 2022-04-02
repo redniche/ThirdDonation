@@ -12,16 +12,23 @@ import com.thirdlife.thirddonation.db.user.entity.UserImg;
 import com.thirdlife.thirddonation.db.user.repository.UserRepository;
 import java.io.File;
 import java.io.IOException;
+import java.security.SignatureException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
+import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.io.FilenameUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.web3j.crypto.Hash;
+import org.web3j.crypto.Keys;
+import org.web3j.crypto.Sign;
+import org.web3j.utils.Numeric;
 
 /**
  * 유저 서비스의 구현체입니다.
@@ -49,12 +56,10 @@ public class UserServiceImpl implements UserService {
 
         User userEntity = userRequest.toEntity();
 
-        System.out.println(userEntity);
         try {
             userRepository.save(userEntity);
         } catch (Exception ex) {
-            CustomException ex2 = new CustomException(ErrorCode.DATABASE_SERVER_ERROR);
-            throw ex2;
+            throw new CustomException(ErrorCode.DATABASE_SERVER_ERROR);
         }
 
         return userEntity;
@@ -189,5 +194,38 @@ public class UserServiceImpl implements UserService {
 
         return dailyIncomeRepository.findByUserIdAndTradingDateBetween(userId,
                 yesterday.minusDays(7), yesterday);
+    }
+
+    /**
+     * 호율적인 검사.
+     *
+     * @param address String
+     * @param signature String
+     * @return Boolean
+     * @throws SignatureException 인증오류
+     */
+    @Override
+    public Boolean verifyAddressFromSignature(String address, String signature)
+            throws SignatureException {
+        byte[] messageHashBytes = Numeric.hexStringToByteArray(
+                Hash.sha3(Hex.encodeHexString("hello world".getBytes())));
+        byte[] signPrefix = ("\u0019Ethereum Signed Message:\n32").getBytes();
+        String r = signature.substring(0, 66);
+        String s = signature.substring(66, 130);
+        String v = "0x" + signature.substring(130, 132);
+
+        byte[] msgBytes = new byte[(signPrefix.length + messageHashBytes.length)];
+
+        System.arraycopy(signPrefix, 0, msgBytes, 0, signPrefix.length);
+        System.arraycopy(messageHashBytes, 0, msgBytes, signPrefix.length, messageHashBytes.length);
+
+        String publicKey = Sign.signedMessageToKey(msgBytes,
+                        new Sign.SignatureData(Numeric.hexStringToByteArray(v)[0],
+                                Numeric.hexStringToByteArray(r),
+                                Numeric.hexStringToByteArray(s)))
+                .toString(16);
+
+        val recoveredAddress = "0x" + Keys.getAddress(publicKey);
+        return Objects.equals(address, recoveredAddress);
     }
 }

@@ -1,5 +1,6 @@
 package com.thirdlife.thirddonation.api.notification.controller;
 
+import com.thirdlife.thirddonation.api.notification.dto.NotificationInfoDto;
 import com.thirdlife.thirddonation.api.notification.dto.NotificationListResponse;
 import com.thirdlife.thirddonation.api.notification.service.NotificationService;
 import com.thirdlife.thirddonation.common.model.response.BaseResponseBody;
@@ -49,7 +50,7 @@ public class NotificationController {
                     Long userId
     ) {
 
-        List<Notification> list = notificationService.getList(userId);
+        List<NotificationInfoDto> list = notificationService.getList(userId);
 
         return ResponseEntity.status(200)
                 .body(NotificationListResponse.builder().statusCode(200).message("Success")
@@ -57,7 +58,7 @@ public class NotificationController {
     }
 
     /**
-     * 알림 읽기 처리
+     * 알림 읽기 처리.
      *
      * @param userId Long
      * @return ResponseEntity

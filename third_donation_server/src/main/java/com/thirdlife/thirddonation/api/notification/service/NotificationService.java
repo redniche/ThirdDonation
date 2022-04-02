@@ -1,5 +1,6 @@
 package com.thirdlife.thirddonation.api.notification.service;
 
+import com.thirdlife.thirddonation.api.notification.dto.NotificationInfoDto;
 import com.thirdlife.thirddonation.db.notification.entity.Notification;
 import java.util.List;
 
@@ -8,7 +9,7 @@ import java.util.List;
  */
 public interface NotificationService {
 
-    List<Notification> getList(Long userId);
+    List<NotificationInfoDto> getList(Long userId);
 
     void setDisabled(Long userId);
 }

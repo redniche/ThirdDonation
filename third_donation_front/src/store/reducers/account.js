@@ -11,6 +11,7 @@ const states = (state = defaultState, action) => {
   const { payload } = action;
   switch (action.type) {
     case getType(actions.getAccount.request): {
+      payload.banner = '/uploads/테스트배너1.jpg';
       return { ...state, account: entityLoadingStarted(state.account, payload) };
     }
     case getType(actions.getAccount.success): {

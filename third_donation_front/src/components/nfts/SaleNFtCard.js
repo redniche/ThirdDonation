@@ -1,6 +1,6 @@
 import { memo, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import Clock from './Clock';
+// import Clock from './Clock';
 import { navigate } from '@reach/router';
 import { Axios } from './../../core/axios';
 import api from '../../core/api';
@@ -24,7 +24,6 @@ const NftCard = ({
   nft,
   className = 'd-item col-lg-3 col-md-6 col-sm-6 col-xs-12 mb-4',
   // preview = false,
-  clockTop = true,
   height,
   onFileLoad,
 }) => {
@@ -36,8 +35,9 @@ const NftCard = ({
   };
   useEffect(async () => {
     try {
-      const { data: tokenUriJson } = await Axios.get(nft.tokenUri, { params: [] });
+      const { data: tokenUriJson } = await Axios.get(nft.nft.tokenUri, { params: [] });
       setTokenUri(tokenUriJson);
+      console.log(tokenUriJson);
     } catch (err) {
       console.log(err);
     }
@@ -45,7 +45,7 @@ const NftCard = ({
 
   return (
     tokenUri && (
-      <div className={className} onClick={() => navigateTo(`/ItemDetail/${nft.id}`)}>
+      <div className={className} onClick={() => navigateTo(`/ItemDetail/${nft.nft.id}`)}>
         <div className="nft__item m-0">
           {nft.item_type === 'single_items' ? (
             <div className="icontype">
@@ -54,11 +54,6 @@ const NftCard = ({
           ) : (
             <div className="icontype">
               <i className="fa fa-shopping-basket"></i>
-            </div>
-          )}
-          {nft.deadline && clockTop && (
-            <div className="de_countdown">
-              <Clock deadline={nft.deadline} />
             </div>
           )}
           <div className="author_list_pp">
@@ -87,29 +82,11 @@ const NftCard = ({
               </span>
             </Outer>
           </div>
-          {nft.deadline && !clockTop && (
-            <div className="de_countdown">
-              <Clock deadline={nft.deadline} />
-            </div>
-          )}
           <div className="nft__item_info">
-            <span onClick={() => navigateTo(`ItemDetail/${nft.id}`)}>
-              <h4>{nft.title}</h4>
+            <span>
+              <h4>{tokenUri.title}</h4>
             </span>
-            {nft.status === 'has_offers' ? (
-              <div className="has_offers">
-                <span className="through">{nft.priceover}</span> {nft.price} ETH
-              </div>
-            ) : (
-              <div className="nft__item_price">
-                {nft.price} ETH
-                {nft.status === 'on_auction' && (
-                  <span>
-                    {nft.bid}/{nft.max_bid}
-                  </span>
-                )}
-              </div>
-            )}
+            <div className="nft__item_price">{nft.basePrice} ETH</div>
             <div className="nft__item_action">
               <span onClick={() => navigateTo(`${nft.bid_link}/${nft.id}`)}>
                 {nft.status === 'on_auction' ? '경매 입찰' : '바로 구매'}

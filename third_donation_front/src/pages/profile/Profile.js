@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import React, { memo, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import ProfileLayout from '../../components/layout/ProfileLayout';
@@ -6,6 +7,9 @@ import * as selectors from '../../store/selectors';
 import { fetchAuthorList } from '../../store/actions/thunks';
 import api from '../../core/api';
 import FollowerModal from '../../components/accounts/FollowerModal';
+import { clearFilter, clearNfts } from '../../store/actions';
+import { doCopy } from '../../common/utils';
+import LineChart from '../../components/nfts/chart/LineChart';
 
 /**
  * authorId를 받아 해당 유저의 프로필을 표시해주는 페이지 컴포넌트
@@ -13,11 +17,11 @@ import FollowerModal from '../../components/accounts/FollowerModal';
  * @returns
  */
 const Profile = ({ authorId }) => {
-  // 리덕스 부분
-  const [openMenu, setOpenMenu] = useState(true);
-  const [openMenu1, setOpenMenu1] = useState(false);
-  const [openMenu2, setOpenMenu2] = useState(false);
-
+  const { data: account } = useSelector(selectors.accountState);
+  const [saleMenu, setSaleMenu] = useState(true);
+  const [productMenu, setProductMenu] = useState(false);
+  const [ownMenu, setOwnMenu] = useState(false);
+  const [chartMenu, setChartMenu] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
 
   const openModal = () => {
@@ -27,135 +31,194 @@ const Profile = ({ authorId }) => {
     setModalOpen(false);
   };
 
-  const handleBtnClick = () => {
-    setOpenMenu(!openMenu);
-    setOpenMenu1(false);
-    setOpenMenu2(false);
-    document.getElementById('Mainbtn').classList.add('active');
-    document.getElementById('Mainbtn1').classList.remove('active');
-    document.getElementById('Mainbtn2').classList.remove('active');
+  const saleBtnClick = () => {
+    setSaleMenu(!saleMenu);
+    (author.authority == 'ARTIST' || author.authority == 'ADMIN') && setProductMenu(false);
+    setOwnMenu(false);
+    setChartMenu(false);
+    document.getElementById('saleBtn').classList.add('active');
+    document.getElementById('chartBtn').classList.remove('active');
+    document.getElementById('ownBtn').classList.remove('active');
+    (author.authority == 'ARTIST' || author.authority == 'ADMIN') &&
+      document.getElementById('productBtn').classList.remove('active');
   };
-  const handleBtnClick1 = () => {
-    setOpenMenu1(!openMenu1);
-    setOpenMenu2(false);
-    setOpenMenu(false);
-    document.getElementById('Mainbtn1').classList.add('active');
-    document.getElementById('Mainbtn').classList.remove('active');
-    document.getElementById('Mainbtn2').classList.remove('active');
+  const productBtnClick = () => {
+    setProductMenu(!productMenu);
+    setOwnMenu(false);
+    setSaleMenu(false);
+    setChartMenu(false);
+    document.getElementById('productBtn').classList.add('active');
+    document.getElementById('saleBtn').classList.remove('active');
+    document.getElementById('ownBtn').classList.remove('active');
+    document.getElementById('chartBtn').classList.remove('active');
   };
-  const handleBtnClick2 = () => {
-    setOpenMenu2(!openMenu2);
-    setOpenMenu(false);
-    setOpenMenu1(false);
-    document.getElementById('Mainbtn2').classList.add('active');
-    document.getElementById('Mainbtn').classList.remove('active');
-    document.getElementById('Mainbtn1').classList.remove('active');
+  const ownBtnClick = () => {
+    setOwnMenu(!ownMenu);
+    setSaleMenu(false);
+    (author.authority == 'ARTIST' || author.authority == 'ADMIN') && setProductMenu(false);
+    setChartMenu(false);
+    document.getElementById('ownBtn').classList.add('active');
+    document.getElementById('saleBtn').classList.remove('active');
+    document.getElementById('chartBtn').classList.remove('active');
+    (author.authority == 'ARTIST' || author.authority == 'ADMIN') &&
+      document.getElementById('productBtn').classList.remove('active');
+  };
+  const chartBtnClick = () => {
+    setChartMenu(!chartMenu);
+    setOwnMenu(false);
+    setSaleMenu(false);
+    (author.authority == 'ARTIST' || author.authority == 'ADMIN') && setProductMenu(false);
+    document.getElementById('chartBtn').classList.add('active');
+    document.getElementById('ownBtn').classList.remove('active');
+    document.getElementById('saleBtn').classList.remove('active');
+    (author.authority == 'ARTIST' || author.authority == 'ADMIN') &&
+      document.getElementById('productBtn').classList.remove('active');
   };
 
+  // 리덕스 부분
   const dispatch = useDispatch();
   const authorsState = useSelector(selectors.authorsState);
-  const author = authorsState.data ? authorsState.data[authorId - 1] : {};
+
+  const author = authorsState.data;
+  // console.log(author);
 
   useEffect(() => {
+    dispatch(clearFilter());
+    dispatch(clearNfts());
     dispatch(fetchAuthorList(authorId));
   }, [dispatch, authorId]);
-
-  // 컴포넌트 레이아웃
+  // 컴포넌트 레이아웃. 프로필당 배너는 구현 안함.
   return (
     <ProfileLayout>
-      {author.banner && (
-        <section
-          id="profile_banner"
-          className="jumbotron breadcumb no-bg"
-          style={{ backgroundImage: `url(${api.baseUrl + author.banner.url})` }}>
-          <div className="mainbreadcumb"></div>
-        </section>
-      )}
-
-      <section className="container no-bottom">
-        <div className="row">
-          <div className="col-md-12">
-            <div className="d_profile de-flex">
-              <div className="de-flex-col">
-                <div className="profile_avatar">
-                  {author.avatar && (
-                    <img
-                      src={api.baseUrl + author.avatar.url}
-                      alt=""
-                      style={{ backgroundImage: `url(${api.baseUrl + author.banner.url})` }}
-                    />
-                  )}
-                  <i className="fa fa-check"></i>
-                  <div className="profile_name">
-                    <h4>
-                      {author.username}
-                      <span className="profile_username">{author.social}</span>
-                      <span id="wallet" className="profile_wallet">
-                        {author.wallet}
-                      </span>
-                      <button id="btn_copy" title="Copy Text">
-                        복사
-                      </button>
-                    </h4>
+      {author && (
+        <>
+          <section
+            id="profile_banner"
+            className="jumbotron breadcumb no-bg"
+            style={
+              author.banner
+                ? { backgroundImage: `url(${author.banner})` }
+                : { backgroundImage: `url(${api.baseUrl + '/uploads/테스트배너1.jpg'})` }
+            }>
+            <div className="mainbreadcumb"></div>
+          </section>
+          <section className="container no-bottom">
+            <div className="row">
+              <div className="col-md-12">
+                <div className="d_profile de-flex">
+                  <div className="de-flex-col">
+                    <div className="profile_avatar">
+                      {author.imagePath ? (
+                        <img
+                          src={author.imagePath}
+                          alt=""
+                          style={{
+                            backgroundImage: `url(${api.baseUrl + '/uploads/테스트배너1.jpg'})`,
+                          }}
+                        />
+                      ) : (
+                        <img
+                          src={api.baseUrl + '/uploads/기본프로필이미지.png'}
+                          alt=""
+                          style={{
+                            backgroundImage: `url(${api.baseUrl + '/uploads/테스트배너1.jpg'})`,
+                          }}
+                        />
+                      )}
+                      <i className="fa fa-check"></i>
+                      <div className="profile_name">
+                        <h4>
+                          {author.username}
+                          <span className="profile_username">{'@' + author.username}</span>
+                          <span id="wallet" className="profile_wallet">
+                            {author.walletAddress}
+                          </span>
+                          <button
+                            id="btn_copy"
+                            title="Copy Text"
+                            onClick={() => doCopy(author.walletAddress)}>
+                            복사
+                          </button>
+                        </h4>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="profile_follow de-flex">
+                    <div className="de-flex-col">
+                      <React.Fragment>
+                        <div className="profile_follower" onClick={openModal}>
+                          {author.followerCount} 팔로워
+                        </div>
+                        <FollowerModal
+                          user={author}
+                          open={modalOpen}
+                          close={closeModal}
+                          header="팔로워"></FollowerModal>
+                      </React.Fragment>
+                    </div>
+                    <div className="de-flex-col">
+                      <span className="btn-main">팔로우</span>
+                    </div>
                   </div>
                 </div>
               </div>
-              <div className="profile_follow de-flex">
-                <div className="de-flex-col">
-                  <React.Fragment>
-                    <div className="profile_follower" onClick={openModal}>
-                      {author.followers} 팔로워
-                    </div>
-                    <FollowerModal
-                      user={author}
-                      open={modalOpen}
-                      close={closeModal}
-                      header="팔로워"></FollowerModal>
-                  </React.Fragment>
+              {author.description && (
+                <div className="col-md-12 profile_description">
+                  <div>{author.description}</div>
                 </div>
-                <div className="de-flex-col">
-                  <span className="btn-main">팔로우</span>
+              )}
+            </div>
+          </section>
+          <section className="container">
+            <div className="row">
+              <div className="col-lg-12">
+                <div className="items_filter">
+                  <ul className="de_nav text-left">
+                    <li id="saleBtn" className="active">
+                      <span onClick={saleBtnClick}>판매 중</span>
+                    </li>
+                    {(author.authority == 'ARTIST' || author.authority == 'ADMIN') && (
+                      <li id="productBtn" className="">
+                        <span onClick={productBtnClick}>만든 작품</span>
+                      </li>
+                    )}
+                    <li id="ownBtn" className="">
+                      <span onClick={ownBtnClick}>소유 중</span>
+                    </li>
+                    {account.id == author.id && (
+                      <li id="chartBtn">
+                        <span onClick={chartBtnClick}>일별 수익 차트</span>
+                      </li>
+                    )}
+                  </ul>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="container no-top">
-        <div className="row">
-          <div className="col-lg-12">
-            <div className="items_filter">
-              <ul className="de_nav text-left">
-                <li id="Mainbtn" className="active">
-                  <span onClick={handleBtnClick}>판매 중</span>
-                </li>
-                <li id="Mainbtn1" className="">
-                  <span onClick={handleBtnClick1}>만든 작품</span>
-                </li>
-                <li id="Mainbtn2" className="">
-                  <span onClick={handleBtnClick2}>소유 중</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        {openMenu && author.id && (
-          <div id="zero1" className="onStep fadeIn">
-            <NftList shuffle showLoadMore={false} authorId={author.id} />
-          </div>
-        )}
-        {openMenu1 && author.id && (
-          <div id="zero2" className="onStep fadeIn">
-            <NftList shuffle showLoadMore={false} authorId={author.id} />
-          </div>
-        )}
-        {openMenu2 && (
-          <div id="zero3" className="onStep fadeIn">
-            <NftList shuffle showLoadMore={false} />
-          </div>
-        )}
-      </section>
+            {saleMenu && author.id && (
+              <div id="zero1" className="onStep fadeIn">
+                <NftList showLoadMore userId={author.id} sellFlag />
+              </div>
+            )}
+            {productMenu &&
+              author.id &&
+              (author.authority == 'ARTIST' || author.authority == 'ADMIN') && (
+                <div id="zero2" className="onStep fadeIn">
+                  <NftList showLoadMore userId={author.id} artistFlag />
+                </div>
+              )}
+            {ownMenu && (
+              <div id="zero3" className="onStep fadeIn">
+                <NftList showLoadMore userId={author.id} />
+              </div>
+            )}
+            {chartMenu && (
+              <div className="onStep fadeIn">
+                <LineChart userId={author.id} />
+              </div>
+            )}
+          </section>
+        </>
+      )}
     </ProfileLayout>
   );
 };

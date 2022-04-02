@@ -1,6 +1,11 @@
+import { useEffect, useState } from 'react';
 import Chart from 'react-apexcharts';
+import { Axios } from '../../../core/axios';
+import { extractColumn } from '../../../common/utils';
 
-export default function Line() {
+const LineChart = ({ userId }) => {
+  const [xAxis, setXAxis] = useState([]);
+  const [yAxis, setYAxis] = useState([]);
   const options = {
     dataLabels: {
       enabled: false,
@@ -9,7 +14,7 @@ export default function Line() {
       curve: 'straight',
     },
     title: {
-      text: 'NFT 거래로 기부단체에 후원된 금액',
+      text: '일별 수익 통계',
       align: 'center',
     },
     grid: {
@@ -19,23 +24,41 @@ export default function Line() {
       },
     },
     xaxis: {
-      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+      categories: xAxis,
+      // categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
     },
   };
 
   const series = [
     {
-      data: [30, 40, 35, 50, 49, 60, 70, 91, 125],
+      data: yAxis,
+      // data: [30, 40, 35, 50, 49, -60, 70, 91, -125],
     },
   ];
 
-  // componentDidMount(props) {
-  //   console.log(this.props)
-  // };
+  const fetchDailyIncome = () => {
+    Axios.get(`/users/daily/income/${userId}`)
+      .then(({ data }) => data)
+      .then(({ data }) => {
+        const xAxisArray = extractColumn(data, 'tradingDate');
+        const yAxisArray = extractColumn(data, 'income');
+        console.log(xAxisArray);
+        console.log(yAxisArray);
+
+        setXAxis(xAxisArray);
+        setYAxis(yAxisArray);
+      });
+  };
+
+  useEffect(() => {
+    fetchDailyIncome();
+  }, []);
 
   return (
     <span className="line">
       <Chart options={options} series={series} type="line" width="100%" />
     </span>
   );
-}
+};
+
+export default LineChart;

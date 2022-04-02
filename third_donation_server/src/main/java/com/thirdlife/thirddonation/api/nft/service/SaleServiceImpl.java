@@ -20,6 +20,7 @@ import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 /**
@@ -126,7 +127,7 @@ public class SaleServiceImpl implements SaleService {
         incomeLogRepository.save(log);
 
         // 판매자가 일반 사용자인 경우, 예술가 수익 기록 (6%)
-        if (!sellerIsArtist)  {
+        if (!sellerIsArtist) {
             log = IncomeLog.builder()
                     .userId(nftArtist.getId())
                     .tokenId(nft.getId())
@@ -176,19 +177,15 @@ public class SaleServiceImpl implements SaleService {
     }
 
     /**
-     * 특정 판매자의 판매 리스트 조회 메서드.
+     * 판매 리스트 조회 메서드.
      *
-     * @param sellerId Long
      * @param pageable Pageable
      * @return List of Sales
      */
     @Override
-    public Page<SaleInfoDto> getSalesListBySellerId(Long sellerId, Pageable pageable) {
-        final User seller = userRepository.findById(sellerId)
-                .orElseThrow(() -> new CustomException(ErrorCode.SELLER_NOT_FOUND));
-
-        Page<Sales> page = salesRepository
-                .findAllBySellerAndSoldOutAndEnabled(seller, false, true, pageable);
+    public Page<SaleInfoDto> getSalesListFilter(Pageable pageable,
+                                              Specification<Sales> searchKeywords) {
+        Page<Sales> page = salesRepository.findAll(searchKeywords, pageable);
 
         return page.map(SaleInfoDto::of);
     }

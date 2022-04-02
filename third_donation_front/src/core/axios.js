@@ -25,4 +25,10 @@ const apis = {
   },
 };
 
+export const setAxiosHeader = (data) => {
+  axios.defaults.headers.common = {
+    Authorization: 'Bearer ' + data,
+  };
+};
+
 export default apis;

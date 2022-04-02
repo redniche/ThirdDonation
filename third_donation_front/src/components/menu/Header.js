@@ -84,6 +84,10 @@ const Header = ({ className }) => {
           dispatch(fetchAccount(data.walletAddress));
         } else {
           alert('메타마스크 지갑을 설치하세요!');
+          window.open(
+            'https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn',
+            '_blank',
+          );
         }
         window.ethereum.on('accountsChanged', (account) => dispatch(fetchAccount(account[0])));
       })

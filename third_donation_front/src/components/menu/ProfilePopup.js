@@ -1,15 +1,9 @@
 import { memo, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import useOnclickOutside from 'react-cool-onclickoutside';
 import Wallet from '../accounts/Wallet';
 import { clearAccount } from '../../store/actions';
-
-function Profile() {
-  window.location.href = '/profile/1';
-}
-function EditProfile() {
-  window.location.href = '/editProfile/1';
-}
+import * as selectors from '../../store/selectors';
 
 const ProfilePopup = () => {
   const dispatch = useDispatch();
@@ -19,6 +13,15 @@ const ProfilePopup = () => {
   const onLogout = () => {
     dispatch(clearAccount());
   };
+
+  const { data: account } = useSelector(selectors.accountState);
+
+  function Profile() {
+    window.location.href = `/profile/${account.id}`;
+  }
+  function EditProfile() {
+    window.location.href = `/editProfile/${account.id}`;
+  }
 
   return (
     <div

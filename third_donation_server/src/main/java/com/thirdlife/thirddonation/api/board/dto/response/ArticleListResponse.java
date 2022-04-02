@@ -7,6 +7,7 @@ import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
+import org.springframework.data.domain.Page;
 
 /**
  * 자선 단체 리스트를 반환하는 DTO.
@@ -16,5 +17,5 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @ApiModel("ArticleList")
 public class ArticleListResponse extends BaseResponseBody {
-    private List<ArticleInfoDto> data;
+    private Page<ArticleInfoDto> data;
 }

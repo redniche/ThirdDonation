@@ -14,19 +14,24 @@ import lombok.NoArgsConstructor;
 public class CharityInfoDto {
     private String name;
     private String walletAddress;
+    private String url;
+    private Boolean enabled;
 
 
     /**
      * 자선단체의 모든 정보를 반환합니다.
      *
-     * @param charity Cherity 자선단체 객체
-     * @return CherityInfoDto 자선단체 정보 Dto
+     * @param charity Charity 자선단체 객체
+     * @return CharityInfoDto 자선단체 정보 Dto
      */
     public static CharityInfoDto of(Charity charity) {
-        CharityInfoDto charifyInfoDto = new CharityInfoDto();
-        charifyInfoDto.setName(charity.getName());
-        //charifyInfoDto.setWalletAddress(charity.getWalletAddress());
+        CharityInfoDto charityInfoDto = new CharityInfoDto();
+        charityInfoDto.setName(charity.getName());
+        charityInfoDto.setWalletAddress(charity.getId());
+        charityInfoDto.setUrl(charity.getUrl());
+        charityInfoDto.setWalletAddress(charity.getId());
+        charityInfoDto.setEnabled(charity.getEnabled());
 
-        return charifyInfoDto;
+        return charityInfoDto;
     }
 }

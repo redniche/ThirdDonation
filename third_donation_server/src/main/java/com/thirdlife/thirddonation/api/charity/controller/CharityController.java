@@ -1,28 +1,30 @@
 package com.thirdlife.thirddonation.api.charity.controller;
 
+import com.thirdlife.thirddonation.api.charity.dto.CharityInfoDto;
 import com.thirdlife.thirddonation.api.charity.dto.request.CharityRegisterRequest;
 import com.thirdlife.thirddonation.api.charity.dto.response.CharityResponse;
 import com.thirdlife.thirddonation.api.charity.service.CharityService;
 import com.thirdlife.thirddonation.common.model.response.BaseResponseBody;
-import com.thirdlife.thirddonation.db.charity.entity.Charity;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import java.util.List;
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -71,8 +73,10 @@ public class CharityController {
             @ApiResponse(code = 200, message = "성공"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    public ResponseEntity<CharityResponse> getCharityList() {
-        List<Charity> charityList = charityService.getCharityList();
+    public ResponseEntity<CharityResponse> getCharityList(
+            @PageableDefault(sort = "dateCreated", direction = Sort.Direction.DESC)
+            @ApiParam(value = "페이지네이션", required = true) final Pageable pageable) {
+        Page<CharityInfoDto> charityList = charityService.getCharityList(pageable);
 
         return ResponseEntity.status(200)
                 .body(CharityResponse.builder().statusCode(200).message("Success").data(charityList)
@@ -80,22 +84,23 @@ public class CharityController {
     }
 
     /**
-     * 지갑 주소 받아와서 자선 단체를 삭제한다.
+     * 지갑 주소 받아와서 자선 단체 허가를 토글한다.
      *
      * @param walletAddress String
      * @return ResponseEntity
      */
-    @DeleteMapping("/{walletAddress}")
-    @ApiOperation(value = "자선단체 삭제")
+    @PatchMapping
+    @ApiOperation(value = "자선단체 허가 업데이트")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    public ResponseEntity<BaseResponseBody> deleteCharity(
-            @NotBlank @PathVariable @ApiParam(value = "자선 단체 지갑 주소", required = true)
-                    String walletAddress) {
+    public ResponseEntity<BaseResponseBody> enableCharity(
+            @ApiParam @RequestParam(value = "자선 단체 지갑 주소", required = true)
+                    String walletAddress,
+            @ApiParam @RequestParam(value = "자선 단체 허가 여부", required = true) Boolean enabled) {
 
-        charityService.deleteCharity(walletAddress);
+        charityService.enableCharity(walletAddress, enabled);
 
         return ResponseEntity.status(200)
                 .body(BaseResponseBody.builder().statusCode(200).message("Success").build());

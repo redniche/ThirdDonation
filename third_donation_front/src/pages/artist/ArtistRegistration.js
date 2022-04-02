@@ -10,6 +10,7 @@ import BasicLayout from '../../components/layout/BasicLayout';
 import { fetchAuthorList } from '../../store/actions/thunks';
 import * as selectors from '../../store/selectors';
 import axios from 'axios';
+// import { Axios } from '../../core/axios';
 
 // 경고창
 // 유저이름, 지갑주소 안적으면 경고창 날림
@@ -94,6 +95,48 @@ const ArtistRegistration = ({ authorId }) => {
     reader.readAsDataURL(file);
   };
 
+  // const { data: wallet } = useSelector(selectors.accountState);
+  // const [name, setName] = useState('');
+  // const [regNum, setRegNum] = useState('');
+
+  // const onChangeName = (e) => {
+  //   setName(e.target.value);
+  // };
+
+  // const onChangeRegNum = (e) => {
+  //   setRegNum(e.target.value);
+  // };
+
+  // console.log(wallet);
+
+  // function artistRegist() {
+  //   Axios.post(
+  //     '/users/artists',
+  //     {
+  //       filePath: 'string',
+  //       name: name,
+  //       registerNumber: regNum,
+  //       userId: wallet.id,
+  //     },
+  //     {
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       withCredentials: true,
+  //     },
+  //   )
+  //     .then(() => {
+  //       window.alert(name + '은 자선단체 등록을 성공하였습니다.');
+  //     })
+  //     .catch((err) => {
+  //       console.log('에러발생' + err);
+  //       window.alert('자선단체 등록을 실패하였습니다.');
+  //     });
+  //   // console.log(name);
+  //   // console.log(url);
+  //   // console.log(wallet.walletAddress);
+  // }
+
   // 리액트 컴포넌트가 렌더링될 때마다 특정 작업을 실행할 수 있도록 하는 Hook
   // authorId(특정값)가 바뀔때 실행된다.
   useEffect(() => {
@@ -150,6 +193,7 @@ const ArtistRegistration = ({ authorId }) => {
                                     id="username"
                                     className="form-control"
                                     placeholder="예술가님의 이름을 적어주세요"
+                                    // onChange={onChangeName}
                                   />
                                   <ErrorMessage name="username" component="div" />
                                   <div className="spacer-20"></div>
@@ -157,10 +201,11 @@ const ArtistRegistration = ({ authorId }) => {
                                   <h5>등록번호</h5>
                                   <Field
                                     type="text"
-                                    name="regist-number"
-                                    id="regist-number"
+                                    name="wallet"
+                                    id="wallet"
                                     className="form-control"
                                     placeholder="장애인 등록번호를 적어주세요"
+                                    // onChange={onChangeRegNum}
                                   />
                                   <ErrorMessage name="wallet" component="div" />
                                   <div className="spacer-20"></div>
@@ -190,12 +235,9 @@ const ArtistRegistration = ({ authorId }) => {
                                     }}
                                   </Formik>
                                   <div className="spacer-40"></div>
-                                  <input
-                                    type="submit"
-                                    id="submit"
-                                    className="btn btn-main"
-                                    value="등록"
-                                  />
+                                  <button type="submit" id="submit" className="btn btn-main">
+                                    등록하기
+                                  </button>
                                 </div>
                               </div>
                             </div>

@@ -75,7 +75,7 @@ public class CharityController {
     })
     public ResponseEntity<CharityResponse> getCharityList(
             @PageableDefault(sort = "dateCreated", direction = Sort.Direction.DESC)
-            @ApiParam(value = "페이지네이션", required = true) final Pageable pageable) {
+            @ApiParam(value = "pageable", required = true) final Pageable pageable) {
         Page<CharityInfoDto> charityList = charityService.getCharityList(pageable);
 
         return ResponseEntity.status(200)
@@ -96,7 +96,7 @@ public class CharityController {
     })
     public ResponseEntity<CharityResponse> getEnableCharityList(
             @PageableDefault(sort = "dateCreated", direction = Sort.Direction.DESC)
-            @ApiParam(value = "페이지네이션", required = true) final Pageable pageable) {
+            @ApiParam(value = "pageable", required = true) final Pageable pageable) {
         Page<CharityInfoDto> charityList = charityService.getEnableCharityList(pageable);
 
         return ResponseEntity.status(200)
@@ -117,9 +117,9 @@ public class CharityController {
             @ApiResponse(code = 500, message = "서버 오류")
     })
     public ResponseEntity<BaseResponseBody> enableCharity(
-            @ApiParam @RequestParam(value = "자선 단체 지갑 주소", required = true)
+            @ApiParam @RequestParam(value = "charityWallet", required = true)
                     String walletAddress,
-            @ApiParam @RequestParam(value = "자선 단체 허가 여부", required = true) Boolean enabled) {
+            @ApiParam @RequestParam(value = "enabled", required = true) Boolean enabled) {
 
         charityService.enableCharity(walletAddress, enabled);
 

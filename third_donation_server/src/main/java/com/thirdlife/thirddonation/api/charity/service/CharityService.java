@@ -1,8 +1,9 @@
 package com.thirdlife.thirddonation.api.charity.service;
 
+import com.thirdlife.thirddonation.api.charity.dto.CharityInfoDto;
 import com.thirdlife.thirddonation.api.charity.dto.request.CharityRegisterRequest;
-import com.thirdlife.thirddonation.db.charity.entity.Charity;
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 /**
  * 자선단체 서비스입니다.
@@ -20,12 +21,13 @@ public interface CharityService {
      *
      * @param walletAddress String
      */
-    void deleteCharity(String walletAddress);
+    void enableCharity(String walletAddress, Boolean enabled);
 
     /**
      * 자선 단체 리스트를 반환하는 메서드입니다.
      *
-     * @return List
+     * @param pageable Pageable
+     * @return List of Charity
      */
-    List<Charity> getCharityList();
+    Page<CharityInfoDto> getCharityList(Pageable pageable);
 }

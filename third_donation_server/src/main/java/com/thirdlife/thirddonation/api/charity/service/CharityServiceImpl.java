@@ -1,5 +1,6 @@
 package com.thirdlife.thirddonation.api.charity.service;
 
+import com.thirdlife.thirddonation.api.charity.dto.CharityInfoDto;
 import com.thirdlife.thirddonation.api.charity.dto.request.CharityRegisterRequest;
 import com.thirdlife.thirddonation.common.exception.CustomException;
 import com.thirdlife.thirddonation.common.exception.ErrorCode;
@@ -7,6 +8,8 @@ import com.thirdlife.thirddonation.db.charity.entity.Charity;
 import com.thirdlife.thirddonation.db.charity.repository.CharityRepository;
 import java.util.List;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,15 +29,16 @@ public class CharityServiceImpl implements CharityService {
     }
 
     @Override
-    public void deleteCharity(String walletAddress) {
+    public void enableCharity(String walletAddress, Boolean enabled) {
         Charity charity =
                 charityRepository.findById(walletAddress).orElseThrow(() -> new CustomException(
                         ErrorCode.CHARITY_NOT_FOUND));
-        charityRepository.delete(charity);
+        charity.setEnabled(enabled);
+        charityRepository.save(charity);
     }
 
     @Override
-    public List<Charity> getCharityList() {
-        return charityRepository.findAll();
+    public Page<CharityInfoDto> getCharityList(Pageable pageable) {
+        return charityRepository.findAll(pageable).map(CharityInfoDto::of);
     }
 }

@@ -1,6 +1,7 @@
 package com.thirdlife.thirddonation.db.charity.repository;
 
 import com.thirdlife.thirddonation.db.charity.entity.Charity;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -9,5 +10,4 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Transactional(readOnly = true)
 public interface CharityRepository extends JpaRepository<Charity, String> {
-
 }

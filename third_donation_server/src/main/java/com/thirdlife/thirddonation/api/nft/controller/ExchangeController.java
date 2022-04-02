@@ -1,20 +1,27 @@
 package com.thirdlife.thirddonation.api.nft.controller;
 
+import com.thirdlife.thirddonation.api.nft.SaleSearch;
+import com.thirdlife.thirddonation.api.nft.SaleSearch.SearchKey;
 import com.thirdlife.thirddonation.api.nft.dto.SaleInfoDto;
 import com.thirdlife.thirddonation.api.nft.dto.request.BuyRequest;
 import com.thirdlife.thirddonation.api.nft.dto.request.SellRequest;
 import com.thirdlife.thirddonation.api.nft.dto.response.SaleListResponse;
 import com.thirdlife.thirddonation.api.nft.service.SaleService;
+import com.thirdlife.thirddonation.common.exception.CustomException;
+import com.thirdlife.thirddonation.common.exception.ErrorCode;
 import com.thirdlife.thirddonation.common.model.response.BaseResponseBody;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import java.util.HashMap;
+import java.util.Map;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -26,7 +33,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.schema.Enums;
 
 /**
  * NFT 판매 관련 요청을 처리하는 컨트롤러입니다.
@@ -90,28 +99,44 @@ public class ExchangeController {
     }
 
     /**
-     * 판매중인 NFT 리스트 조회합니다.
+     * 판매중인 NFT 리스트 필터링식 조회합니다.
      *
      * @param pageable Pageable
      * @return ResponseEntity
      */
     @GetMapping("/sales")
     @ApiOperation(
-            value = "NFT 판매 리스트",
-            notes = "판매자 조회시 sellerId 붙여줌니다. <br>/api/nfts/sales?page=0&size=5&sellerId=9")
+            value = "NFT 판매 리스트 필터링 조회",
+            notes = "판매자 조회시 sellerId 붙여줌니다. <br>/api/nfts/sales?page=0&size=5&seller_id=9"
+                    + "<br> Swagger 에선 지원 안하므로 PostMan 을 사용하세요. 파라미터명은 대소문자를 구분하지 않습니다"
+                    + "<br><strong>사용 가능 필터링 목록</strong> "
+                    + "<br>artist=아티스트명 일부나 전체"
+                    + "<br>name=NFT 이름 "
+                    + "<br>file_type=video나 image"
+                    + "<br>wish_count_greater=숫자, "
+                    + "<br>price_between=작은숫자,큰숫자"
+                    + "<br>seller_id=판매자아이디")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
             @ApiResponse(code = 404, message = "사용자 없음"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
     public ResponseEntity<SaleListResponse> getSalesList(
-            @PageableDefault(sort = "id", direction = Sort.Direction.DESC)
-            @ApiParam(value = "페이지네이션", required = true) final Pageable pageable,
-            @ApiParam(value = "조회할 판매자 ID") final Long sellerId) {
+            @ApiParam(value = "조회 필터") @RequestParam(required = false)
+                    Map<String, Object> searchRequest,
+            @PageableDefault(size = 20 , sort = "id", direction = Sort.Direction.DESC)
+            @ApiParam(value = "페이지네이션", required = true) final Pageable pageable) {
+        Map<SearchKey, Object> searchKeys = new HashMap<>();
+        for (String key : searchRequest.keySet()) {
+            try {
+                searchKeys.put(SearchKey.valueOf(key.toUpperCase()), searchRequest.get(key));
+            } catch (Exception ex) {
+                //TODO 나중에 guava 등의 방법으로 exception 을 쓰지 않는 방향으로 바꿔야 더 빨라짐.
+            }
+        }
 
-        Page<SaleInfoDto> salesList =
-                sellerId != null ? saleService.getSalesListBySellerId(sellerId, pageable) :
-                        saleService.getSalesList(pageable);
+        Page<SaleInfoDto> salesList = searchKeys.isEmpty() ? saleService.getSalesList(pageable) :
+                saleService.getSalesListFilter(pageable, SaleSearch.searchWith(searchKeys));
 
         return ResponseEntity.status(200).body(
                 SaleListResponse.builder()

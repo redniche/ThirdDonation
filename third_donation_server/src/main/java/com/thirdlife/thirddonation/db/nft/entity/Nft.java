@@ -36,10 +36,17 @@ public class Nft {
     @JoinColumn(name = "owner_id", referencedColumnName = "id")
     private User owner;
 
+    // 아래 컬럼들은 모두 필터링용
+
     @Column(nullable = false)
     private Boolean isMintSold;
 
     private Integer wishCount;
+
+    private String name;
+
+    @Column(length = 30)
+    private String fileType;
 
     public void increaseWishCount() {
         wishCount++;

@@ -26,6 +26,7 @@ public enum ErrorCode {
     CANNOT_DOWN_AUTHORITY(BAD_REQUEST, "이미 관리자입니다."),
     CANNOT_EMPTY_IMAGE(BAD_REQUEST, "이미지를 보내야 합니다."),
     CANNOT_WRONG_MIME(BAD_REQUEST, "잘못된 타입의 이미지입니다"),
+    CANNOT_WRONG_FILTER(BAD_REQUEST, "잘못된 필터링 요청입니다"),
 
     /* 401 UNAUTHORIZED : 인증되지 않은 사용자 */
     UNAUTHORIZED_MEMBER(UNAUTHORIZED, "현재 내 계정 정보가 존재하지 않습니다"),

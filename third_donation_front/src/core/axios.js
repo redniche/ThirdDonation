@@ -24,6 +24,7 @@ const apis = {
     user: `${user_base}`,
     img: `${user_base}/img`,
     profile: `${user_base}/profile`,
+    artists: `${user_base}/artists`,
   },
   file: file_base,
 };

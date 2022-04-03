@@ -67,7 +67,7 @@ const Sell = () => {
       console.log(artNftContract.methods);
       console.log(currentWallet);
 
-      const response = artNftContract.methods
+      const response = await artNftContract.methods
         .setApprovalForAll(SALE_NFT_CONTRACT_ADDRESS, true)
         .send({ from: currentWallet });
       console.log(response);
@@ -98,13 +98,6 @@ const Sell = () => {
       const currentWallet = accounts[0];
       console.log(currentWallet);
 
-      // const web3 = new Web3(currentProvider);
-      // const {
-      //   CONTRACT_ABI: { SALE_ABI, NFT_ABI },
-      // } = ABI;
-
-      // const saleArtContract = new web3.eth.Contract(SALE_ABI, SALE_NFT_CONTRACT_ADDRESS);
-      // const artNftContract = new web3.eth.Contract(NFT_ABI, SSAFY_NFT_CONTRACT_ADDRESS);
       const saleArtContract = getSaleNftContract(currentProvider);
       const artNftContract = getSsafyNftContract2(currentProvider);
 
@@ -124,12 +117,12 @@ const Sell = () => {
       console.log(response);
 
       // 해당 주소 토큰 개수 확인
-      const balance = await artNftContract.methods.balanceOf(currentWallet).call();
-      console.log(balance);
+      // const balance = await artNftContract.methods.balanceOf(currentWallet).call();
+      // console.log(balance);
 
       // 해당 tokenId에 해당하는 토큰 가격 확인
-      const price = await saleArtContract.methods.getArtTokenPrice(nft.id).call();
-      console.log(price);
+      // const price = await saleArtContract.methods.getArtTokenPrice(nft.id).call();
+      // console.log(price);
 
       setLoading(false);
       alert('NFT 판매 등록이 완료되었습니다.');
@@ -156,7 +149,7 @@ const Sell = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        withCredentials: true,
+        // withCredentials: true,
       },
     )
       .then((res) => {

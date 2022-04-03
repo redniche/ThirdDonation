@@ -42,10 +42,11 @@ public interface SaleService {
     Page<SaleInfoDto> getSalesList(Pageable pageable);
 
     /**
-     * 판매 리스트 조회 메서드.
+     * 판매 리스트 필터링 조회 메서드.
      *
      * @param pageable Pageable
-     * @return List of Sales
+     * @param searchKeywords Specification
+     * @return Page of SaleInfoDto
      */
     Page<SaleInfoDto> getSalesListFilter(Pageable pageable, Specification<Sales> searchKeywords);
 }

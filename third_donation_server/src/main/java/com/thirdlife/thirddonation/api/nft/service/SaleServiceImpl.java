@@ -3,6 +3,7 @@ package com.thirdlife.thirddonation.api.nft.service;
 import com.thirdlife.thirddonation.api.nft.dto.SaleInfoDto;
 import com.thirdlife.thirddonation.api.nft.dto.request.BuyRequest;
 import com.thirdlife.thirddonation.api.nft.dto.request.SellRequest;
+import com.thirdlife.thirddonation.api.user.service.UserService;
 import com.thirdlife.thirddonation.common.exception.CustomException;
 import com.thirdlife.thirddonation.common.exception.ErrorCode;
 import com.thirdlife.thirddonation.db.charity.entity.Charity;
@@ -19,6 +20,7 @@ import com.thirdlife.thirddonation.db.notification.repository.NotificationReposi
 import com.thirdlife.thirddonation.db.user.entity.User;
 import com.thirdlife.thirddonation.db.user.repository.UserRepository;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -40,6 +42,7 @@ public class SaleServiceImpl implements SaleService {
     private final CharityRepository charityRepository;
     private final IncomeLogRepository incomeLogRepository;
     private final NotificationRepository notificationRepository;
+    private final UserService userService;
 
     /**
      * NFT 판매 정보를 등록하는 메서드입니다.
@@ -48,9 +51,12 @@ public class SaleServiceImpl implements SaleService {
      */
     @Override
     public void sell(SellRequest sellRequest) {
-        final Long sellerId = sellRequest.getSellerId();
-        final User seller = userRepository.findById(sellerId)
-                .orElseThrow(() -> new CustomException(ErrorCode.SELLER_NOT_FOUND));
+        User seller;
+        try {
+            seller = userService.getAuthUser();
+        } catch (Exception ex) {
+            throw new CustomException(ErrorCode.SELLER_NOT_FOUND);
+        }
 
         final Long tokenId = sellRequest.getTokenId();
         final Nft nft = nftRepository.findById(tokenId)
@@ -168,8 +174,17 @@ public class SaleServiceImpl implements SaleService {
      */
     @Override
     public void disableSales(Long id) {
+        User seller;
+        try {
+            seller = userService.getAuthUser();
+        } catch (Exception ex) {
+            throw new CustomException(ErrorCode.SELLER_NOT_FOUND);
+        }
         final Sales sales = salesRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.SALE_NOT_FOUND));
+        if (!Objects.equals(seller.getId(), sales.getSeller().getId())) {
+            throw new CustomException(ErrorCode.USER_INVALID);
+        }
 
         sales.setEnabled(false);
         salesRepository.save(sales);
@@ -189,14 +204,15 @@ public class SaleServiceImpl implements SaleService {
     }
 
     /**
-     * 판매 리스트 조회 메서드.
+     * 판매 리스트 필터링 조회 메서드.
      *
      * @param pageable Pageable
-     * @return List of Sales
+     * @param searchKeywords Specification
+     * @return Page of SaleInfoDto
      */
     @Override
     public Page<SaleInfoDto> getSalesListFilter(Pageable pageable,
-                                              Specification<Sales> searchKeywords) {
+                                                Specification<Sales> searchKeywords) {
         Page<Sales> page = salesRepository.findAll(searchKeywords, pageable);
 
         return page.map(SaleInfoDto::of);

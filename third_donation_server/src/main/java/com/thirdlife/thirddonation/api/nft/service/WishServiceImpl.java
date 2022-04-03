@@ -1,6 +1,7 @@
 package com.thirdlife.thirddonation.api.nft.service;
 
 import com.thirdlife.thirddonation.api.nft.dto.request.WishRequest;
+import com.thirdlife.thirddonation.api.user.service.UserService;
 import com.thirdlife.thirddonation.common.exception.CustomException;
 import com.thirdlife.thirddonation.common.exception.ErrorCode;
 import com.thirdlife.thirddonation.db.nft.entity.Nft;
@@ -23,7 +24,7 @@ public class WishServiceImpl implements WishService {
 
     private final WishRepository wishRepository;
     private final NftRepository nftRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     /**
      * NFT 찜 정보를 등록하는 메서드입니다.
@@ -32,9 +33,7 @@ public class WishServiceImpl implements WishService {
      */
     @Override
     public void createWish(WishRequest wishRequest) {
-
-        final User user = userRepository.findById(wishRequest.getUserId())
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        final User user = userService.getAuthUser();
 
         Nft nft = nftRepository.findById(wishRequest.getTokenId())
                 .orElseThrow(() -> new CustomException(ErrorCode.NFT_NOT_FOUND));
@@ -64,9 +63,7 @@ public class WishServiceImpl implements WishService {
      */
     @Override
     public void deleteWish(WishRequest wishRequest) {
-
-        final User user = userRepository.findById(wishRequest.getUserId())
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        final User user = userService.getAuthUser();
 
         Nft nft = nftRepository.findById(wishRequest.getTokenId())
                 .orElseThrow(() -> new CustomException(ErrorCode.NFT_NOT_FOUND));

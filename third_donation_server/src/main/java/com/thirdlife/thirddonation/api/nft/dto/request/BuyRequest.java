@@ -12,7 +12,7 @@ public class BuyRequest {
     @NotNull
     private Long saleId;
 
-    @NotNull
+    @Deprecated
     private Long buyerId;
 
     private String message;

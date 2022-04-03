@@ -22,7 +22,7 @@ public class SellRequest {
     @NotNull
     private Long basePrice;
 
-    @NotNull
+    @Deprecated
     private Long sellerId;
 
     @NotBlank

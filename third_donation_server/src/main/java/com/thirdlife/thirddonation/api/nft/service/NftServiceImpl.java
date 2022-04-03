@@ -2,6 +2,7 @@ package com.thirdlife.thirddonation.api.nft.service;
 
 import com.thirdlife.thirddonation.api.nft.dto.NftInfoDto;
 import com.thirdlife.thirddonation.api.nft.dto.request.NftMintRequest;
+import com.thirdlife.thirddonation.api.user.service.UserService;
 import com.thirdlife.thirddonation.common.exception.CustomException;
 import com.thirdlife.thirddonation.common.exception.ErrorCode;
 import com.thirdlife.thirddonation.db.nft.entity.Nft;
@@ -23,7 +24,7 @@ import org.springframework.stereotype.Service;
 public class NftServiceImpl implements NftService {
 
     private final NftRepository nftRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     /**
      * NFT를 생성하는 메서드입니다.
@@ -32,10 +33,10 @@ public class NftServiceImpl implements NftService {
      */
     @Override
     public void createNft(NftMintRequest nftMintRequest) {
-        final String ownerAddress = nftMintRequest.getOwnerAddress();
-        final User owner = userRepository.findByWalletAddress(ownerAddress);
-
-        if (owner == null) {
+        User owner;
+        try {
+            owner = userService.getAuthUser();
+        } catch (Exception ex) {
             throw new CustomException(ErrorCode.OWNER_NOT_FOUND);
         }
 
@@ -50,7 +51,7 @@ public class NftServiceImpl implements NftService {
      * NFT 리스트 조회 메서드입니다.
      * 유저 id로 해당 유저가 가진 NFT 를 조회합니다.
      *
-     * @param ownerId   Long
+     * @param ownerId  Long
      * @param pageable Pageable
      * @return List of Nft
      */

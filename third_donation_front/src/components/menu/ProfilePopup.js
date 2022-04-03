@@ -4,6 +4,7 @@ import useOnclickOutside from 'react-cool-onclickoutside';
 import Wallet from '../accounts/Wallet';
 import { clearAccount } from '../../store/actions';
 import * as selectors from '../../store/selectors';
+import auth from '../../core/auth';
 
 const ProfilePopup = () => {
   const dispatch = useDispatch();
@@ -14,6 +15,7 @@ const ProfilePopup = () => {
   const { data: account } = useSelector(selectors.accountState);
   const onLogout = () => {
     dispatch(clearAccount());
+    auth.clearToken();
   };
 
   function Profile() {
@@ -31,8 +33,8 @@ const ProfilePopup = () => {
       ref={refProfilePopup}>
       <img
         src={
-          account.imageBase64
-            ? account.imageBase64
+          account.imagePath
+            ? account.imagePath
             : process.env.PUBLIC_URL + '/img/기본프로필이미지.png'
         }
         alt="프로필"

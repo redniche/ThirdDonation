@@ -16,7 +16,7 @@ import apis, { Axios } from '../../core/axios';
  * Yup 패키지로 유효성 체크
  */
 const validationSchema = Yup.object().shape({
-  username: Yup.lazy(() => Yup.string().required('유저 이름이 필요합니다.')),
+  userName: Yup.lazy(() => Yup.string().required('유저 이름이 필요합니다.')),
 });
 
 /**
@@ -30,8 +30,8 @@ const EditProfile = ({ authorId }) => {
   const author = authorsState.data ? authorsState.data : null;
 
   const initialValues = {
-    username: author ? author.username : '',
-    about: author ? author.description : '',
+    userName: author ? author.username : '',
+    description: author ? author.description : '',
   };
 
   const initialProfilePicture = {
@@ -53,7 +53,9 @@ const EditProfile = ({ authorId }) => {
    * @param {*}} data
    */
   const handleSubmitForm = async (data) => {
-    await Axios(apis.users.profile, { method: 'patch', body: data })
+    data.id = parseInt(authorId);
+    console.log(data);
+    await Axios.patch(apis.users.profile, data)
       .then((response) => {
         console.log(response);
         redirectUser(`/editProfile/${authorId}`);
@@ -64,10 +66,8 @@ const EditProfile = ({ authorId }) => {
   };
 
   const handleSubmitProfilePicture = async (file, userId) => {
-    var formData = {
-      id: userId,
-      imageBase64: file.toString(),
-    };
+    const formData = new FormData();
+    formData.append('img', file);
 
     // await Axios({
     //   method: 'post',
@@ -78,16 +78,12 @@ const EditProfile = ({ authorId }) => {
     //     'Content-Type': 'multipart/form-data',
     //   },
     // })
-    await Axios({
-      method: 'post',
-      url: `${apis.users.img}`,
-      data: formData,
-      headers: {
-        'Content-Type': 'application/json',
-      },
+    await Axios.post(`${apis.users.img}`, formData, {
+      'Content-Type': 'multipart/form-data',
+      params: { userId: userId },
     })
       .then((res) => {
-        redirectUser(`/profile/${authorId}`);
+        redirectUser(`/editProfile/${authorId}`);
         console.log(res);
       })
       .catch((err) => {
@@ -95,10 +91,12 @@ const EditProfile = ({ authorId }) => {
       });
   };
 
+  const [profileImageFile, setProfileImageFile] = useState();
   const [profileImageTemp, setProfileImageTemp] = useState();
 
   const handleProfilePicture = (event) => {
     let tempFile = event.target.files[0];
+    setProfileImageFile(tempFile);
     if (!tempFile) return;
 
     let maxSize = 3 * 1024 * 1024;
@@ -162,7 +160,6 @@ const EditProfile = ({ authorId }) => {
                             </span>
                           </li>
                         </ul>
-
                         <div className="de_tab_content">
                           <div className="tab-1">
                             <div
@@ -177,23 +174,23 @@ const EditProfile = ({ authorId }) => {
                                   <h5>유저명</h5>
                                   <Field
                                     type="text"
-                                    name="username"
-                                    id="username"
+                                    name="userName"
+                                    id="userName"
                                     className="form-control"
                                     placeholder="유저명(자신의 별명)을 입력합니다."
                                   />
-                                  <ErrorMessage name="username" component="div" />
+                                  <ErrorMessage name="userName" component="div" />
                                   <div className="spacer-20"></div>
 
                                   <h5>설명</h5>
                                   <Field
                                     component="textarea"
-                                    name="about"
-                                    id="about"
+                                    name="description"
+                                    id="description"
                                     className="form-control"
                                     placeholder="자신을 마음껏 소개 해보세요!"
                                   />
-                                  <ErrorMessage name="about" component="div" />
+                                  <ErrorMessage name="description" component="div" />
                                   <div className="spacer-20"></div>
                                 </div>
                               </div>
@@ -212,7 +209,7 @@ const EditProfile = ({ authorId }) => {
                   initialValues={initialProfilePicture}
                   onSubmit={async (values, { setSubmitting, resetForm }) => {
                     setSubmitting(true);
-                    await handleSubmitProfilePicture(profileImageTemp, authorId);
+                    await handleSubmitProfilePicture(profileImageFile, authorId);
                     setSubmitting(false);
                     resetForm();
                   }}>
@@ -234,8 +231,8 @@ const EditProfile = ({ authorId }) => {
                             profileImageTemp
                               ? profileImageTemp
                               : author &&
-                                (author.imageBase64
-                                  ? author.imageBase64
+                                (author.imagePath
+                                  ? author.imagePath
                                   : process.env.PUBLIC_URL + '/img/기본프로필이미지.png')
                           }
                           id="click_profile_img"

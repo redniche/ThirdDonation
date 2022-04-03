@@ -114,10 +114,8 @@ const Profile = ({ authorId }) => {
                             ? author.imagePath
                             : process.env.PUBLIC_URL + '/img/기본프로필이미지.png'
                         }
-                        alt=""
-                        style={{
-                          backgroundImage: `url(${api.baseUrl + '/uploads/테스트배너1.jpg'})`,
-                        }}
+                        alt="프로필"
+                        style={{ width: '150px', height: '150px' }}
                       />
                       <i className="fa fa-check"></i>
                       <div className="profile_name">

@@ -678,6 +678,36 @@ p.lead {
     }
   }
 }
+.btn-grey {
+  display: block;
+  width: max-content;
+  text-align: center;
+  color: #fff !important;
+  background: #6c757d;
+  border-radius: 6px;
+  letter-spacing: normal;
+  outline: 0;
+  font-weight: 800;
+  text-decoration: none;
+  padding: 8px 40px;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 2px 2px 20px 0px rgba(131, 100, 226, 0);
+  transition: all 0.3s ease;
+  &:hover {
+    box-shadow: 2px 2px 20px 0px rgba(131, 100, 226, 0.5);
+    transition: all 0.3s ease;
+  }
+  &.inline {
+    display: inline-block;
+    margin-right: 15px;
+    &.white {
+      color: $color_more !important;
+      background: $white;
+    }
+  }
+}
 a {
   text-decoration: none;
   color: inherit;
@@ -2053,15 +2083,16 @@ address {
   -webkit-border-radius: 3px;
 }
 .pagination li .a {
-  font-size: 14px;
-  color: #888;
+  font-size: 1.2rem;
   border: solid 1px #dddddd;
   border-right: none;
   background: none;
-  padding: 15px 20px 15px 20px;
+  padding: 13px 18px 13px 18px;
   border-radius: 0;
-  background: $white;
   cursor: pointer;
+}
+.pagination li:not(.active) .a:hover {
+  background: #eeeeee;
 }
 .dark-scheme .pagination li .a {
   border-color: rgba(255, 255, 255, 0.1);

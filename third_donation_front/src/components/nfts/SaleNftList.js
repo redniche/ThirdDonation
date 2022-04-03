@@ -1,12 +1,7 @@
 import { memo, useState, useEffect } from 'react';
-// import { useSelector } from 'react-redux';
-// import * as selectors from '../../store/selectors';
-// import * as actions from '../../store/actions/thunks';
-// import { clearNfts, clearFilter, clearPage } from '../../store/actions';
 import SaleNFtCard from './SaleNFtCard';
-// import { shuffleArray } from '../../store/utils';
-// import NftMusicCard from './NftMusicCard';
 import { Axios } from './../../core/axios';
+import SaleFilterBar from '../../components/nfts/SaleFilterBar';
 
 /**
  * NFT리스트들을 표시하기 위한 컴포넌트
@@ -17,12 +12,18 @@ import { Axios } from './../../core/axios';
 const SaleNftList = () => {
   const [height, setHeight] = useState(0);
   const [nfts, setNfts] = useState([]);
-  // const [tokenUri, setTokenUri] = useState(null);
 
-  // const dispatch = useDispatch();
-  // const nfts = useSelector(selectors.saleNftItems);
-  // console.log(nfts);
-  // const nfts = nftItems ? (shuffle ? shuffleArray(nftItems) : nftItems) : [];
+  // filter state
+  const [searchValue, setSearchValue] = useState(null);
+  const [artistWord, setArtistWord] = useState(null);
+  const [nftWord, setNftWord] = useState(null);
+  const [sellerWord, setSellerWord] = useState(null);
+  const [fileType, setFileType] = useState(null);
+  const [minPrice, setMinPrice] = useState('');
+  const [maxPrice, setMaxPrice] = useState('');
+  const [priceRange, setPriceRange] = useState('');
+  const [wishCount, setWishCount] = useState(null);
+  // const [saveWishCount, setSaveWishCount] = useState(null);
 
   const onFileLoad = ({ target: file }) => {
     let currentHeight = height;
@@ -31,23 +32,58 @@ const SaleNftList = () => {
     }
   };
 
-  const getSaleNftList = () => {
-    Axios.get('/nfts/exchange/sales')
+  const searchKind = (e) => {
+    console.log(e);
+    setSearchValue(e.value);
+  };
+
+  const searchWord = (word) => {
+    console.log(word);
+    // setWord(word);
+    if (searchValue == 'artist') {
+      setArtistWord(word);
+      console.log('😁😁');
+    } else if (searchValue == 'nftName') {
+      setNftWord(word);
+    } else if (searchValue == 'sellerId') {
+      setSellerWord(word);
+    }
+  };
+
+  const selectFileType = (e) => {
+    console.log(e);
+    setFileType(e.value);
+  };
+
+  const onChangeMinPrice = (price) => {
+    console.log(price);
+    setMinPrice(price);
+  };
+  const onChangeMaxPrice = (price) => {
+    console.log(price);
+    setMaxPrice(price);
+  };
+  const onChangeWishCount = (cnt) => {
+    console.log(cnt);
+    setWishCount(cnt);
+  };
+
+  const getSaleNftList = async (price) => {
+    await Axios.get('/nfts/exchange/sales', {
+      params: {
+        file_type: fileType,
+        artist: artistWord,
+        name: nftWord,
+        seller_id: sellerWord,
+        price_between: price,
+        wish_count_greater: wishCount,
+      },
+    })
       .then((data) => data)
       .then(async (res) => {
         const nftData = res.data.data;
         console.log(nftData);
         setNfts(nftData);
-        // console.log(nftData);
-        // console.log(nftData.tokenUri);
-
-        // try {
-        //   const { data: tokenUriJson } = await Axios.get(nftData.tokenUri, { params: [] });
-        //   setTokenUri(tokenUriJson);
-        //   // console.log(tokenUri);
-        // } catch (err) {
-        //   console.log(err);
-        // }
       })
       .catch((err) => {
         console.log(`err: ${err}`);
@@ -59,22 +95,52 @@ const SaleNftList = () => {
     getSaleNftList();
   }, []);
 
+  useEffect(() => {
+    setArtistWord(null);
+    setNftWord(null);
+    setSellerWord(null);
+    getSaleNftList(priceRange);
+  }, [searchValue]);
+
+  useEffect(() => {
+    if (isNaN(parseInt(wishCount))) {
+      console.log('😂');
+      setWishCount(null);
+    }
+
+    getSaleNftList(priceRange);
+  }, [artistWord, nftWord, sellerWord, fileType, wishCount]);
+
+  useEffect(() => {
+    if (minPrice.length != 0 && maxPrice.length != 0) {
+      const priceString = minPrice + ',' + maxPrice;
+      setPriceRange(priceString);
+      getSaleNftList(priceString);
+    } else {
+      setPriceRange(null);
+      getSaleNftList(null);
+    }
+  }, [minPrice, maxPrice]);
+
   return (
     <div className="row">
+      {/* {console.log(fileType)}
+      {console.log(searchValue)} */}
+      {console.log(minPrice.length)}
+      {console.log(maxPrice)}
+      {/* {console.log(wishCount.length)} */}
+      <SaleFilterBar
+        searchKind={searchKind}
+        searchWord={searchWord}
+        fileType={selectFileType}
+        onChangeMinPrice={onChangeMinPrice}
+        onChangeMaxPrice={onChangeMaxPrice}
+        onChangeWishCount={onChangeWishCount}
+      />
       {nfts &&
         nfts.map((nft, index) => (
           <SaleNFtCard nft={nft} key={index} onFileLoad={onFileLoad} height={height} />
         ))}
-      {/* {showLoadMore && (
-        <div className="col-lg-12">
-          <div className="spacer-single"></div>
-          <span onClick={loadMore} className="btn-main lead m-auto">
-            더 보기
-          </span>
-          {result == 1 && <div className="result_log">마지막 NFT 입니다.</div>}
-          {result == -1 && <div className="result_log">오류가 발생 했습니다.</div>}
-        </div>
-      )} */}
     </div>
   );
 };

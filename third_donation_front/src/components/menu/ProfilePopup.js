@@ -16,8 +16,6 @@ const ProfilePopup = () => {
     dispatch(clearAccount());
   };
 
-  const { data: account } = useSelector(selectors.accountState);
-
   function Profile() {
     window.location.href = `/profile/${account.id}`;
   }

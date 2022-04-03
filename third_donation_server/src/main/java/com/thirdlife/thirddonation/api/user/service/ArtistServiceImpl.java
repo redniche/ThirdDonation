@@ -4,6 +4,7 @@ import com.thirdlife.thirddonation.api.user.dto.ArtistInfoDto;
 import com.thirdlife.thirddonation.api.user.dto.request.ArtistRegisterRequest;
 import com.thirdlife.thirddonation.common.exception.CustomException;
 import com.thirdlife.thirddonation.common.exception.ErrorCode;
+import com.thirdlife.thirddonation.common.util.FileManageUtil;
 import com.thirdlife.thirddonation.db.user.entity.Artist;
 import com.thirdlife.thirddonation.db.user.entity.Authority;
 import com.thirdlife.thirddonation.db.user.entity.User;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 장애인 예술가 서비스.
@@ -38,9 +40,17 @@ public class ArtistServiceImpl implements ArtistService {
         }
         User user = userRepository.findById(artistRegisterRequest.getUserId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        //엔티티 생성
         Artist artist = artistRegisterRequest.toEntity();
         artist.setUser(user);
 
+        MultipartFile multipartFile =  artistRegisterRequest.getImageFile();
+
+        //파일저장
+        String fileName = multipartFile.getOriginalFilename();
+        String savingFileName = FileManageUtil.saveFile(multipartFile, fileName);
+        artist.setFilePath(savingFileName);
+        
         artistRepository.save(artist);
     }
 

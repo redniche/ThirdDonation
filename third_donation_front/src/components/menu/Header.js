@@ -372,7 +372,7 @@ const Header = ({ className }) => {
                       className="dropdown-custom dropdown-toggle btn"
                       onMouseEnter={onArtistMenuClick}
                       onMouseLeave={closeArtistMenu}>
-                      에술가
+                      예술가
                       <span className="lines"></span>
                       {artistMenu && (
                         <div className="item-dropdown">

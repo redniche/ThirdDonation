@@ -10,8 +10,11 @@ import lombok.Getter;
  */
 @Getter
 public class ArticleRegisterRequest {
+
+    @Deprecated
     private Long userId;
 
+    @NotBlank
     private String categoryName;
 
     @NotBlank

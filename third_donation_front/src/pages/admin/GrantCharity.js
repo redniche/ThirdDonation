@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Table } from 'react-bootstrap';
 import PanelLayout from '../../components/layout/PanelLayout';
 import { Axios } from '../../core/axios';
+import { getSsafyNftContract2 } from '../../contracts';
+import { detectCurrentProvider } from '../../core/ethereum';
 
 // 증명서 이미지 행 hover 이벤트 방지 설정 (작동 안 됨 - 수정 필요)
 /* .table-hover > tbody > tr.anti-hover:hover > td,
@@ -29,7 +31,33 @@ const GrantArtist = () => {
       });
   }
 
-  function aceeptCharity(walletAddress) {
+  async function aceeptCharity(walletAddress) {
+    try {
+      const currentProvider = detectCurrentProvider();
+      if (!currentProvider) return;
+
+      const accounts = await currentProvider.request({ method: 'eth_requestAccounts' });
+      const currentWallet = accounts[0];
+
+      const artNftContract = getSsafyNftContract2(currentProvider);
+      console.log(artNftContract.methods);
+
+      const response = await artNftContract.methods
+        .addCharityAddress(walletAddress)
+        .send({ from: currentWallet })
+        .then(() => {
+          saveAceeptCharity(walletAddress);
+        });
+      console.log(response);
+
+      alert('자선 단체 승인 성공');
+    } catch (error) {
+      console.log(error);
+      alert('자선 단체 승인 실패');
+    }
+  }
+
+  function saveAceeptCharity(walletAddress) {
     Axios.patch(
       '/charities',
       {},

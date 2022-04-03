@@ -36,9 +36,6 @@ public class ArtistServiceImpl implements ArtistService {
     @Override
     public void createArtist(ArtistRegisterRequest artistRegisterRequest) {
         Long userId = artistRegisterRequest.getUserId();
-        if (artistRepository.existsById(userId)) {
-            throw new CustomException(ErrorCode.ARTIST_DUPLICATE);
-        }
         User user = userRepository.findById(artistRegisterRequest.getUserId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 

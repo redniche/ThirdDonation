@@ -177,7 +177,7 @@ const Profile = ({ authorId }) => {
                     <li id="ownBtn" className="">
                       <span onClick={ownBtnClick}>소유 중</span>
                     </li>
-                    {account.id == author.id && (
+                    {account && account.id == author.id && (
                       <li id="chartBtn">
                         <span onClick={chartBtnClick}>일별 수익 차트</span>
                       </li>

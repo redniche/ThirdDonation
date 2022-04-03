@@ -79,7 +79,9 @@ const EditProfile = ({ authorId }) => {
     //   },
     // })
     await Axios.post(`${apis.users.img}`, formData, {
-      'Content-Type': 'multipart/form-data',
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
       params: { userId: userId },
     })
       .then((res) => {

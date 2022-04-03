@@ -1,7 +1,8 @@
 import axios from 'axios';
 import auth from './auth';
 
-export const API_URL = 'https://j6e207.p.ssafy.io/api';
+// export const API_URL = 'https://j6e207.p.ssafy.io/api';
+export const API_URL = 'http://localhost:8080/api';
 export const API_TIME_SOURCE = 'https://worldtimeapi.org/api/timezone/Asia/Seoul';
 export const Axios = axios.create({
   baseURL: API_URL,
@@ -30,9 +31,7 @@ const apis = {
 };
 
 export const setAxiosHeader = (data) => {
-  axios.defaults.headers.common = {
-    Authorization: 'Bearer ' + data,
-  };
+  if (data && data.length > 0) Axios.defaults.headers.common['Authorization'] = `Bearer ${data}`;
 };
 
 //처음 시작시 단 한 번 실행

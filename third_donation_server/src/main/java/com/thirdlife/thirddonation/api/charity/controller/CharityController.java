@@ -67,7 +67,7 @@ public class CharityController {
      *
      * @return ResponseEntity
      */
-    @GetMapping("/all")
+    @GetMapping("${request.path.admin}")
     @ApiOperation(value = "자선단체 전체 리스트 조회")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
@@ -88,7 +88,7 @@ public class CharityController {
      *
      * @return ResponseEntity
      */
-    @GetMapping()
+    @GetMapping
     @ApiOperation(value = "허가된 자선단체 리스트 조회")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),

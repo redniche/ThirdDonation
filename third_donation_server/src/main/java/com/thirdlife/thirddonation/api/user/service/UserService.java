@@ -37,16 +37,26 @@ public interface UserService {
     User getUserByWalletAddress(String walletAddress);
 
 
+    /**
+     * 유저의 정보를 업데이트 하는 메서드입니다.
+     *
+     * @param userProfileModifyRequest UserProfileModifyRequest
+     */
     void updateProfile(UserProfileModifyRequest userProfileModifyRequest);
+
+    /**
+     * 현재 jwt 로 접속된 유저 엔티티를 반환합니다.
+     *
+     * @return User
+     */
+    User getAuthUser();
 
     /**
      * 유저의 이미지 정보를 업로드하는 메서드입니다.
      *
-      * @param userId Long
      * @param multipartFile MultipartFile
-     * @return String
      */
-    String uploadProfileImage(Long userId, MultipartFile multipartFile);
+    void uploadProfileImage(MultipartFile multipartFile);
 
     /**
      * id로 찾아 유저를 반환하는 메서드입니다.
@@ -59,10 +69,9 @@ public interface UserService {
     /**
      * 최근 1주일간 사용자의 수익을 반환하는 메서드.
      *
-     * @param userId Long
      * @return List of DailyIncome
      */
-    List<DailyIncome> getDailyIncome(Long userId);
+    List<DailyIncome> getDailyIncome();
 
     Boolean verifyAddressFromSignature(String address, String signature)
             throws SignatureException;

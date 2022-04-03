@@ -24,11 +24,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 /**
- *  User 엔티티.
- *  id는 DB 에서 생성되는 값입니다.
+ * User 엔티티.
+ * id는 DB 에서 생성되는 값입니다.
  */
 @Builder
 @Data
@@ -88,7 +89,12 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        List<GrantedAuthority> authorities = new ArrayList<>();
+
+        for (int i = this.authority.ordinal(); i > -1; i--) {
+            authorities.add(new SimpleGrantedAuthority(Authority.values()[i].name()));
+        }
+        return authorities;
     }
 
     @Override
@@ -116,7 +122,7 @@ public class User implements UserDetails {
         return enabled;
     }
 
-    public void changeUserImg(UserImg userImg){
+    public void changeUserImg(UserImg userImg) {
         this.userImg = userImg;
     }
 

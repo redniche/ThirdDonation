@@ -2,9 +2,12 @@ package com.thirdlife.thirddonation.config;
 
 import com.thirdlife.thirddonation.api.user.service.UserService;
 import com.thirdlife.thirddonation.common.auth.JwtAuthenticationFilter;
+import com.thirdlife.thirddonation.db.user.entity.Authority;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -27,6 +30,31 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final CorsFilter corsFilter;
     private final UserService userService;
 
+    @Value("${request.path.api}")
+    private String apiPath;
+
+    @Value("${request.path.users}")
+    private String usersPath;
+
+    @Value("${request.path.nfts}")
+    private String nftsPath;
+
+    @Value("${request.path.charities}")
+    private String charitiesPath;
+
+    @Value("${request.path.notifications}")
+    private String notificationsPath;
+
+    @Value("${request.path.board}")
+    private String boardPath;
+
+    @Value("${request.path.board.category}")
+    private String categoryPath;
+
+    @Value("${request.path.admin.artists}")
+    private String artistsPath;
+
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -43,6 +71,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilter(corsFilter)
                 .addFilter(new JwtAuthenticationFilter(authenticationManager(), userService))
                 .authorizeRequests()
+                .antMatchers(HttpMethod.GET, apiPath + usersPath + artistsPath).hasAuthority(
+                        Authority.ADMIN.name())
+                .antMatchers(HttpMethod.PATCH, apiPath + usersPath + artistsPath).hasAuthority(
+                        Authority.ADMIN.name())
                 .antMatchers("/api/**").permitAll()
                 .anyRequest().permitAll()
                 .and().cors();

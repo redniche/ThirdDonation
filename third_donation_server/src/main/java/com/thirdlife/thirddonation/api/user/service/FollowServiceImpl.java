@@ -22,6 +22,7 @@ public class FollowServiceImpl implements FollowService {
 
     private final FollowRepository followRepository;
     private final UserRepository userRepository;
+    private final UserService userService;
 
     /**
      * 예술가 팔로우 요첟.
@@ -29,11 +30,9 @@ public class FollowServiceImpl implements FollowService {
      * @param followRequest FollowRequest
      */
     public void createFollow(FollowRequest followRequest) {
-        final User user = userRepository.findById(followRequest.getUserId())
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        final User user = userService.getAuthUser();
 
-        User artist = userRepository.findById(followRequest.getArtistId())
-                .orElseThrow(() -> new CustomException(ErrorCode.ARTIST_NOT_FOUND));
+        User artist = getFollowArtist(followRequest, user);
 
         followRepository.findByUserAndFollowingArtist(user, artist)
                 .ifPresent(follow -> {
@@ -59,11 +58,9 @@ public class FollowServiceImpl implements FollowService {
      */
     @Override
     public void deleteFollow(FollowRequest followRequest) {
-        final User user = userRepository.findById(followRequest.getUserId())
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        final User user = userService.getAuthUser();
 
-        User artist = userRepository.findById(followRequest.getArtistId())
-                .orElseThrow(() -> new CustomException(ErrorCode.ARTIST_NOT_FOUND));
+        User artist = getFollowArtist(followRequest, user);
 
         Follow follow = followRepository.findByUserAndFollowingArtist(user, artist)
                 .orElseThrow(() -> new CustomException(ErrorCode.FOLLOW_NOT_FOUND));
@@ -73,5 +70,16 @@ public class FollowServiceImpl implements FollowService {
         userRepository.save(artist);
 
         followRepository.delete(follow);
+    }
+
+    private User getFollowArtist(FollowRequest followRequest, User user) {
+        final Long artistId = followRequest.getArtistId();
+        if (artistId.equals(user.getId())) {
+            throw new CustomException(ErrorCode.CANNOT_FOLLOW_MYSELF);
+        }
+
+        User artist = userRepository.findById(followRequest.getArtistId())
+                .orElseThrow(() -> new CustomException(ErrorCode.ARTIST_NOT_FOUND));
+        return artist;
     }
 }

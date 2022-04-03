@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import * as selectors from '../../store/selectors';
 import BasicLayout from './../../components/layout/BasicLayout';
@@ -6,9 +6,16 @@ import { useParams } from '@reach/router';
 import { Axios } from './../../core/axios';
 import { navigate } from '@reach/router';
 import { detectCurrentProvider } from '../../core/ethereum';
-import { getSsafyNftContract2, getSaleNftContract } from '../../contracts';
+import {
+  getSsafyNftContract2,
+  getSaleNftContract,
+  getSsafyToeknContract,
+  SALE_NFT_CONTRACT_ADDRESS,
+} from '../../contracts';
 
+import { Modal } from 'react-bootstrap';
 import Spinner from 'react-bootstrap/Spinner';
+import Select from 'react-select';
 
 /**
  * NFT의 상세 정보를 보여주는 페이지 컴포넌트
@@ -24,7 +31,9 @@ const ItemDetail = function () {
   const [owner, setOwner] = useState(false);
   const [sale, setSale] = useState(false);
   const [saleId, setSaleId] = useState(null);
+  const [tokenPrice, setTokenPrice] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [modalShow, setModalShow] = React.useState(false);
 
   // 파라미터 id값 받아오기
   const nftId = useParams().nftId;
@@ -33,6 +42,74 @@ const ItemDetail = function () {
   const navigateTo = (link) => {
     navigate(link);
   };
+
+  const [charities] = useState([]);
+  // const [charityWallet, setCharityWallet] = useState('');
+  // const [msg, setMsg] = useState('');
+
+  const selectInfo = useRef();
+  const msgInfo = useRef();
+
+  const getCharity = () => {
+    Axios.get('/charities')
+      .then((data) => data)
+      .then(async (res) => {
+        const charityList = res.data.data.content;
+        console.log(charityList);
+        for (let i = 0; i < charityList.length; i++) {
+          const name = charityList[i].name;
+          const walletAddress = charityList[i].walletAddress;
+          console.log('😀😀');
+          const charity = { value: walletAddress, label: name };
+          // setCharities(charities.concat(charity));
+          charities.push(charity);
+        }
+      })
+      .catch((err) => {
+        console.log(`err: ${err}`);
+        // 만약 NFT생성은 완료 되었는데 서버전송에서 오류날 경우따로 DB저장 처리 가능한 함수 필요
+      });
+  };
+
+  // const handleSelect = (e) => {
+  //   console.log(e.value);
+  //   setCharityWallet(e.value);
+  //   console.log(charityWallet);
+  //   e.preventDefault();
+  // };
+
+  // const msgChange = (e) => {
+  //   console.log(e.target.value);
+  //   setMsg(e.target.value);
+  //   console.log(msg);
+  // };
+
+  function MyVerticallyCenteredModal(props) {
+    return (
+      <Modal {...props} aria-labelledby="contained-modal-title-vcenter" style={{ zIndex: '2000' }}>
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title-vcenter">Modal heading</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          기부할 자선단체를 선택해주세요.
+          <Select
+            options={charities}
+            // onChange={handleSelect}
+            ref={selectInfo}></Select>
+          <input
+            type="text"
+            // onChange={msgChange}
+            ref={msgInfo}
+          />
+        </Modal.Body>
+        <Modal.Footer>
+          <button className="btn-main lead mb-5 mr15" onClick={purchaseToken}>
+            완료
+          </button>
+        </Modal.Footer>
+      </Modal>
+    );
+  }
 
   const getSaleId = () => {
     if (!account) return;
@@ -73,6 +150,7 @@ const ItemDetail = function () {
   if (!currentProvider) return;
   const artNftContract = getSsafyNftContract2(currentProvider);
   const saleArtContract = getSaleNftContract(currentProvider);
+  const ssafyTokenContract = getSsafyToeknContract(currentProvider);
 
   // 스마트 컨트랙트에서 토큰 ID에 해당하는 tokenURI 가져오는 함수
   const getContractData = async () => {
@@ -86,7 +164,10 @@ const ItemDetail = function () {
       const price = await saleArtContract.methods.artTokenPrices(nftId).call();
       console.log(price);
       // 판매 중인 NFT라면
-      if (price != 0) setSale(true);
+      if (price != 0) {
+        setTokenPrice(price);
+        setSale(true);
+      }
     } catch (error) {
       console.log(error);
       alert('정보 가져오기 실패!');
@@ -131,10 +212,73 @@ const ItemDetail = function () {
       });
   };
 
+  // NFT 구매
+  const purchaseToken = async () => {
+    try {
+      if (!account) {
+        alert('지갑을 연결해주세요.');
+        return;
+      }
+      const charityWalletAddress = selectInfo.current.state.value.value;
+      const msgToArtist = msgInfo.current.value;
+      console.log(charityWalletAddress);
+      console.log(msgToArtist);
+
+      const accounts = await currentProvider.request({ method: 'eth_requestAccounts' });
+      const currentWallet = accounts[0];
+
+      console.log(ssafyTokenContract.methods);
+
+      // 구매 승인 (스마트 컨트랙트)
+      const response = await ssafyTokenContract.methods
+        .approve(SALE_NFT_CONTRACT_ADDRESS, tokenPrice)
+        .send({ from: currentWallet });
+      console.log(response);
+
+      // NFT 구매 (스마트 컨트랙트)
+      const response2 = await saleArtContract.methods
+        .purchaseArtToken(nftId, currentWallet, charityWalletAddress)
+        .send({ from: currentWallet })
+        .then(() => {
+          // NFT 구매 (백엔드)
+          savePurchase(charityWalletAddress, msgToArtist);
+        });
+      console.log(response2);
+
+      alert('NFT 구매가 완료되었습니다.');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const savePurchase = (address, msg) => {
+    Axios.post(
+      '/nfts/exchange/buy',
+      {
+        buyerId: account.id,
+        charityWalletAddress: address,
+        message: msg,
+        saleId: saleId,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   useEffect(async () => {
     getNFT();
     getContractData();
     getSaleId();
+    getCharity();
   }, []);
 
   useEffect(async () => {
@@ -147,9 +291,8 @@ const ItemDetail = function () {
   if (nft.owner) console.log(nft.owner.id);
   return (
     <BasicLayout>
-      {console.log(nft)}
-
-      {console.log(tokenUri)}
+      {/* {console.log(nft)}
+      {console.log(tokenUri)} */}
       <section className="container mt-4">
         <div className="row mt-md-5 pt-md-4">
           <div className="col-md-6 text-center">
@@ -230,7 +373,14 @@ const ItemDetail = function () {
                   <div className="d-flex flex-row mt-5">
                     {/* 판매버튼 */}
                     {!owner ? (
-                      <button className="btn-main lead mb-5 mr15">구매하기</button>
+                      <div>
+                        <div>{tokenPrice} SSF</div>
+                        <button
+                          className="btn-main lead mb-5 mr15"
+                          onClick={() => setModalShow(true)}>
+                          구매하기
+                        </button>
+                      </div>
                     ) : sale ? (
                       loading ? (
                         <div className="m-4 d-flex justify-content-center">
@@ -256,6 +406,7 @@ const ItemDetail = function () {
           </div>
         </div>
       </section>
+      <MyVerticallyCenteredModal show={modalShow} onHide={() => setModalShow(false)} />
     </BasicLayout>
   );
 };

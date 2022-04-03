@@ -4,6 +4,7 @@ import com.thirdlife.thirddonation.db.user.entity.Artist;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import lombok.Getter;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 장애인 등록 신청 DTO.
@@ -21,7 +22,7 @@ public class ArtistRegisterRequest {
     private String registerNumber;
 
     @NotBlank
-    private String filePath;
+    private MultipartFile imageFile;
 
     /**
      * 요청 값을 기반으로 Artist Entity 반환.
@@ -32,7 +33,6 @@ public class ArtistRegisterRequest {
         return Artist.builder()
                 .name(name)
                 .registerNumber(registerNumber)
-                .filePath(filePath)
                 .enabled(false)
                 .build();
     }

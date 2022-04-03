@@ -39,6 +39,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -204,7 +205,7 @@ public class UserController {
             @ApiResponse(code = 500, message = "서버 오류")
     })
     public ResponseEntity<BaseResponseBody> registerArtist(
-            @Valid @RequestBody ArtistRegisterRequest artistRegisterRequest) {
+            @Valid @ModelAttribute ArtistRegisterRequest artistRegisterRequest) {
 
         artistService.createArtist(artistRegisterRequest);
 

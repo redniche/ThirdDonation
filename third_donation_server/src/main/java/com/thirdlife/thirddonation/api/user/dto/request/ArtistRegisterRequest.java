@@ -4,11 +4,13 @@ import com.thirdlife.thirddonation.db.user.entity.Artist;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 장애인 등록 신청 DTO.
  */
+@Setter
 @Getter
 public class ArtistRegisterRequest {
 
@@ -21,7 +23,7 @@ public class ArtistRegisterRequest {
     @NotBlank
     private String registerNumber;
 
-    @NotBlank
+    @NotNull
     private MultipartFile imageFile;
 
     /**

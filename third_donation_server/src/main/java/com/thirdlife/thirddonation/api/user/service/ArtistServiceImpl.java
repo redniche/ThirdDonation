@@ -35,22 +35,30 @@ public class ArtistServiceImpl implements ArtistService {
      */
     @Override
     public void createArtist(ArtistRegisterRequest artistRegisterRequest) {
-        if (artistRepository.existsById(artistRegisterRequest.getUserId())) {
+        Long userId = artistRegisterRequest.getUserId();
+        if (artistRepository.existsById(userId)) {
             throw new CustomException(ErrorCode.ARTIST_DUPLICATE);
         }
         User user = userRepository.findById(artistRegisterRequest.getUserId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-        //엔티티 생성
-        Artist artist = artistRegisterRequest.toEntity();
-        artist.setUser(user);
 
-        MultipartFile multipartFile =  artistRegisterRequest.getImageFile();
+        MultipartFile multipartFile = artistRegisterRequest.getImageFile();
 
         //파일저장
         String fileName = multipartFile.getOriginalFilename();
         String savingFileName = FileManageUtil.saveFile(multipartFile, fileName);
+
+        //엔티티 생성
+
+        Artist artist = artistRepository.findById(userId).orElse(null);
+        if (artist == null) {
+            artist = artistRegisterRequest.toEntity();
+            artist.setUser(user);
+        } else {
+            artist.setName(artistRegisterRequest.getName());
+            artist.setRegisterNumber(artistRegisterRequest.getRegisterNumber());
+        }
         artist.setFilePath(savingFileName);
-        
         artistRepository.save(artist);
     }
 

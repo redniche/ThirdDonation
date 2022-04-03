@@ -149,7 +149,7 @@ public class UserController {
      * @param userProfileModifyRequest UserProfileModifyRequest
      * @return ResponseEntity of UserProfileResponse
      */
-    @PatchMapping("/profile}")
+    @PatchMapping("/profile")
     @ApiOperation(value = "회원 프로필 업데이트",
             notes = "<strong>회원 id</strong>를 통해 회원 프로필을 조회한다.")
     @ApiResponses({

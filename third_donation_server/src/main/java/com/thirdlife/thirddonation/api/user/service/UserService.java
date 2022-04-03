@@ -1,6 +1,5 @@
 package com.thirdlife.thirddonation.api.user.service;
 
-import com.thirdlife.thirddonation.api.user.dto.request.UserImgRequest;
 import com.thirdlife.thirddonation.api.user.dto.request.UserProfileModifyRequest;
 import com.thirdlife.thirddonation.api.user.dto.request.UserRequest;
 import com.thirdlife.thirddonation.db.log.document.DailyIncome;

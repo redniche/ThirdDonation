@@ -2,8 +2,8 @@ import { memo, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Clock from './Clock';
 import { navigate } from '@reach/router';
-import { Axios } from './../../core/axios';
-import api from '../../core/api';
+import apis, { Axios } from './../../core/axios';
+import ipfs_apis from '../../core/ipfs';
 
 const Outer = styled.div`
   display: flex;
@@ -66,9 +66,9 @@ const NftCard = ({
               <img
                 className="lazy"
                 src={
-                  tokenUri.author.imagePath
-                    ? tokenUri.author.imagePath
-                    : api.baseUrl + '/uploads/기본프로필이미지.png'
+                  nft.artist.imagePath
+                    ? process.env.PUBLIC_URL + `${apis.file}/${nft.artist.imagePath}`
+                    : process.env.PUBLIC_URL + '/img/기본프로필이미지.png'
                 }
                 alt=""
               />
@@ -78,12 +78,21 @@ const NftCard = ({
           <div className="nft__item_wrap" style={{ height: `${height}px` }}>
             <Outer>
               <span>
-                <img
-                  onLoad={onFileLoad}
-                  src={tokenUri.image}
-                  className="lazy nft__item_preview"
-                  alt=""
-                />
+                {nft.fileType == 'video' ? (
+                  <video
+                    onLoad={onFileLoad}
+                    src={`${ipfs_apis.https_public}/${tokenUri.hash}`}
+                    className="lazy nft__item_preview"
+                    alt=""
+                  />
+                ) : (
+                  <img
+                    onLoad={onFileLoad}
+                    src={`${ipfs_apis.https_public}/${tokenUri.hash}`}
+                    className="lazy nft__item_preview"
+                    alt=""
+                  />
+                )}
               </span>
             </Outer>
           </div>
@@ -94,30 +103,28 @@ const NftCard = ({
           )}
           <div className="nft__item_info">
             <span onClick={() => navigateTo(`ItemDetail/${nft.id}`)}>
-              <h4>{nft.title}</h4>
+              <h4>{nft.name}</h4>
             </span>
-            {nft.status === 'has_offers' ? (
-              <div className="has_offers">
-                <span className="through">{nft.priceover}</span> {nft.price} ETH
-              </div>
-            ) : (
-              <div className="nft__item_price">
-                {nft.price} ETH
-                {nft.status === 'on_auction' && (
-                  <span>
-                    {nft.bid}/{nft.max_bid}
+            {nft.price && (
+              <>
+                <div className="nft__item_price">
+                  {nft.price} ETH
+                  {nft.status === 'on_auction' && (
+                    <span>
+                      {nft.bid}/{nft.max_bid}
+                    </span>
+                  )}
+                </div>
+                <div className="nft__item_action">
+                  <span onClick={() => navigateTo(`${nft.bid_link}/${nft.id}`)}>
+                    {nft.status === 'on_auction' ? '경매 입찰' : '바로 구매'}
                   </span>
-                )}
-              </div>
+                </div>
+              </>
             )}
-            <div className="nft__item_action">
-              <span onClick={() => navigateTo(`${nft.bid_link}/${nft.id}`)}>
-                {nft.status === 'on_auction' ? '경매 입찰' : '바로 구매'}
-              </span>
-            </div>
             <div className="nft__item_like">
               <i className="fa fa-heart"></i>
-              <span>{nft.likes}</span>
+              <span>{nft.wishCount}</span>
             </div>
           </div>
         </div>

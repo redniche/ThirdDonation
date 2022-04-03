@@ -67,24 +67,30 @@ const Mint = () => {
     const nowWalletAddress = accounts[0];
     const reader = new window.FileReader();
     reader.readAsArrayBuffer(file);
-    reader.onload = async (e) => {
+    reader.onload = (e) => {
       const fileResult = e.target.result;
-      await getHash(Buffer(fileResult))
+      getHash(Buffer(fileResult))
         .then(({ fileHash, tokenUriHash }) => {
           console.log(fileHash, tokenUriHash);
           const tokenUri = `${ipfs_apis.https_public}/${tokenUriHash}`;
           return { fileHash, tokenUri };
         })
-        .then(async ({ fileHash, tokenUri }) => {
+        .then(({ fileHash, tokenUri }) => {
           // mint함수 부르기
           if (fileHash && tokenUri) {
             //fileHash랑 tokenUri가 null이 아니어야 작동.
-            if (await sendMintTx(fileHash, tokenUri)) {
-              alert('NFT 생성에 성공했습니다!');
-              navigate('/');
-            } else {
-              alert('NFT 생성에 실패했습니다');
-            }
+            sendMintTx(fileHash, tokenUri)
+              .then((result) => {
+                if (result) {
+                  alert('NFT 생성에 성공했습니다!');
+                  navigate('/');
+                } else {
+                  alert('NFT 생성에 실패했습니다');
+                }
+              })
+              .catch(() => {
+                alert('NFT 생성에 실패했습니다');
+              });
           } else {
             alert('NFT 생성에 실패했습니다');
           }

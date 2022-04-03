@@ -1,7 +1,7 @@
 import { memo, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import ProfileLayout from '../../components/layout/ProfileLayout';
-import { fetchAuthorList } from '../../store/actions/thunks';
+import { fetchAuthor } from '../../store/actions/thunks';
 import Slider from '../../components/nfts/chart/Slider';
 
 /**
@@ -14,7 +14,7 @@ const ChartProfile = ({ authorId }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchAuthorList(authorId));
+    dispatch(fetchAuthor(authorId));
   }, [dispatch, authorId]);
 
   // 컴포넌트 레이아웃

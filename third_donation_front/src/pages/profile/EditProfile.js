@@ -2,21 +2,21 @@ import { memo, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Form, Formik, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import auth, { authorUrl } from '../../core/auth';
-import request from '../../core/auth/request';
+// JWT할거면 참고
+// import auth, { authorUrl } from '../../core/auth';
+// import request from '../../core/auth/request';
 import { navigate } from '@reach/router';
 import api from '../../core/api';
-import { fetchAuthorList } from '../../store/actions/thunks';
+import { fetchAuthor } from '../../store/actions/thunks';
 import * as selectors from '../../store/selectors';
-import axios from 'axios';
 import ProfileLayout from './../../components/layout/ProfileLayout';
+import apis, { Axios } from '../../core/axios';
 
 /**
  * Yup 패키지로 유효성 체크
  */
 const validationSchema = Yup.object().shape({
-  username: Yup.lazy(() => Yup.string().required('Username is required')),
-  wallet: Yup.lazy(() => Yup.string().required('Wallet is required')),
+  userName: Yup.lazy(() => Yup.string().required('유저 이름이 필요합니다.')),
 });
 
 /**
@@ -25,15 +25,13 @@ const validationSchema = Yup.object().shape({
  * @returns
  */
 const EditProfile = ({ authorId }) => {
-  const jwt = auth.getToken();
+  // const jwt = auth.getToken();
   const authorsState = useSelector(selectors.authorsState);
-  const author = authorsState.data ? authorsState.data[0] : null;
+  const author = authorsState.data ? authorsState.data : null;
 
   const initialValues = {
-    username: author ? author.username : '',
-    about: author ? author.about : '',
-    social: author ? author.social : '',
-    wallet: author ? author.wallet : '',
+    userName: author ? author.username : '',
+    description: author ? author.description : '',
   };
 
   const initialProfilePicture = {
@@ -55,37 +53,37 @@ const EditProfile = ({ authorId }) => {
    * @param {*}} data
    */
   const handleSubmitForm = async (data) => {
-    const requestURL = authorUrl(authorId);
-
-    await request(requestURL, { method: 'PUT', body: data })
+    data.id = parseInt(authorId);
+    console.log(data);
+    await Axios.patch(apis.users.profile, data)
       .then((response) => {
         console.log(response);
-        redirectUser(`/Author/${authorId}`);
+        redirectUser(`/editProfile/${authorId}`);
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
-  const handleSubmitProfilePicture = async (file, field) => {
-    var formData = new FormData();
+  const handleSubmitProfilePicture = async (file, userId) => {
+    const formData = new FormData();
+    formData.append('img', file);
 
-    formData.append('files', file);
-    formData.append('ref', 'author'); // link the image to a content type
-    formData.append('refId', authorId); // link the image to a specific entry
-    formData.append('field', field); // link the image to a specific field
-
-    await axios({
-      method: 'post',
-      url: `${api.baseUrl}/upload`,
-      data: formData,
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-        'Content-Type': 'multipart/form-data',
-      },
+    // await Axios({
+    //   method: 'post',
+    //   url: `${apis.users.img}`,
+    //   data: formData,
+    //   headers: {
+    //     Authorization: `Bearer ${jwt}`,
+    //     'Content-Type': 'multipart/form-data',
+    //   },
+    // })
+    await Axios.post(`${apis.users.img}`, formData, {
+      'Content-Type': 'multipart/form-data',
+      params: { userId: userId },
     })
       .then((res) => {
-        redirectUser(`/Author/${authorId}`);
+        redirectUser(`/editProfile/${authorId}`);
         console.log(res);
       })
       .catch((err) => {
@@ -93,21 +91,30 @@ const EditProfile = ({ authorId }) => {
       });
   };
 
-  const [profileImage, setProfileImage] = useState();
+  const [profileImageFile, setProfileImageFile] = useState();
   const [profileImageTemp, setProfileImageTemp] = useState();
 
   const handleProfilePicture = (event) => {
-    let file = event.target.files[0];
-    setProfileImage(file);
+    let tempFile = event.target.files[0];
+    setProfileImageFile(tempFile);
+    if (!tempFile) return;
+
+    let maxSize = 3 * 1024 * 1024;
+    if (maxSize <= tempFile.size) {
+      alert('프로필 이미지 용량은 3MB 이내로 등록 가능합니다.');
+      return;
+    }
+
+    // URL.revokeObjectURL(file);
     let reader = new FileReader();
     reader.onloadend = () => {
       setProfileImageTemp(reader.result);
     };
-    reader.readAsDataURL(file);
+    reader.readAsDataURL(tempFile);
   };
 
   useEffect(() => {
-    dispatch(fetchAuthorList(authorId));
+    dispatch(fetchAuthor(authorId));
   }, [dispatch, authorId]);
 
   return (
@@ -153,7 +160,6 @@ const EditProfile = ({ authorId }) => {
                             </span>
                           </li>
                         </ul>
-
                         <div className="de_tab_content">
                           <div className="tab-1">
                             <div
@@ -168,34 +174,23 @@ const EditProfile = ({ authorId }) => {
                                   <h5>유저명</h5>
                                   <Field
                                     type="text"
-                                    name="username"
-                                    id="username"
+                                    name="userName"
+                                    id="userName"
                                     className="form-control"
                                     placeholder="유저명(자신의 별명)을 입력합니다."
                                   />
-                                  <ErrorMessage name="username" component="div" />
+                                  <ErrorMessage name="userName" component="div" />
                                   <div className="spacer-20"></div>
 
                                   <h5>설명</h5>
                                   <Field
                                     component="textarea"
-                                    name="about"
-                                    id="about"
+                                    name="description"
+                                    id="description"
                                     className="form-control"
                                     placeholder="자신을 마음껏 소개 해보세요!"
                                   />
-                                  <ErrorMessage name="about" component="div" />
-                                  <div className="spacer-20"></div>
-
-                                  <h5>소셜태그</h5>
-                                  <Field
-                                    type="text"
-                                    name="social"
-                                    id="social"
-                                    className="form-control"
-                                    placeholder="인스타그램, 트위터 등에서 사용하는 태그를 입력하세요!"
-                                  />
-                                  <ErrorMessage name="social" component="div" />
+                                  <ErrorMessage name="description" component="div" />
                                   <div className="spacer-20"></div>
                                 </div>
                               </div>
@@ -214,14 +209,13 @@ const EditProfile = ({ authorId }) => {
                   initialValues={initialProfilePicture}
                   onSubmit={async (values, { setSubmitting, resetForm }) => {
                     setSubmitting(true);
-                    await handleSubmitProfilePicture(profileImage, 'avatar');
+                    await handleSubmitProfilePicture(profileImageFile, authorId);
                     setSubmitting(false);
                     resetForm();
                   }}>
-                  {/* {({ values, isSubmitting, isValid }) => { */}
-                  {() => {
+                  {({ handleSubmit }) => {
                     return (
-                      <Form>
+                      <Form onSubmit={handleSubmit}>
                         <h5>
                           소개용 이미지{' '}
                           <i
@@ -234,11 +228,12 @@ const EditProfile = ({ authorId }) => {
                         </h5>
                         <img
                           src={
-                            author && author.avatar && author.avatar.url
+                            profileImageTemp
                               ? profileImageTemp
-                                ? profileImageTemp
-                                : api.baseUrl + author.avatar.url
-                              : api.baseUrl + '/mock_data/uploads/예술가1.jpg'
+                              : author &&
+                                (author.imagePath
+                                  ? author.imagePath
+                                  : process.env.PUBLIC_URL + '/img/기본프로필이미지.png')
                           }
                           id="click_profile_img"
                           className="d-profile-img-edit img-fluid"
@@ -249,9 +244,8 @@ const EditProfile = ({ authorId }) => {
                           name="profile_image"
                           type="file"
                           id="upload_profile_img"
-                          onChange={(event) => {
-                            handleProfilePicture(event);
-                          }}
+                          accept=".png,.jpg,.jpeg"
+                          onChange={handleProfilePicture}
                         />
                         <input type="submit" className="btn-main mt-3" value="프로필 이미지 저장" />
                       </Form>

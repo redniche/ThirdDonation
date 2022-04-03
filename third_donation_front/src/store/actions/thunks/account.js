@@ -1,10 +1,10 @@
-import { Axios, Canceler, setAxiosHeader } from '../../../core/axios';
+import apis, { Axios, Canceler, setAxiosHeader } from '../../../core/axios';
 import * as actions from '..';
 import { GetWeb3 } from '../../../contracts';
 import auth from '../../../core/auth';
 
 export const fetchAccount = (walletAddress) => async (dispatch) => {
-  var web3 = GetWeb3();
+  const web3 = GetWeb3();
   dispatch(actions.getAccount.request(Canceler.cancel));
   try {
     web3.eth.personal.sign(web3.utils.sha3('hello world'), walletAddress, (err, result) => {
@@ -15,7 +15,7 @@ export const fetchAccount = (walletAddress) => async (dispatch) => {
         })
           .then(({ data: { accessToken, data } }) => {
             auth.setToken(accessToken);
-
+            data.imagePath = apis.file + data.imagePath;
             setAxiosHeader(auth.getToken());
             dispatch(actions.getAccount.success(data));
           })

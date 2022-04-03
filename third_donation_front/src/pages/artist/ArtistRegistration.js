@@ -7,7 +7,7 @@ import auth, { authorUrl } from '../../core/auth';
 import request from '../../core/auth/request';
 import api from '../../core/api';
 import BasicLayout from '../../components/layout/BasicLayout';
-import { fetchAuthorList } from '../../store/actions/thunks';
+import { fetchAuthor } from '../../store/actions/thunks';
 import * as selectors from '../../store/selectors';
 import axios from 'axios';
 // import { Axios } from '../../core/axios';
@@ -140,7 +140,7 @@ const ArtistRegistration = ({ authorId }) => {
   // 리액트 컴포넌트가 렌더링될 때마다 특정 작업을 실행할 수 있도록 하는 Hook
   // authorId(특정값)가 바뀔때 실행된다.
   useEffect(() => {
-    dispatch(fetchAuthorList(authorId));
+    dispatch(fetchAuthor(authorId));
   }, [dispatch, authorId]);
 
   return (

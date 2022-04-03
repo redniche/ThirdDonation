@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import ProfileLayout from '../../components/layout/ProfileLayout';
 import NftList from '../../components/nfts/NftList';
 import * as selectors from '../../store/selectors';
-import { fetchAuthorList } from '../../store/actions/thunks';
+import { fetchAuthor } from '../../store/actions/thunks';
 import api from '../../core/api';
 import FollowerModal from '../../components/accounts/FollowerModal';
 import { clearFilter, clearNfts } from '../../store/actions';
@@ -85,7 +85,7 @@ const Profile = ({ authorId }) => {
   useEffect(() => {
     dispatch(clearFilter());
     dispatch(clearNfts());
-    dispatch(fetchAuthorList(authorId));
+    dispatch(fetchAuthor(authorId));
   }, [dispatch, authorId]);
   // 컴포넌트 레이아웃. 프로필당 배너는 구현 안함.
   return (
@@ -108,23 +108,15 @@ const Profile = ({ authorId }) => {
                 <div className="d_profile de-flex">
                   <div className="de-flex-col">
                     <div className="profile_avatar">
-                      {author.imagePath ? (
-                        <img
-                          src={author.imagePath}
-                          alt=""
-                          style={{
-                            backgroundImage: `url(${api.baseUrl + '/uploads/테스트배너1.jpg'})`,
-                          }}
-                        />
-                      ) : (
-                        <img
-                          src={api.baseUrl + '/uploads/기본프로필이미지.png'}
-                          alt=""
-                          style={{
-                            backgroundImage: `url(${api.baseUrl + '/uploads/테스트배너1.jpg'})`,
-                          }}
-                        />
-                      )}
+                      <img
+                        src={
+                          author.imagePath
+                            ? author.imagePath
+                            : process.env.PUBLIC_URL + '/img/기본프로필이미지.png'
+                        }
+                        alt="프로필"
+                        style={{ width: '150px', height: '150px' }}
+                      />
                       <i className="fa fa-check"></i>
                       <div className="profile_name">
                         <h4>

@@ -5,6 +5,7 @@ import Wallet from '../accounts/Wallet';
 import { clearAccount } from '../../store/actions';
 import * as selectors from '../../store/selectors';
 import auth from '../../core/auth';
+import { Link } from '@reach/router';
 
 const ProfilePopup = () => {
   const dispatch = useDispatch();
@@ -17,13 +18,6 @@ const ProfilePopup = () => {
     dispatch(clearAccount());
     auth.clearToken();
   };
-
-  function Profile() {
-    window.location.href = `/profile/${account.id}`;
-  }
-  function EditProfile() {
-    window.location.href = `/editProfile/${account.id}`;
-  }
 
   return (
     <div
@@ -53,14 +47,18 @@ const ProfilePopup = () => {
           <div className="d-line"></div>
 
           <ul className="de-submenu-profile">
-            <li onClick={() => Profile()}>
+            <li>
               <span>
-                <i className="fa fa-user"></i> 나의 프로필
+                <Link to={'/profile/' + account.id}>
+                  <i className="fa fa-user"></i>나의 프로필
+                </Link>
               </span>
             </li>
-            <li onClick={() => EditProfile()}>
+            <li>
               <span>
-                <i className="fa fa-pencil"></i> 프로필 수정하기
+                <Link to={'/editProfile/' + account.id}>
+                  <i className="fa fa-pencil"></i>프로필 수정하기
+                </Link>
               </span>
             </li>
             <li onClick={() => onLogout()}>

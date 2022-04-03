@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface NotificationService {
 
-    List<NotificationInfoDto> getList(Long userId);
+    List<NotificationInfoDto> getList();
 
-    void setDisabled(Long userId);
+    void setDisabled();
 }

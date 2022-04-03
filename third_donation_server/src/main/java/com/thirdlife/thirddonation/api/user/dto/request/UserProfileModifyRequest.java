@@ -11,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Getter
 public class UserProfileModifyRequest {
 
-    @NotBlank
+    @Deprecated
     @ApiModelProperty(name = "유저아이디", example = "아이디를 입력하세요")
     private Long id;
     

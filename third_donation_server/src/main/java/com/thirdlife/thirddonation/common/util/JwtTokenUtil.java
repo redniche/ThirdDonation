@@ -77,12 +77,12 @@ public class JwtTokenUtil {
      * (이를 쓰지 않아도 기본적으로 만료시간은 존재함.)
      *
      * @param expires Instant
-     * @param userId  String
+     * @param walletAddress  String
      * @return String
      */
-    public static String getToken(Instant expires, String userId) {
+    public static String getToken(Instant expires, String walletAddress) {
         return JWT.create()
-                .withSubject(userId)
+                .withSubject(walletAddress)
                 .withExpiresAt(Date.from(expires))
                 .withIssuer(ISSUER)
                 .withIssuedAt(

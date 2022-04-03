@@ -36,6 +36,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -54,6 +55,7 @@ import org.web3j.crypto.Keys;
 import org.web3j.crypto.Sign;
 import org.web3j.crypto.Sign.SignatureData;
 import org.web3j.utils.Numeric;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * 회원 관련의 요청을 처리하는 컨트롤러입니다.
@@ -183,10 +185,10 @@ public class UserController {
             @ApiResponse(code = 404, message = "사용자 없음"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    public ResponseEntity<BaseResponseBody> img(@ApiParam(value = "id") @RequestParam Long userId,
+    public ResponseEntity<BaseResponseBody> img(@Deprecated @ApiParam(value = "id") @RequestParam Long userId,
                                                 @RequestPart("img") MultipartFile img) {
 
-        userService.uploadProfileImage(userId, img);
+        userService.uploadProfileImage(img);
 
         return ResponseEntity.status(200)
                 .body(BaseResponseBody.builder().statusCode(200).message("Success").build());
@@ -268,13 +270,6 @@ public class UserController {
     public ResponseEntity<BaseResponseBody> followArtist(
             @Valid @RequestBody FollowRequest followRequest) {
 
-        final Long userId = followRequest.getUserId();
-        final Long artistId = followRequest.getArtistId();
-
-        if (userId.equals(artistId)) {
-            throw new CustomException(ErrorCode.CANNOT_FOLLOW_MYSELF);
-        }
-
         followService.createFollow(followRequest);
 
         return ResponseEntity.status(200)
@@ -296,13 +291,6 @@ public class UserController {
     public ResponseEntity<BaseResponseBody> unfollowArtist(
             @Valid @RequestBody FollowRequest followRequest) {
 
-        final Long userId = followRequest.getUserId();
-        final Long artistId = followRequest.getArtistId();
-
-        if (userId.equals(artistId)) {
-            throw new CustomException(ErrorCode.CANNOT_FOLLOW_MYSELF);
-        }
-
         followService.deleteFollow(followRequest);
 
         return ResponseEntity.status(200)
@@ -319,8 +307,7 @@ public class UserController {
     public ResponseEntity<UserDailyIncomeResponse> getDailyIncome(
             @Positive @PathVariable @ApiParam(value = "조회할 회원 id를 입력받음", required = true)
                     Long userId) {
-
-        List<DailyIncome> incomeList = userService.getDailyIncome(userId);
+        List<DailyIncome> incomeList = userService.getDailyIncome();
 
         return ResponseEntity.status(200)
                 .body(UserDailyIncomeResponse.builder().statusCode(200).message("Success")

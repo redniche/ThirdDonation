@@ -12,17 +12,15 @@ import com.thirdlife.thirddonation.db.user.entity.User;
 import com.thirdlife.thirddonation.db.user.entity.UserImg;
 import com.thirdlife.thirddonation.db.user.repository.UserRepository;
 import java.io.File;
-import java.io.IOException;
 import java.security.SignatureException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.commons.codec.binary.Hex;
-import org.apache.commons.io.FilenameUtils;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -96,8 +94,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public void updateProfile(UserProfileModifyRequest userProfileModifyRequest) {
-        User user = userRepository.findById(userProfileModifyRequest.getId())
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        User user = getAuthUser();
 
         user.setUsername(userProfileModifyRequest.getUserName());
         user.setDescription(userProfileModifyRequest.getDescription());
@@ -105,10 +102,25 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
+    /**
+     * 현재 jwt 로 접속된 유저 엔티티를 반환합니다.
+     *
+     * @return User
+     */
     @Override
-    public String uploadProfileImage(Long userId, MultipartFile multipartFile) {
-        final User user = userRepository.findById(userId)
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+    public User getAuthUser() {
+        User user;
+        try {
+            user = (User) SecurityContextHolder.getContext().getAuthentication().getDetails();
+        } catch (Exception ex) {
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+        }
+        return user;
+    }
+
+    @Override
+    public void uploadProfileImage(MultipartFile multipartFile) {
+        User user = getAuthUser();
 
         String fileName = multipartFile.getOriginalFilename();
         String savingFileName = FileManageUtil.saveFile(multipartFile, fileName);
@@ -142,7 +154,6 @@ public class UserServiceImpl implements UserService {
         user.changeUserImg(img);
         userRepository.save(user);
 
-        return savingFileName;
     }
 
     /**
@@ -159,21 +170,21 @@ public class UserServiceImpl implements UserService {
     /**
      * 최근 1주일간 사용자의 수익을 반환하는 메서드.
      *
-     * @param userId Long
      * @return List of DailyIncome
      */
     @Override
-    public List<DailyIncome> getDailyIncome(Long userId) {
+    public List<DailyIncome> getDailyIncome() {
+        User user = getAuthUser();
         LocalDate yesterday = LocalDate.now().minusDays(1);
 
-        return dailyIncomeRepository.findByUserIdAndTradingDateBetween(userId,
+        return dailyIncomeRepository.findByUserIdAndTradingDateBetween(user.getId(),
                 yesterday.minusDays(7), yesterday);
     }
 
     /**
      * 호율적인 검사.
      *
-     * @param address String
+     * @param address   String
      * @param signature String
      * @return Boolean
      * @throws SignatureException 인증오류

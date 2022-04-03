@@ -3,6 +3,8 @@ package com.thirdlife.thirddonation.common.auth;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.thirdlife.thirddonation.api.user.service.UserService;
+import com.thirdlife.thirddonation.common.exception.CustomException;
+import com.thirdlife.thirddonation.common.exception.ErrorCode;
 import com.thirdlife.thirddonation.common.util.JwtTokenUtil;
 import com.thirdlife.thirddonation.common.util.ResponseBodyWriteUtil;
 import com.thirdlife.thirddonation.db.user.entity.User;
@@ -85,9 +87,11 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
                     // 비밀번호를 사용하지 않으므로 user.getAuthorities() 정보는 가져오지 않음.
                     UsernamePasswordAuthenticationToken jwtAuthentication =
                             new UsernamePasswordAuthenticationToken(walletAddress,
-                                    null);
+                                    null, user.getAuthorities());
                     jwtAuthentication.setDetails(user);
                     return jwtAuthentication;
+                } else {
+                    throw new CustomException(ErrorCode.USER_NOT_FOUND);
                 }
             }
             return null;

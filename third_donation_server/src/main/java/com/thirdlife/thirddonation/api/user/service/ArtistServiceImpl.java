@@ -27,6 +27,7 @@ public class ArtistServiceImpl implements ArtistService {
 
     private final ArtistRepository artistRepository;
     private final UserRepository userRepository;
+    private final UserService userService;
 
     /**
      * 장애인 예술가 신청 요청 등록.
@@ -35,9 +36,7 @@ public class ArtistServiceImpl implements ArtistService {
      */
     @Override
     public void createArtist(ArtistRegisterRequest artistRegisterRequest) {
-        Long userId = artistRegisterRequest.getUserId();
-        User user = userRepository.findById(artistRegisterRequest.getUserId())
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        final User user = userService.getAuthUser();
 
         MultipartFile multipartFile = artistRegisterRequest.getImageFile();
 
@@ -47,7 +46,7 @@ public class ArtistServiceImpl implements ArtistService {
 
         //엔티티 생성
 
-        Artist artist = artistRepository.findById(userId).orElse(null);
+        Artist artist = artistRepository.findById(user.getId()).orElse(null);
         if (artist == null) {
             artist = artistRegisterRequest.toEntity();
             artist.setUser(user);
@@ -60,7 +59,10 @@ public class ArtistServiceImpl implements ArtistService {
     }
 
     /**
-     * 장애인 예술가 신청 요청 등록.
+     * 장애인 예술가 조회.
+     *
+     * @param pageable Pageable
+     * @return Page
      */
     @Override
     public Page<ArtistInfoDto> getArtistList(Pageable pageable) {
@@ -68,7 +70,9 @@ public class ArtistServiceImpl implements ArtistService {
     }
 
     /**
-     * 장애인 예술가 신청 요청 등록.
+     * 장애인 예술가 등록 토글.
+     *
+     * @param userId Long
      */
     @Override
     public void enableArtist(Long userId) {

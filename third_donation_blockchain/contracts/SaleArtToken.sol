@@ -89,6 +89,10 @@ contract SaleArtToken {
         }
     }
 
+    function getArtTokenPrice(uint256 _artTokenId) view public returns (uint256){
+        return artTokenPrices[_artTokenId];
+    }
+
     
     function getContractOwner() view public returns (address){
         return mintArtTokenAddress.owner();

@@ -24,7 +24,7 @@ import Recommended from './pages/nfts/Recommended';
 import Notice from './pages/board/Board';
 
 import NoticeView from './pages/board/BoardView';
-import NoticeWrite from './pages/board/BoardNew';
+import NoticeWrite from './pages/board/BoardWrite';
 
 const GlobalStyles = createGlobalStyle`
   :root {

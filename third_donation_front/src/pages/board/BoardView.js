@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import PanelLayout from '../../components/layout/PanelLayout';
-import '../../components/board/Board.css';
 import { useParams } from '@reach/router';
 import { useSelector } from 'react-redux';
 import * as selectors from '../../store/selectors';
@@ -54,57 +53,66 @@ const BoardView = () => {
       });
   }
 
+  const thStyle = {
+    width: '20%',
+    padding: '30px 0',
+  };
+
   useEffect(() => {
     getArticle();
   }, []);
 
   return (
-    <PanelLayout title="상세정보">
+    <PanelLayout title="공지사항">
       <section className="container">
-        <div className="post-view-wrapper">
-          {article ? (
-            <div>
-              <div className="post-view-row">
-                <label>제목</label>
-                <label>{article.title}</label>
-              </div>
-              <div className="post-view-row">
-                <label>작성일</label>
-                {/* <label>{article.dateCreated.substr(0, 10)}</label> */}
-                <label>{article.dateCreated}</label>
-              </div>
-              <div className="post-view-row">
-                <label>수정일</label>
-                {article.dateLastUpdated != null && <label>{article.dateLastUpdated}</label>}
-                {/* <label>{article.dateLastUpdated.substr(0, 10)}</label> */}
-              </div>
-              <div className="post-view-row">
-                <label>조회수</label>
-                <label>{article.views}</label>
-              </div>
-              <section className="containerWrap">
-                {article.contentText && (
-                  <Viewer
-                    plugins={[[codeSyntaxHighlight, { highlighter: Prism }]]}
-                    initialValue={article.contentText}
-                    // initialValue="가나다라마바사"
-                  />
-                )}
-              </section>
-            </div>
-          ) : (
-            '해당 게시글을 찾을 수 없습니다.'
-          )}
-          <Link to="/notice">
-            <button className="post-view-go-list-btn">목록으로 돌아가기</button>
-          </Link>
-
-          {/* 관리자인지 확인하는 구문 */}
-          {wallet != null && wallet.authority == 'ADMIN' && (
-            <button className="post-view-delete-btn" onClick={() => Delete()}>
-              삭제하기
-            </button>
-          )}
+        <div className="row">
+          <div className="col-lg-12">
+            {article ? (
+              <>
+                <table className="table de-table table-rank">
+                  <tbody>
+                    <tr>
+                      <th style={thStyle}>제목</th>
+                      <td>{article.title}</td>
+                    </tr>
+                    <tr>
+                      <th style={thStyle}>작성자</th>
+                      <td>{article.user.username}</td>
+                    </tr>
+                    <tr>
+                      <th style={thStyle}>작성일</th>
+                      <td>{article.dateCreated.substr(0, 10)}</td>
+                    </tr>
+                    <tr>
+                      <td colSpan={2}>
+                        <section className="containerWrap">
+                          {article.contentText && (
+                            <Viewer
+                              plugins={[[codeSyntaxHighlight, { highlighter: Prism }]]}
+                              initialValue={article.contentText}
+                              // initialValue="가나다라마바사"
+                            />
+                          )}
+                        </section>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div className="d-flex justify-content-end mt-3">
+                  {wallet != null && wallet.authority == 'ADMIN' && (
+                    <button className="btn-grey" onClick={() => Delete()}>
+                      삭제
+                    </button>
+                  )}
+                  <Link to="/notice">
+                    <button className="ms-3 btn-main">목록</button>
+                  </Link>
+                </div>
+              </>
+            ) : (
+              '해당 게시글을 찾을 수 없습니다.'
+            )}
+          </div>
         </div>
       </section>
     </PanelLayout>

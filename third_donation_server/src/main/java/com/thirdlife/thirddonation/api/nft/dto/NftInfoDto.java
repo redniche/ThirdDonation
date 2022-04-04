@@ -43,7 +43,7 @@ public class NftInfoDto {
                 .isMintSold(nft.getIsMintSold())
                 .wishCount(nft.getWishCount())
                 .name(nft.getName())
-                .name(nft.getFileType())
+                .fileType(nft.getFileType())
                 .build();
     }
 }

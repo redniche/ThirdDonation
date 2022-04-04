@@ -17,11 +17,11 @@ import { detectCurrentProvider } from '../../core/ethereum';
  * 관리자가 예술가 등록 요청을 승인할 수 있는 페이지 컴포넌트
  * @returns
  */
-const GrantArtist = () => {
+const GrantArtist = ({ navigate }) => {
   const [list, setDataList] = useState([]);
 
   function getList() {
-    Axios.get('/charities/all')
+    Axios.get('/charities/admin')
       .then((data) => data)
       .then(async (res) => {
         setDataList(res.data.data.content);
@@ -69,7 +69,8 @@ const GrantArtist = () => {
       },
     )
       .then(async () => {
-        window.location.href = '/admin/grantCharity';
+        navigate('/admin/grantCharity');
+        // window.location.href = '/admin/grantCharity';
       })
       .catch((err) => {
         console.log('에러 발생' + err);
@@ -88,7 +89,8 @@ const GrantArtist = () => {
       },
     )
       .then(async () => {
-        window.location.href = '/admin/grantCharity';
+        navigate('/admin/grantCharity');
+        // window.location.href = '/admin/grantCharity';
       })
       .catch((err) => {
         console.log('에러 발생' + err);

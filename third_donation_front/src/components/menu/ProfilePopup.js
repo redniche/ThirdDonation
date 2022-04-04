@@ -14,6 +14,7 @@ const ProfilePopup = () => {
   const refProfilePopup = useOnclickOutside(() => closeProfilePopup());
 
   const { data: account } = useSelector(selectors.accountState);
+
   const onLogout = () => {
     dispatch(clearAccount());
     auth.clearToken();

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Table } from 'react-bootstrap';
 import PanelLayout from '../../components/layout/PanelLayout';
 import { Axios } from '../../core/axios';
-import { getSsafyNftContract2 } from '../../contracts';
+import { getSsafyNftContract } from '../../contracts';
 import { detectCurrentProvider } from '../../core/ethereum';
 import Pagination from '../../components/paging/Pagination';
 
@@ -41,8 +41,7 @@ const GrantArtist = () => {
       const accounts = await currentProvider.request({ method: 'eth_requestAccounts' });
       const currentWallet = accounts[0];
 
-      const artNftContract = getSsafyNftContract2(currentProvider);
-      // console.log(artNftContract.methods);
+      const artNftContract = getSsafyNftContract(currentProvider);
 
       await artNftContract.methods
         .addCharityAddress(walletAddress)

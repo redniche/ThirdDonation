@@ -1,9 +1,8 @@
 import { memo, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import Clock from './Clock';
+import { Axios } from './../../core/axios';
 import { navigate } from '@reach/router';
 import api from '../../core/api';
-import { IpfsAxios } from '../../core/ipfs';
 
 const Outer = styled.div`
   display: flex;
@@ -14,17 +13,14 @@ const Outer = styled.div`
   border-radius: 8px;
 `;
 
-//react functional component
 /**
- *  NFT 카드 정보들을 입력받아 NFT카드를 표시하는 컴포넌트
- * @param {*} datas {nft, claseName, clockTop, height, onFileLoad}
- * @returns NftCard
+ * 컬렉션을 표시하기 위한 컴포넌트
+ * @param {*} param0
+ * @returns
  */
-const NftCard = ({
+const NftsItem = ({
   nft,
   className = 'd-item col-lg-3 col-md-6 col-sm-6 col-xs-12 mb-4',
-  // preview = false,
-  clockTop = true,
   height,
   onFileLoad,
 }) => {
@@ -36,16 +32,16 @@ const NftCard = ({
   };
   useEffect(async () => {
     try {
-      const { data: tokenUriJson } = await IpfsAxios.get(nft.tokenUri, { params: [] });
+      const { data: tokenUriJson } = await Axios.get(nft.nft.tokenUri, { params: [] });
       setTokenUri(tokenUriJson);
+      console.log(tokenUriJson);
     } catch (err) {
       console.log(err);
     }
-  }, []);
-
+  }, [nft]);
   return (
     tokenUri && (
-      <div className={className} onClick={() => navigateTo(`/ItemDetail/${nft.id}`)}>
+      <div className={className} onClick={() => navigateTo(`/ItemDetail/${nft.nft.id}`)}>
         <div className="nft__item m-0">
           {nft.item_type === 'single_items' ? (
             <div className="icontype">
@@ -56,18 +52,13 @@ const NftCard = ({
               <i className="fa fa-shopping-basket"></i>
             </div>
           )}
-          {nft.deadline && clockTop && (
-            <div className="de_countdown">
-              <Clock deadline={nft.deadline} />
-            </div>
-          )}
           <div className="author_list_pp">
             <span onClick={() => navigateTo(`/profile/${tokenUri.author.id}`)}>
               <img
                 className="lazy"
                 src={
-                  nft.artist.imagePath
-                    ? nft.artist.imagePath
+                  tokenUri.author.imagePath
+                    ? tokenUri.author.imagePath
                     : api.baseUrl + '/uploads/기본프로필이미지.png'
                 }
                 alt=""
@@ -87,29 +78,11 @@ const NftCard = ({
               </span>
             </Outer>
           </div>
-          {nft.deadline && !clockTop && (
-            <div className="de_countdown">
-              <Clock deadline={nft.deadline} />
-            </div>
-          )}
           <div className="nft__item_info">
-            <span onClick={() => navigateTo(`ItemDetail/${nft.id}`)}>
-              <h4>{nft.title}</h4>
+            <span>
+              <h4>{tokenUri.title}</h4>
             </span>
-            {nft.status === 'has_offers' ? (
-              <div className="has_offers">
-                <span className="through">{nft.priceover}</span> {nft.price} ETH
-              </div>
-            ) : (
-              <div className="nft__item_price">
-                {nft.price} ETH
-                {nft.status === 'on_auction' && (
-                  <span>
-                    {nft.bid}/{nft.max_bid}
-                  </span>
-                )}
-              </div>
-            )}
+            <div className="nft__item_price">{nft.basePrice} ETH</div>
             <div className="nft__item_action">
               <span onClick={() => navigateTo(`${nft.bid_link}/${nft.id}`)}>
                 {nft.status === 'on_auction' ? '경매 입찰' : '바로 구매'}
@@ -126,4 +99,4 @@ const NftCard = ({
   );
 };
 
-export default memo(NftCard);
+export default memo(NftsItem);

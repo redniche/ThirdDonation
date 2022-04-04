@@ -69,17 +69,16 @@ const Mint = () => {
     reader.readAsArrayBuffer(file);
     reader.onload = (e) => {
       const fileResult = e.target.result;
-      getHash(Buffer(fileResult))
-        .then(({ fileHash, tokenUriHash }) => {
+      getHash(Buffer(fileResult), file.type)
+        .then(({ fileHash, tokenUriHash, metadata }) => {
           console.log(fileHash, tokenUriHash);
-          const tokenUri = `${ipfs_apis.https_public}/${tokenUriHash}`;
-          return { fileHash, tokenUri };
+          return { fileHash, tokenUriHash, metadata };
         })
-        .then(({ fileHash, tokenUri }) => {
+        .then(({ fileHash, tokenUriHash, metadata }) => {
           // mint함수 부르기
-          if (fileHash && tokenUri) {
+          if (fileHash && tokenUriHash) {
             //fileHash랑 tokenUri가 null이 아니어야 작동.
-            sendMintTx(fileHash, tokenUri)
+            sendMintTx(fileHash, tokenUriHash, metadata)
               .then((result) => {
                 if (result) {
                   alert('NFT 생성에 성공했습니다!');
@@ -105,7 +104,7 @@ const Mint = () => {
      * @param {Buffer} buffer Buffer값
      * @returns
      */
-    const getHash = async (buffer) => {
+    const getHash = async (buffer, type) => {
       try {
         const uploadResult = await Ipfs.add(buffer);
         const fileHash = uploadResult.path;
@@ -119,16 +118,35 @@ const Mint = () => {
               'Content-type': 'application/json',
             },
           });
-          console.log(timeData.data.datetime);
           let time = new Date(timeData.data.datetime);
-          console.log(time);
 
+          // {
+          //   "title": "브이",
+          //   "description": "브이",
+          //   "hash": "QmVegiU99WMHqkEuS8awdn496upfwozoMCrCq7Z4QhWnsT",
+          //   "type": "video/mp4"
+          //   "file": "ipfs://QmVegiU99WMHqkEuS8awdn496upfwozoMCrCq7Z4QhWnsT",
+          //   "artist": {
+          //     "id": 11,
+          //     "name": "Unnamed",
+          //     "walletAddress": "0x019fd08eba0560271edd8821fd07483a6dc38e74",
+          //     "create_date": "2022-03-28T11:15:36.547171"
+          //   },
+          //   "create_date": "2022-04-01T02:25:31.364Z"
+          // }
+          const artist = {
+            id: account.id,
+            name: account.username,
+            walletAddress: account.walletAddress,
+            create_date: account.dateCreated,
+          };
           const metadata = {
             title,
             description,
             hash: fileHash,
-            image: `${ipfs_apis.https_public}/${fileHash}`,
-            author: account,
+            type,
+            file: `ipfs://${fileHash}`,
+            artist,
             create_date: time,
           };
           // tokenUri생성하기
@@ -136,7 +154,7 @@ const Mint = () => {
             console.log(`tokenUri: ${res.path}`);
             return res.path;
           });
-          return { fileHash, tokenUriHash };
+          return { fileHash, tokenUriHash, metadata };
         }
       } catch (e) {
         console.log(e);
@@ -153,24 +171,28 @@ const Mint = () => {
      * @param {String} tokenUri
      * @returns
      */
-    const sendMintTx = async (fileHash, tokenUri) => {
-      if (fileHash && tokenUri) {
+    const sendMintTx = async (fileHash, tokenUriHash, metadata) => {
+      if (fileHash && tokenUriHash) {
+        const ipfsTokenUri = `${ipfs_apis.ipfs}${tokenUriHash}`;
         const ssafyNftContract = getSsafyNftContract(currentProvider);
-        console.log(nowWalletAddress);
         try {
+          //ipfsTokenUri로 NFT민팅
           const response = await ssafyNftContract.methods
-            .create(nowWalletAddress, fileHash, tokenUri)
+            .create(nowWalletAddress, fileHash, ipfsTokenUri)
             .send({ from: nowWalletAddress });
-          console.log(response);
-
           if (response.status) {
             const tokenId = response.events.Transfer.returnValues.tokenId;
 
-            handleSaveNFT(tokenId, tokenUri);
-            console.log(`발행한 tokenId: ${tokenId}`);
-            // const balanceLength = await myTicketContract.methods.balanceOf(account).call();
-            // console.log(`해당 주소가 보유하고있는 NFT 토큰의 개수: ${balanceLength}`);
-            return true;
+            if (tokenId !== 0 && tokenUriHash !== '') {
+              try {
+                await handleSaveNFT(tokenId, ipfsTokenUri, metadata);
+                return true;
+              } catch (error) {
+                console.log(error);
+                return false;
+              }
+            }
+            return false;
           }
         } catch (err) {
           console.error(err);
@@ -181,31 +203,24 @@ const Mint = () => {
     /**
      * 민팅 종료시 이를 백엔드에 저장한다.
      * @param {String} tokenId
-     * @param {String} tokenUri
+     * @param {String} ipfsTokenUri
      */
-    const handleSaveNFT = (tokenId, tokenUri) => {
-      if (tokenId !== 0 && tokenUri !== '')
-        Axios.post(
-          apis.nfts.items,
-          {
-            id: tokenId,
-            tokenUri: tokenUri,
-            ownerAddress: nowWalletAddress,
+    const handleSaveNFT = (tokenId, ipfsTokenUri, metadata) =>
+      Axios.post(
+        apis.nfts.items,
+        {
+          id: tokenId,
+          tokenUri: ipfsTokenUri,
+          ownerAddress: nowWalletAddress,
+          fileType: isVideo ? 'video' : 'image',
+          name: metadata.title,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
           },
-          {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          },
-        )
-          .then((res) => {
-            console.log(res);
-          })
-          .catch((err) => {
-            console.log(`err: ${err}`);
-            // 만약 NFT생성은 완료 되었는데 서버전송에서 오류날 경우따로 DB저장 처리 가능한 함수 필요
-          });
-    };
+        },
+      );
   };
 
   return (

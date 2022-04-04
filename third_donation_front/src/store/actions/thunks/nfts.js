@@ -16,7 +16,7 @@ export const fetchNftsBreakdown = (userId, isArtist = false, isSell = false, isM
         data: { data },
       } = await Axios.get(`${apis.nfts.items}/${isMusic ? '/nfts_music.json' : userId}`, {
         cancelToken: Canceler.token,
-        params: { page, size: 20, isArtist },
+        params: { page, size: 20, artist: isArtist },
       });
       if (data.length) {
         dispatch(actions.increasePage());

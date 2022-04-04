@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Table } from 'react-bootstrap';
 import PanelLayout from '../../components/layout/PanelLayout';
 import { Axios } from '../../core/axios';
-import { getSsafyNftContract2 } from '../../contracts';
+import { getSsafyNftContract } from '../../contracts';
 import { detectCurrentProvider } from '../../core/ethereum';
 
 // 증명서 이미지 행 hover 이벤트 방지 설정 (작동 안 됨 - 수정 필요)
@@ -39,7 +39,7 @@ const GrantArtist = ({ navigate }) => {
       const accounts = await currentProvider.request({ method: 'eth_requestAccounts' });
       const currentWallet = accounts[0];
 
-      const artNftContract = getSsafyNftContract2(currentProvider);
+      const artNftContract = getSsafyNftContract(currentProvider);
       console.log(artNftContract.methods);
 
       const response = await artNftContract.methods

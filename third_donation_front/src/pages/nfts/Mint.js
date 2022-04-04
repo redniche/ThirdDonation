@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react';
 import PanelLayout from '../../components/layout/PanelLayout';
 import apis, { Axios, API_TIME_SOURCE } from './../../core/axios';
 import ipfs_apis, { Ipfs } from './../../core/ipfs';
-import { getSsafyNftContract2 } from '../../contracts';
+import { getSsafyNftContract } from '../../contracts';
 import { useNavigate } from '@reach/router';
 import { useSelector } from 'react-redux';
 import * as selectors from '../../store/selectors';
@@ -155,7 +155,7 @@ const Mint = () => {
      */
     const sendMintTx = async (fileHash, tokenUri) => {
       if (fileHash && tokenUri) {
-        const ssafyNftContract = getSsafyNftContract2(currentProvider);
+        const ssafyNftContract = getSsafyNftContract(currentProvider);
         console.log(nowWalletAddress);
         try {
           const response = await ssafyNftContract.methods

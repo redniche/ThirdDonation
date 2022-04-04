@@ -39,7 +39,7 @@ export const getSsafyToeknContract = (provider) => {
   return new web3.eth.Contract(TOKEN_ABI, SSAFY_TOKEN_CONTRACT_ADDRESS);
 };
 
-export const getSsafyNftContract2 = (provider) => {
+export const getSsafyNftContract = (provider) => {
   const web3 = new Web3(provider);
   return new web3.eth.Contract(NFT_ABI, SSAFY_NFT_CONTRACT_ADDRESS);
 };

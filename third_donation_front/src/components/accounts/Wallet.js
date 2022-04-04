@@ -1,7 +1,8 @@
-import { ssafyTokenContract } from '../../contracts';
+import { getSsafyToeknContract } from '../../contracts';
 import { useSelector } from 'react-redux';
 import { memo, useState, useEffect } from 'react';
 import * as selectors from '../../store/selectors';
+import { detectCurrentProvider } from '../../core/ethereum';
 
 /**
  * 지갑에 관한 정보를 표시하는 컴포넌트
@@ -12,7 +13,10 @@ const Wallet = () => {
   const { data: account } = useSelector(selectors.accountState);
 
   const getBalance = async () => {
+    const currentProvider = detectCurrentProvider();
+    const ssafyTokenContract = getSsafyToeknContract(currentProvider);
     const balance = await ssafyTokenContract.methods.balanceOf(account.walletAddress).call();
+
     setBalance(balance);
   };
 

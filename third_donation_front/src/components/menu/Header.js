@@ -89,7 +89,6 @@ const Header = ({ className }) => {
             '_blank',
           );
         }
-        window.ethereum.on('accountsChanged', (account) => dispatch(fetchAccount(account[0])));
       })
       .catch((error) => console.log(error));
   };

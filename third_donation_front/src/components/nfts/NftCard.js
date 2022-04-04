@@ -2,8 +2,8 @@ import { memo, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Clock from './Clock';
 import { navigate } from '@reach/router';
-import { Axios } from './../../core/axios';
 import api from '../../core/api';
+import { IpfsAxios } from '../../core/ipfs';
 
 const Outer = styled.div`
   display: flex;
@@ -36,7 +36,7 @@ const NftCard = ({
   };
   useEffect(async () => {
     try {
-      const { data: tokenUriJson } = await Axios.get(nft.tokenUri, { params: [] });
+      const { data: tokenUriJson } = await IpfsAxios.get(nft.tokenUri, { params: [] });
       setTokenUri(tokenUriJson);
     } catch (err) {
       console.log(err);
@@ -66,8 +66,8 @@ const NftCard = ({
               <img
                 className="lazy"
                 src={
-                  tokenUri.author.imagePath
-                    ? tokenUri.author.imagePath
+                  nft.artist.imagePath
+                    ? nft.artist.imagePath
                     : api.baseUrl + '/uploads/기본프로필이미지.png'
                 }
                 alt=""

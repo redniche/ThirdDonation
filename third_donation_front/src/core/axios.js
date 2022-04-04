@@ -3,7 +3,6 @@ import auth from './auth';
 
 export const API_URL = 'https://j6e207.p.ssafy.io/api';
 // export const API_URL = 'http://localhost:8080/api';
-export const API_TIME_SOURCE = 'https://worldtimeapi.org/api/timezone/Asia/Seoul';
 export const Axios = axios.create({
   baseURL: API_URL,
 });

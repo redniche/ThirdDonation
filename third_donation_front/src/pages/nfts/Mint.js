@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import PanelLayout from '../../components/layout/PanelLayout';
-import apis, { Axios, API_TIME_SOURCE } from './../../core/axios';
+import apis, { Axios } from './../../core/axios';
 import ipfs_apis, { Ipfs } from './../../core/ipfs';
 import { getSsafyNftContract } from '../../contracts';
 import { useNavigate } from '@reach/router';

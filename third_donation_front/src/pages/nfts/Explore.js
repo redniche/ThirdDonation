@@ -1,5 +1,4 @@
 import SaleNftList from '../../components/nfts/SaleNftList';
-import TopFilterBar from '../../components/nfts/TopFilterBar';
 import PanelLayout from '../../components/layout/PanelLayout';
 
 /**
@@ -9,11 +8,7 @@ import PanelLayout from '../../components/layout/PanelLayout';
 const Explore = () => (
   <PanelLayout title="찾아보기">
     <section className="container">
-      <div className="row">
-        <div className="col-lg-12">
-          <TopFilterBar />
-        </div>
-      </div>
+      <div className="row"></div>
       <SaleNftList />
     </section>
   </PanelLayout>

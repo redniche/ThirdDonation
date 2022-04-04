@@ -18,7 +18,7 @@ const Outer = styled.div`
  * @param {*} param0
  * @returns
  */
-const CollectionItem = ({
+const NftsItem = ({
   nft,
   className = 'd-item col-lg-3 col-md-6 col-sm-6 col-xs-12 mb-4',
   height,
@@ -99,4 +99,4 @@ const CollectionItem = ({
   );
 };
 
-export default memo(CollectionItem);
+export default memo(NftsItem);

@@ -62,7 +62,7 @@ public class SaleServiceImpl implements SaleService {
         final Nft nft = nftRepository.findById(tokenId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NFT_NOT_FOUND));
 
-        if (!seller.equals(nft.getOwner())) {
+        if (!seller.getId().equals(nft.getOwner().getId())) {
             throw new CustomException(ErrorCode.CANNOT_SELL_OTHERS);
         }
 

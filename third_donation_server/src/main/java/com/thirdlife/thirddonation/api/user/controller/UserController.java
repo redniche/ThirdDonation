@@ -240,14 +240,34 @@ public class UserController {
      * @param userId Long
      * @return ResponseEntity of BaseResponseBody
      */
-    @PatchMapping("${request.path.artists}")
-    @ApiOperation(value = "장애인 예술가 허가 토글")
+    @PatchMapping("${request.path.artists}/enable")
+    @ApiOperation(value = "장애인 예술가 허가")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
     public ResponseEntity<BaseResponseBody> enableArtist(
-            @ApiParam(value = "아티스트 신청 아이디", required = true)
+            @ApiParam(value = "아티스트 등록할 아이디", required = true)
+            @RequestParam(value = "userId") Long userId) {
+        artistService.enableArtist(userId);
+        return ResponseEntity.status(200)
+                .body(BaseResponseBody.builder().statusCode(200).message("Success").build());
+    }
+
+    /**
+     * 장애인 예술가 등록 허가 기능.
+     *
+     * @param userId Long
+     * @return ResponseEntity of BaseResponseBody
+     */
+    @PatchMapping("${request.path.artists}/disable")
+    @ApiOperation(value = "장애인 예술가 비활성")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<BaseResponseBody> disableArtist(
+            @ApiParam(value = "아티스트 비허가할 아이디", required = true)
             @RequestParam(value = "userId") Long userId) {
         artistService.enableArtist(userId);
         return ResponseEntity.status(200)

@@ -25,9 +25,17 @@ public interface ArtistService {
     Page<ArtistInfoDto> getArtistList(Pageable pageable);
 
     /**
-     * 장애인 예술가 등록 토글.
+     * 장애인 예술가 허가.
      *
      * @param userId Long
      */
     void enableArtist(Long userId);
+
+
+    /**
+     * 장애인 예술가 비활성.
+     *
+     * @param userId Long
+     */
+    void disableArtist(Long userId);
 }

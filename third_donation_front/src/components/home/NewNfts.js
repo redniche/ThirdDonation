@@ -1,210 +1,66 @@
-import { memo, useState } from 'react';
-// import { memo, useState, useEffect } from 'react';
+import { memo, useState, useEffect } from 'react';
 import Slider from 'react-slick';
-import styled from 'styled-components';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import Clock from '../nfts/Clock';
 import { carouselNew } from '../constants';
+import { Axios } from './../../core/axios';
 
-// import { fetchNftsBreakdown } from '../../store/actions/thunks';
-// import { useSelector, useDispatch } from 'react-redux';
-// import * as selectors from '../../store/selectors';
+import NftsItem from './NftsItem';
 
-// import api from '../../core/api';
-
-const Outer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-content: center;
-  align-items: center;
-`;
+// const Outer = styled.div`
+//   display: flex;
+//   justify-content: center;
+//   align-content: center;
+//   align-items: center;
+// `;
 
 /**
  * 판매할 NFT를 등록하는 페이지 컴포넌트
  * @returns
  */
 const NewNfts = () => {
-  const nfts = [
-    {
-      title: 'Pinky Ocean',
-      price: '0.08',
-      bid: '1',
-      max_bid: '20',
-      deadline: 'January, 10, 2023',
-      author: {
-        avatar: {
-          url: './img/author/author-1.jpg',
-        },
-      },
-      preview_image: {
-        url: './img/items/static-1.jpg',
-      },
-      bid_link: '/#',
-      likes: '50',
-    },
-    {
-      title: 'Pinky Ocean',
-      price: '0.08',
-      bid: '1',
-      max_bid: '20',
-      author: {
-        avatar: {
-          url: './img/author/author-2.jpg',
-        },
-      },
-      preview_image: {
-        url: './img/items/static-2.jpg',
-      },
-      bid_link: '/#',
-      likes: '50',
-    },
-    {
-      title: 'Pinky Ocean',
-      price: '0.08',
-      bid: '1',
-      max_bid: '20',
-      author: {
-        avatar: {
-          url: './img/author/author-3.jpg',
-        },
-      },
-      preview_image: {
-        url: './img/items/static-3.jpg',
-      },
-      bid_link: '/#',
-      likes: '50',
-    },
-    {
-      title: 'Pinky Ocean',
-      price: '0.08',
-      bid: '1',
-      max_bid: '20',
-      deadline: 'February, 1, 2023',
-      author: {
-        avatar: {
-          url: './img/author/author-4.jpg',
-        },
-      },
-      preview_image: {
-        url: './img/items/static-4.jpg',
-      },
-      bid_link: '/#',
-      likes: '50',
-    },
-    {
-      title: 'Pinky Ocean',
-      price: '0.08',
-      bid: '1',
-      max_bid: '20',
-      deadline: 'February, 1, 2023',
-      author: {
-        avatar: {
-          url: './img/author/author-5.jpg',
-        },
-      },
-      preview_image: {
-        url: './img/items/static-5.jpg',
-      },
-      bid_link: '/#',
-      likes: '50',
-    },
-    {
-      title: 'Pinky Ocean',
-      price: '0.08',
-      bid: '1',
-      max_bid: '20',
-      author: {
-        avatar: {
-          url: './img/author/author-6.jpg',
-        },
-      },
-      preview_image: {
-        url: './img/items/static-6.jpg',
-      },
-      bid_link: '/#',
-      likes: '50',
-    },
-  ];
-
-  // const dispatch = useDispatch();
-  // const nftsState = useSelector(selectors.nftBreakdownState);
-  // const nfts = nftsState.data ? nftsState.data : [];
-
-  // console.log('log');
-  // console.log(nfts);
-
-  // nfts.sort(function (a, b) {
-  //   a = new Date(a.dateModified);
-  //   b = new Date(b.dateModified);
-  //   return a > b ? -1 : a < b ? 1 : 0;
-  // });
+  const [nfts, setNfts] = useState([]);
 
   const [height, setHeight] = useState(0);
 
-  const onImgLoad = ({ target: img }) => {
+  const onFileLoad = ({ target: file }) => {
     let currentHeight = height;
-    if (currentHeight < img.offsetHeight) {
-      setHeight(img.offsetHeight);
+    if (currentHeight < file.offsetHeight) {
+      setHeight(file.offsetHeight);
     }
   };
 
-  // useEffect(() => {
-  //   dispatch(fetchNftsBreakdown());
-  // }, [dispatch]);
+  const getSaleNftList = async () => {
+    await Axios.get('/nfts/exchange/sales')
+      .then((data) => data)
+      .then(async (res) => {
+        const nftData = res.data.data;
+        console.log(nftData);
+        setNfts(nftData);
+      })
+      .then(() => {
+        newNftsSort();
+      })
+      .catch((err) => {
+        console.log(`err: ${err}`);
+        // 만약 NFT생성은 완료 되었는데 서버전송에서 오류날 경우따로 DB저장 처리 가능한 함수 필요
+      });
+  };
+
+  const newNftsSort = () => {
+    nfts.splice(20);
+  };
+
+  useEffect(() => {
+    getSaleNftList();
+  }, []);
 
   return (
     <div className="nft">
       <Slider {...carouselNew}>
         {nfts &&
           nfts.map((nft, index) => (
-            <div className="itm" index={index + 1} key={index}>
-              <div className="d-item">
-                <div className="nft__item">
-                  {nft.deadline && (
-                    <div className="de_countdown">
-                      <Clock deadline={nft.deadline} />
-                    </div>
-                  )}
-                  <div className="author_list_pp">
-                    <span onClick={() => window.open('/home1', '_self')}>
-                      <img className="lazy" src={nft.author.avatar.url} alt="" />
-                      <i className="fa fa-check"></i>
-                    </span>
-                  </div>
-                  <div className="nft__item_wrap" style={{ height: `${height}px` }}>
-                    <Outer>
-                      <span>
-                        <img
-                          src={nft.preview_image.url}
-                          className="lazy nft__item_preview"
-                          onLoad={onImgLoad}
-                          alt=""
-                        />
-                      </span>
-                    </Outer>
-                  </div>
-                  <div className="nft__item_info">
-                    <span onClick={() => window.open('/#', '_self')}>
-                      <h4>{nft.title}</h4>
-                    </span>
-                    <div className="nft__item_price">
-                      {nft.price} ETH
-                      <span>
-                        {nft.bid}/{nft.max_bid}
-                      </span>
-                    </div>
-                    <div className="nft__item_action">
-                      <span onClick={() => window.open(nft.bid_link, '_self')}>Place a bid</span>
-                    </div>
-                    <div className="nft__item_like">
-                      <i className="fa fa-heart"></i>
-                      <span>{nft.likes}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <NftsItem key={index} nft={nft} onFileLoad={onFileLoad} height={height} />
           ))}
       </Slider>
     </div>

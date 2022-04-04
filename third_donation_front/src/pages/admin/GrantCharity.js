@@ -4,34 +4,36 @@ import PanelLayout from '../../components/layout/PanelLayout';
 import { Axios } from '../../core/axios';
 import { getSsafyNftContract } from '../../contracts';
 import { detectCurrentProvider } from '../../core/ethereum';
-
-// 증명서 이미지 행 hover 이벤트 방지 설정 (작동 안 됨 - 수정 필요)
-/* .table-hover > tbody > tr.anti-hover:hover > td,
-  .table-hover > tbody > tr.anti-hover:hover > th {
-    background: white;
-  } */
-
-///api/charities
+import Pagination from '../../components/paging/Pagination';
 
 /**
  * 관리자가 예술가 등록 요청을 승인할 수 있는 페이지 컴포넌트
  * @returns
  */
-const GrantArtist = ({ navigate }) => {
-  const [list, setDataList] = useState([]);
+const GrantArtist = () => {
+  const [totalPage, setTotalPage] = useState([]);
+  const [curPage, setCurPage] = useState(0);
 
-  function getList() {
-    Axios.get('/charities/admin')
-      .then((data) => data)
-      .then(async (res) => {
-        setDataList(res.data.data.content);
+  const [list, setList] = useState([]);
+
+  const getList = (page) => {
+    Axios.get('/charities/admin', {
+      params: {
+        page,
+      },
+    })
+      .then(({ data }) => data)
+      .then(async ({ data }) => {
+        setList(data.content);
+        setCurPage(page);
+        setTotalPage(data.totalPages);
       })
       .catch((err) => {
         console.log('에러 발생' + err);
       });
-  }
+  };
 
-  async function aceeptCharity(walletAddress) {
+  async function acceptCharity(walletAddress) {
     try {
       const currentProvider = detectCurrentProvider();
       if (!currentProvider) return;
@@ -40,15 +42,14 @@ const GrantArtist = ({ navigate }) => {
       const currentWallet = accounts[0];
 
       const artNftContract = getSsafyNftContract(currentProvider);
-      console.log(artNftContract.methods);
 
-      const response = await artNftContract.methods
+      await artNftContract.methods
         .addCharityAddress(walletAddress)
         .send({ from: currentWallet })
         .then(() => {
           saveAceeptCharity(walletAddress);
         });
-      console.log(response);
+      // console.log(response);
 
       alert('자선 단체 승인 성공');
     } catch (error) {
@@ -69,15 +70,14 @@ const GrantArtist = ({ navigate }) => {
       },
     )
       .then(async () => {
-        navigate('/admin/grantCharity');
-        // window.location.href = '/admin/grantCharity';
+        getList(curPage);
       })
       .catch((err) => {
         console.log('에러 발생' + err);
       });
   }
 
-  function disaceeptCharity(walletAddress) {
+  function declineCharity(walletAddress) {
     Axios.patch(
       '/charities',
       {},
@@ -89,8 +89,7 @@ const GrantArtist = ({ navigate }) => {
       },
     )
       .then(async () => {
-        navigate('/admin/grantCharity');
-        // window.location.href = '/admin/grantCharity';
+        getList(curPage);
       })
       .catch((err) => {
         console.log('에러 발생' + err);
@@ -98,7 +97,7 @@ const GrantArtist = ({ navigate }) => {
   }
 
   useEffect(() => {
-    getList();
+    getList(0);
   }, []);
 
   return (
@@ -128,19 +127,21 @@ const GrantArtist = ({ navigate }) => {
                         <td>{item.url}</td>
                         {item.enabled ? <td>허용됨</td> : <td>허용 안됨</td>}
                         <td>
-                          <button
-                            className="btn-main d-inline-block"
-                            onClick={(e) => aceeptCharity(item.walletAddress, e)}>
-                            승인
-                          </button>
+                          {item.enabled ? (
+                            <button
+                              className="btn-main d-inline-block"
+                              onClick={(e) => declineCharity(item.walletAddress, e)}>
+                              허용 안함
+                            </button>
+                          ) : (
+                            <button
+                              className="btn-main d-inline-block"
+                              onClick={(e) => acceptCharity(item.walletAddress, e)}>
+                              허용
+                            </button>
+                          )}
                         </td>
-                        <td>
-                          <button
-                            className="btn-main d-inline-block"
-                            onClick={(e) => disaceeptCharity(item.walletAddress, e)}>
-                            거절
-                          </button>
-                        </td>
+                        <td></td>
                       </tr>
                     </React.Fragment>
                   ))}
@@ -152,6 +153,9 @@ const GrantArtist = ({ navigate }) => {
               </tbody>
             </Table>
           </div>
+          <div className="spacer-single"></div>
+          <Pagination totalPage={totalPage} curPage={curPage} fetch={getList} />
+          <div className="spacer-single"></div>
         </div>
       </section>
     </PanelLayout>

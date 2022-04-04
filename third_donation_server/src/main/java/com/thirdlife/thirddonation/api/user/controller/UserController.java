@@ -269,7 +269,7 @@ public class UserController {
     public ResponseEntity<BaseResponseBody> disableArtist(
             @ApiParam(value = "아티스트 비허가할 아이디", required = true)
             @RequestParam(value = "userId") Long userId) {
-        artistService.enableArtist(userId);
+        artistService.disableArtist(userId);
         return ResponseEntity.status(200)
                 .body(BaseResponseBody.builder().statusCode(200).message("Success").build());
     }

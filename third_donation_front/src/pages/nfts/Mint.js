@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import PanelLayout from '../../components/layout/PanelLayout';
-import apis, { Axios } from './../../core/axios';
+import axios_apis, { Axios } from './../../core/axios';
 import ipfs_apis, { Ipfs } from './../../core/ipfs';
 import { getSsafyNftContract } from '../../contracts';
 import { useNavigate } from '@reach/router';
@@ -201,7 +201,7 @@ const Mint = () => {
      */
     const handleSaveNFT = (tokenId, ipfsTokenUri, metadata) =>
       Axios.post(
-        apis.nfts.items,
+        axios_apis.nfts.items,
         {
           id: tokenId,
           tokenUri: ipfsTokenUri,

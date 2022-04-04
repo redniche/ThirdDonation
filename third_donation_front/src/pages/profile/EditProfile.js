@@ -10,7 +10,7 @@ import api from '../../core/api';
 import { fetchAuthor } from '../../store/actions/thunks';
 import * as selectors from '../../store/selectors';
 import ProfileLayout from './../../components/layout/ProfileLayout';
-import apis, { Axios } from '../../core/axios';
+import axios_apis, { Axios } from '../../core/axios';
 
 /**
  * Yup 패키지로 유효성 체크
@@ -55,7 +55,7 @@ const EditProfile = ({ authorId }) => {
   const handleSubmitForm = async (data) => {
     data.id = parseInt(authorId);
     console.log(data);
-    await Axios.patch(apis.users.profile, data)
+    await Axios.patch(axios_apis.users.profile, data)
       .then((response) => {
         console.log(response);
         redirectUser(`/editProfile/${authorId}`);
@@ -78,7 +78,7 @@ const EditProfile = ({ authorId }) => {
     //     'Content-Type': 'multipart/form-data',
     //   },
     // })
-    await Axios.post(`${apis.users.img}`, formData, {
+    await Axios.post(`${axios_apis.users.img}`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },

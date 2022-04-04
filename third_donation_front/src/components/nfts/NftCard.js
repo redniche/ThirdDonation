@@ -2,9 +2,10 @@ import { memo, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Clock from './Clock';
 import { navigate } from '@reach/router';
-import apis from '../../core/axios';
+import axios_apis from '../../core/axios';
 import ipfs_apis from '../../core/ipfs';
 import { IpfsAxios } from '../../core/ipfs';
+import { convertIpfsToHttps } from './../../core/ipfs';
 
 const Outer = styled.div`
   display: flex;
@@ -35,9 +36,13 @@ const NftCard = ({
   const navigateTo = (link) => {
     navigate(link);
   };
+
+  const heartClickHandle = () => {};
   useEffect(async () => {
     try {
-      const { data: tokenUriJson } = await IpfsAxios.get(nft.tokenUri, { params: [] });
+      const { data: tokenUriJson } = await IpfsAxios.get(convertIpfsToHttps(nft.tokenUri), {
+        params: [],
+      });
       setTokenUri(tokenUriJson);
     } catch (err) {
       console.log(err);
@@ -46,7 +51,7 @@ const NftCard = ({
 
   return (
     tokenUri && (
-      <div className={className} onClick={() => navigateTo(`/ItemDetail/${nft.id}`)}>
+      <div className={className}>
         <div className="nft__item m-0">
           {nft.item_type === 'single_items' ? (
             <div className="icontype">
@@ -63,33 +68,36 @@ const NftCard = ({
             </div>
           )}
           <div className="author_list_pp">
-            <span onClick={() => navigateTo(`/profile/${tokenUri.author.id}`)}>
+            <span onClick={() => navigateTo(`/profile/${nft.artist.id}`)}>
               <img
                 className="lazy"
                 src={
                   nft.artist.imagePath
-                    ? process.env.PUBLIC_URL + `${apis.file}/${nft.artist.imagePath}`
-                    : process.env.PUBLIC_URL + '/img/기본프로필이미지.png'
+                    ? `${axios_apis.file}/${nft.artist.imagePath}`
+                    : '/img/기본프로필이미지.png'
                 }
                 alt=""
               />
               <i className="fa fa-check"></i>
             </span>
           </div>
-          <div className="nft__item_wrap" style={{ height: `${height}px` }}>
+          <div
+            className="nft__item_wrap"
+            onClick={() => navigateTo(`/ItemDetail/${nft.id}`)}
+            style={{ height: `${height}px` }}>
             <Outer>
               <span>
                 {nft.fileType == 'video' ? (
                   <video
                     onLoad={onFileLoad}
-                    src={`${ipfs_apis.https_public}/${tokenUri.hash}`}
+                    src={`${ipfs_apis.https_local}/${tokenUri.hash}`}
                     className="lazy nft__item_preview"
                     alt=""
                   />
                 ) : (
                   <img
                     onLoad={onFileLoad}
-                    src={`${ipfs_apis.https_public}/${tokenUri.hash}`}
+                    src={`${ipfs_apis.https_local}/${tokenUri.hash}`}
                     className="lazy nft__item_preview"
                     alt=""
                   />
@@ -103,7 +111,7 @@ const NftCard = ({
             </div>
           )}
           <div className="nft__item_info">
-            <span onClick={() => navigateTo(`ItemDetail/${nft.id}`)}>
+            <span>
               <h4>{nft.name}</h4>
             </span>
             {nft.price && (
@@ -124,7 +132,7 @@ const NftCard = ({
               </>
             )}
             <div className="nft__item_like">
-              <i className="fa fa-heart"></i>
+              <i className="fa fa-heart" onClick={heartClickHandle}></i>
               <span>{nft.wishCount}</span>
             </div>
           </div>

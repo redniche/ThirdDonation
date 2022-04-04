@@ -11,9 +11,9 @@ export const Canceler = axios.CancelToken.source();
 const nft_base = '/nfts';
 const user_base = '/users';
 const nft_sale_base = '/nfts/exchange';
-const file_base = '/upload/file/';
+const file_base = '/upload/file';
 
-const apis = {
+const axios_apis = {
   nfts: {
     items: `${nft_base}/items`,
     list: `${nft_base}/nft`,
@@ -36,4 +36,4 @@ export const setAxiosHeader = (data) => {
 //처음 시작시 단 한 번 실행
 setAxiosHeader(auth.getToken());
 
-export default apis;
+export default axios_apis;

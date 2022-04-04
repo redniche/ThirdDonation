@@ -113,11 +113,7 @@ const Profile = ({ authorId }) => {
                   <div className="de-flex-col">
                     <div className="profile_avatar">
                       <img
-                        src={
-                          author.imagePath
-                            ? author.imagePath
-                            : process.env.PUBLIC_URL + '/img/기본프로필이미지.png'
-                        }
+                        src={author.imagePath ? author.imagePath : '/img/기본프로필이미지.png'}
                         alt="프로필"
                         style={{ width: '150px', height: '150px' }}
                       />

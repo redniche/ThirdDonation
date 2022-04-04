@@ -46,7 +46,7 @@ public class NotificationController {
             @ApiResponse(code = 500, message = "서버 오류")
     })
     public ResponseEntity<NotificationListResponse> getList(
-            @Deprecated @Positive @PathVariable
+            @Positive @PathVariable
             @ApiParam(value = "조회할 회원 id를 입력받음", required = false)
                     Long userId
     ) {
@@ -71,7 +71,7 @@ public class NotificationController {
             @ApiResponse(code = 500, message = "서버 오류")
     })
     public ResponseEntity<BaseResponseBody> setDisabled(
-            @Deprecated @Positive @PathVariable
+            @Positive @PathVariable
             @ApiParam(value = "조회할 회원 id를 입력받음", required = false)
                     Long userId
     ) {

@@ -112,13 +112,7 @@ const Mint = () => {
         if (fileHash) {
           console.log(`hash: ${fileHash}`);
           // metadata생성하기
-
-          const timeData = await Axios.get(API_TIME_SOURCE, {
-            headers: {
-              'Content-type': 'application/json',
-            },
-          });
-          let time = new Date(timeData.data.datetime);
+          let time = new Date();
 
           // {
           //   "title": "브이",
@@ -151,7 +145,7 @@ const Mint = () => {
           };
           // tokenUri생성하기
           const tokenUriHash = await Ipfs.add(JSON.stringify(metadata)).then((res) => {
-            console.log(`tokenUri: ${res.path}`);
+            console.log(`생성된 tokenUriHash: ${res.path}`);
             return res.path;
           });
           return { fileHash, tokenUriHash, metadata };

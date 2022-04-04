@@ -6,7 +6,7 @@ import { Axios } from './../../core/axios';
 import * as selectors from '../../store/selectors';
 import {
   SALE_NFT_CONTRACT_ADDRESS,
-  getSsafyNftContract2,
+  getSsafyNftContract,
   getSaleNftContract,
 } from '../../contracts';
 import { detectCurrentProvider } from '../../core/ethereum';
@@ -99,7 +99,7 @@ const Sell = () => {
       console.log(currentWallet);
 
       const saleArtContract = getSaleNftContract(currentProvider);
-      const artNftContract = getSsafyNftContract2(currentProvider);
+      const artNftContract = getSsafyNftContract(currentProvider);
 
       const saleAuth = await artNftContract.methods
         .isApprovedForAll(currentWallet, SALE_NFT_CONTRACT_ADDRESS)

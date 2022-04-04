@@ -37,7 +37,8 @@ const Profile = ({ authorId }) => {
     setOwnMenu(false);
     setChartMenu(false);
     document.getElementById('saleBtn').classList.add('active');
-    document.getElementById('chartBtn').classList.remove('active');
+    if (account && account.id == author.id)
+      document.getElementById('chartBtn').classList.remove('active');
     document.getElementById('ownBtn').classList.remove('active');
     (author.authority == 'ARTIST' || author.authority == 'ADMIN') &&
       document.getElementById('productBtn').classList.remove('active');
@@ -50,7 +51,8 @@ const Profile = ({ authorId }) => {
     document.getElementById('productBtn').classList.add('active');
     document.getElementById('saleBtn').classList.remove('active');
     document.getElementById('ownBtn').classList.remove('active');
-    document.getElementById('chartBtn').classList.remove('active');
+    if (account && account.id == author.id)
+      document.getElementById('chartBtn').classList.remove('active');
   };
   const ownBtnClick = () => {
     setOwnMenu(!ownMenu);
@@ -59,7 +61,8 @@ const Profile = ({ authorId }) => {
     setChartMenu(false);
     document.getElementById('ownBtn').classList.add('active');
     document.getElementById('saleBtn').classList.remove('active');
-    document.getElementById('chartBtn').classList.remove('active');
+    if (account && account.id == author.id)
+      document.getElementById('chartBtn').classList.remove('active');
     (author.authority == 'ARTIST' || author.authority == 'ADMIN') &&
       document.getElementById('productBtn').classList.remove('active');
   };
@@ -68,7 +71,8 @@ const Profile = ({ authorId }) => {
     setOwnMenu(false);
     setSaleMenu(false);
     (author.authority == 'ARTIST' || author.authority == 'ADMIN') && setProductMenu(false);
-    document.getElementById('chartBtn').classList.add('active');
+    if (account && account.id == author.id)
+      document.getElementById('chartBtn').classList.add('active');
     document.getElementById('ownBtn').classList.remove('active');
     document.getElementById('saleBtn').classList.remove('active');
     (author.authority == 'ARTIST' || author.authority == 'ADMIN') &&

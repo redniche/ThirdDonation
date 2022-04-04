@@ -41,7 +41,7 @@ const NftCard = ({
     } catch (err) {
       console.log(err);
     }
-  }, []);
+  }, [nft]);
 
   return (
     tokenUri && (

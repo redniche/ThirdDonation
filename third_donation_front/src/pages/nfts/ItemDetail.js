@@ -7,7 +7,7 @@ import { Axios } from './../../core/axios';
 import { navigate } from '@reach/router';
 import { detectCurrentProvider } from '../../core/ethereum';
 import {
-  getSsafyNftContract2,
+  getSsafyNftContract,
   getSaleNftContract,
   getSsafyToeknContract,
   SALE_NFT_CONTRACT_ADDRESS,
@@ -148,7 +148,7 @@ const ItemDetail = function () {
 
   const currentProvider = detectCurrentProvider();
   if (!currentProvider) return;
-  const artNftContract = getSsafyNftContract2(currentProvider);
+  const artNftContract = getSsafyNftContract(currentProvider);
   const saleArtContract = getSaleNftContract(currentProvider);
   const ssafyTokenContract = getSsafyToeknContract(currentProvider);
 

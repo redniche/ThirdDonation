@@ -16,9 +16,9 @@ import '@toast-ui/editor/dist/toastui-editor.css';
 import '@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight.css';
 import codeSyntaxHighlight from '@toast-ui/editor-plugin-code-syntax-highlight';
 
-const BoardView = () => {
+const BoardView = ({ navigate }) => {
   const { data: wallet } = useSelector(selectors.accountState);
-  const [article, setArticle] = useState({});
+  const [article, setArticle] = useState(null);
 
   const no = useParams().no;
 
@@ -46,7 +46,7 @@ const BoardView = () => {
       },
     })
       .then(async () => {
-        window.location.href = '/notice';
+        navigate('/notice');
       })
       .catch((err) => {
         console.log('에러 발생' + err);

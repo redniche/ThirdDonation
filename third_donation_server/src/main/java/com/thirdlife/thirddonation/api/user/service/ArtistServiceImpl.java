@@ -70,7 +70,7 @@ public class ArtistServiceImpl implements ArtistService {
     }
 
     /**
-     * 장애인 예술가 등록 토글.
+     * 장애인 예술가 허가.
      *
      * @param userId Long
      */
@@ -85,14 +85,34 @@ public class ArtistServiceImpl implements ArtistService {
         User user = artist.getUser();
         if (user.getAuthority() == Authority.ADMIN) {
             throw new CustomException(ErrorCode.CANNOT_DOWN_AUTHORITY);
-        } else if (user.getAuthority() == Authority.ARTIST) {
-            artist.getUser().setAuthority(Authority.NORMAL);
-            artist.setEnabled(false);
         } else {
             artist.getUser().setAuthority(Authority.ARTIST);
             artist.setEnabled(true);
         }
 
+        artistRepository.save(artist);
+    }
+
+    /**
+     * 장애인 예술가 비활성.
+     *
+     * @param userId Long
+     */
+    @Override
+    public void disableArtist(Long userId) {
+        Artist artist = artistRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        // 허가할 때 없는 아이디일 수 있다.(삭제이상발생시)
+        userRepository.findById(artist.getId())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        User user = artist.getUser();
+        if (user.getAuthority() == Authority.ADMIN) {
+            throw new CustomException(ErrorCode.CANNOT_DOWN_AUTHORITY);
+        } else if (user.getAuthority() == Authority.ARTIST) {
+            artist.getUser().setAuthority(Authority.NORMAL);
+            artist.setEnabled(false);
+        }
         artistRepository.save(artist);
     }
 }

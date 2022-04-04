@@ -46,11 +46,12 @@ public class NotificationController {
             @ApiResponse(code = 500, message = "서버 오류")
     })
     public ResponseEntity<NotificationListResponse> getList(
-            @Positive @PathVariable @ApiParam(value = "조회할 회원 id를 입력받음", required = true)
+            @Deprecated @Positive @PathVariable
+            @ApiParam(value = "조회할 회원 id를 입력받음", required = false)
                     Long userId
     ) {
 
-        List<NotificationInfoDto> list = notificationService.getList(userId);
+        List<NotificationInfoDto> list = notificationService.getList();
 
         return ResponseEntity.status(200)
                 .body(NotificationListResponse.builder().statusCode(200).message("Success")
@@ -70,11 +71,12 @@ public class NotificationController {
             @ApiResponse(code = 500, message = "서버 오류")
     })
     public ResponseEntity<BaseResponseBody> setDisabled(
-            @Positive @PathVariable @ApiParam(value = "조회할 회원 id를 입력받음", required = true)
+            @Deprecated @Positive @PathVariable
+            @ApiParam(value = "조회할 회원 id를 입력받음", required = false)
                     Long userId
     ) {
 
-        notificationService.setDisabled(userId);
+        notificationService.setDisabled();
 
         return ResponseEntity.status(200)
                 .body(BaseResponseBody.builder().statusCode(200).message("Success").build());

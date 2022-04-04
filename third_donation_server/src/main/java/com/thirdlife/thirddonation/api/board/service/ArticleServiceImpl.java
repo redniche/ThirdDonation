@@ -2,6 +2,7 @@ package com.thirdlife.thirddonation.api.board.service;
 
 import com.thirdlife.thirddonation.api.board.dto.ArticleInfoDto;
 import com.thirdlife.thirddonation.api.board.dto.request.ArticleRegisterRequest;
+import com.thirdlife.thirddonation.api.user.service.UserService;
 import com.thirdlife.thirddonation.common.exception.CustomException;
 import com.thirdlife.thirddonation.common.exception.ErrorCode;
 import com.thirdlife.thirddonation.db.board.entity.Article;
@@ -30,6 +31,7 @@ public class ArticleServiceImpl implements ArticleService {
     private final ArticleRepository articleRepository;
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
+    private final UserService userService;
 
     /**
      * 글을 생성하는 메서드입니다.
@@ -38,8 +40,7 @@ public class ArticleServiceImpl implements ArticleService {
      */
     @Override
     public void createArticle(ArticleRegisterRequest articleRegisterRequest) {
-        final User writer = userRepository.findById(articleRegisterRequest.getUserId())
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        final User writer = userService.getAuthUser();
 
         final Category category =
                 categoryRepository.findByName(articleRegisterRequest.getCategoryName())
@@ -67,11 +68,9 @@ public class ArticleServiceImpl implements ArticleService {
         Article article =
                 articleRepository.findById(articleId).orElseThrow(() -> new CustomException(
                         ErrorCode.ARTICLE_NOT_FOUND));
-        final Long requestUserId = articleRegisterRequest.getUserId();
-        final User writer = userRepository.findById(requestUserId)
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        final User writer = userService.getAuthUser();
 
-        if (!requestUserId.equals(writer.getId())) {
+        if (!Objects.equals(article.getUser().getId(), writer.getId())) {
             throw new CustomException(ErrorCode.USER_INVALID);
         }
         article.setTitle(articleRegisterRequest.getTitle());
@@ -91,10 +90,9 @@ public class ArticleServiceImpl implements ArticleService {
         Article article =
                 articleRepository.findById(articleId).orElseThrow(() -> new CustomException(
                         ErrorCode.ARTICLE_NOT_FOUND));
-        final User user = userRepository.findById(userId)
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-        Long articleWriterId = article.getUser().getId();
-        if (!Objects.equals(articleWriterId, user.getId())) {
+        final User writer = userService.getAuthUser();
+
+        if (!Objects.equals(article.getUser().getId(), writer.getId())) {
             throw new CustomException(ErrorCode.USER_INVALID);
         }
         articleRepository.delete(article);

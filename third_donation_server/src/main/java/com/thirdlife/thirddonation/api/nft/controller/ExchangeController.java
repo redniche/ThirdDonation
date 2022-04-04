@@ -44,7 +44,7 @@ import springfox.documentation.schema.Enums;
 @Validated
 @Api(tags = "NFT 판매 관리")
 @RestController
-@RequestMapping("${request.path.api}${request.path.nfts}/exchange")
+@RequestMapping("${request.path.api}${request.path.nfts}${request.path.exchange}")
 @RequiredArgsConstructor
 public class ExchangeController {
 

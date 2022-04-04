@@ -32,27 +32,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Value("${request.path.api}")
     private String apiPath;
-
     @Value("${request.path.users}")
     private String usersPath;
-
-    @Value("${request.path.nfts}")
-    private String nftsPath;
-
+    @Value("${request.path.nfts}/items")
+    private String nftsItemsPath;
+    @Value("${request.path.nfts}${request.path.exchange}")
+    private String nftsExchangePath;
     @Value("${request.path.charities}")
     private String charitiesPath;
-
     @Value("${request.path.notifications}")
     private String notificationsPath;
-
     @Value("${request.path.board}")
     private String boardPath;
-
     @Value("${request.path.board.category}")
     private String categoryPath;
-
-    @Value("${request.path.admin.artists}")
+    @Value("${request.path.artists}")
     private String artistsPath;
+    @Value("${request.path.admin}")
+    private String adminPath;
 
 
     @Bean
@@ -74,6 +71,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, apiPath + usersPath + artistsPath).hasAuthority(
                         Authority.ADMIN.name())
                 .antMatchers(HttpMethod.PATCH, apiPath + usersPath + artistsPath).hasAuthority(
+                        Authority.ADMIN.name())
+                .antMatchers(HttpMethod.POST, apiPath + nftsItemsPath).hasAuthority(
+                        Authority.ARTIST.name())
+                .antMatchers(HttpMethod.POST, apiPath + nftsExchangePath + "/sell").hasAuthority(
+                        Authority.ARTIST.name())
+                .antMatchers(HttpMethod.PATCH, apiPath + nftsExchangePath + "/sales/**")
+                    .hasAuthority(
+                        Authority.ARTIST.name())
+                .antMatchers(HttpMethod.GET, apiPath + charitiesPath + adminPath).hasAuthority(
+                        Authority.ADMIN.name())
+                .antMatchers(HttpMethod.POST, apiPath + charitiesPath).hasAuthority(
+                        Authority.ADMIN.name())
+                .antMatchers(HttpMethod.PATCH, apiPath + charitiesPath).hasAuthority(
+                        Authority.ADMIN.name())
+                .antMatchers(HttpMethod.DELETE, apiPath + charitiesPath).hasAuthority(
+                        Authority.ADMIN.name())
+                .antMatchers(apiPath + boardPath + categoryPath).hasAuthority(
                         Authority.ADMIN.name())
                 .antMatchers("/api/**").permitAll()
                 .anyRequest().permitAll()

@@ -200,7 +200,7 @@ public class UserController {
      * @param artistRegisterRequest ArtistRegisterRequest
      * @return ResponseEntity
      */
-    @PostMapping("/artists")
+    @PostMapping("${request.path.artists}")
     @ApiOperation(value = "장애인 예술가 등록 신청")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
@@ -220,7 +220,7 @@ public class UserController {
      *
      * @return ResponseEntity
      */
-    @GetMapping("/artists")
+    @GetMapping("${request.path.artists}")
     @ApiOperation(value = "장애인 예술가 신청 리스트 조회")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
@@ -240,7 +240,7 @@ public class UserController {
      * @param userId Long
      * @return ResponseEntity of BaseResponseBody
      */
-    @PatchMapping("/artists")
+    @PatchMapping("${request.path.artists}")
     @ApiOperation(value = "장애인 예술가 허가 토글")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),

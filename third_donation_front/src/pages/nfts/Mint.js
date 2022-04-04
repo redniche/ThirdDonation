@@ -124,7 +124,8 @@ const Mint = () => {
           //   "title": "브이",
           //   "description": "브이",
           //   "hash": "QmVegiU99WMHqkEuS8awdn496upfwozoMCrCq7Z4QhWnsT",
-          //   "image": "ipfs://QmVegiU99WMHqkEuS8awdn496upfwozoMCrCq7Z4QhWnsT",
+          //   "type": "video/mp4"
+          //   "file": "ipfs://QmVegiU99WMHqkEuS8awdn496upfwozoMCrCq7Z4QhWnsT",
           //   "artist": {
           //     "id": 11,
           //     "name": "Unnamed",

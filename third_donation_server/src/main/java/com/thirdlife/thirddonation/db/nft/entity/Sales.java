@@ -1,5 +1,6 @@
 package com.thirdlife.thirddonation.db.nft.entity;
 
+import com.thirdlife.thirddonation.db.board.entity.BaseEntity;
 import com.thirdlife.thirddonation.db.charity.entity.Charity;
 import com.thirdlife.thirddonation.db.user.entity.User;
 import java.time.LocalDateTime;
@@ -17,6 +18,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
@@ -24,10 +26,11 @@ import lombok.NoArgsConstructor;
  */
 @Builder
 @Data
+@EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Sales {
+public class Sales extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

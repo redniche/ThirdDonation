@@ -2,13 +2,13 @@ package com.thirdlife.thirddonation.api.nft.controller;
 
 import com.thirdlife.thirddonation.api.nft.SaleSearch;
 import com.thirdlife.thirddonation.api.nft.SaleSearch.SearchKey;
+import com.thirdlife.thirddonation.api.nft.dto.MessageInfoDto;
 import com.thirdlife.thirddonation.api.nft.dto.SaleInfoDto;
 import com.thirdlife.thirddonation.api.nft.dto.request.BuyRequest;
 import com.thirdlife.thirddonation.api.nft.dto.request.SellRequest;
 import com.thirdlife.thirddonation.api.nft.dto.response.SaleListResponse;
+import com.thirdlife.thirddonation.api.nft.dto.response.SalesMessageResponse;
 import com.thirdlife.thirddonation.api.nft.service.SaleService;
-import com.thirdlife.thirddonation.common.exception.CustomException;
-import com.thirdlife.thirddonation.common.exception.ErrorCode;
 import com.thirdlife.thirddonation.common.model.response.BaseResponseBody;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -21,7 +21,6 @@ import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -35,7 +34,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import springfox.documentation.schema.Enums;
 
 /**
  * NFT 판매 관련 요청을 처리하는 컨트롤러입니다.
@@ -124,7 +122,7 @@ public class ExchangeController {
     public ResponseEntity<SaleListResponse> getSalesList(
             @ApiParam(value = "조회 필터") @RequestParam(required = false)
                     Map<String, Object> searchRequest,
-            @PageableDefault(size = 20 , sort = "id", direction = Sort.Direction.DESC)
+            @PageableDefault(size = 20, sort = "id", direction = Sort.Direction.DESC)
             @ApiParam(value = "페이지네이션", required = true) final Pageable pageable) {
         Map<SearchKey, Object> searchKeys = new HashMap<>();
         for (String key : searchRequest.keySet()) {
@@ -142,6 +140,32 @@ public class ExchangeController {
                 SaleListResponse.builder()
                         .statusCode(200).message("Success").data(salesList.getContent()).build()
         );
+    }
+
+    /**
+     * 판메 완료된 NFT 메시지 리스트.
+     *
+     * @param pageable Pageable
+     * @return ResponseEntity
+     */
+    @GetMapping("/sales/messages")
+    @ApiOperation(value = "판메 완료된 NFT 메시지 리스트",
+            notes = "?page=0&size=x")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 404, message = "사용자 없음"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<SalesMessageResponse> getMessageList(
+            @PageableDefault(sort = "dateLastUpdated", direction = Sort.Direction.DESC)
+            @ApiParam(value = "pageable", required = true) final Pageable pageable
+    ) {
+        Page<MessageInfoDto> messageList = saleService.getMessageList(pageable);
+
+        return ResponseEntity.status(200)
+                .body(SalesMessageResponse.builder().statusCode(200).message("Success")
+                        .data(messageList)
+                        .build());
     }
 
     /**

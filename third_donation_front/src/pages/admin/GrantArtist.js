@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Modal, Button } from 'react-bootstrap';
+import { Table } from 'react-bootstrap';
 import PanelLayout from '../../components/layout/PanelLayout';
+import Pagination from '../../components/paging/Pagination';
+import { Axios } from '../../core/axios';
 
 // 증명서 이미지 행 hover 이벤트 방지 설정 (작동 안 됨 - 수정 필요)
 /* .table-hover > tbody > tr.anti-hover:hover > td,
@@ -8,41 +10,55 @@ import PanelLayout from '../../components/layout/PanelLayout';
     background: white;
   } */
 
-// 테스트용 견본 모달. 승인, 거절 버튼 클릭시 재확인 창 띄울지 고민 중...
-function MyVerticallyCenteredModal(props) {
-  return (
-    <Modal {...props} aria-labelledby="contained-modal-title-vcenter" centered>
-      <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">Modal heading</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>승인하시겠습니까?</Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={props.onHide}>
-          취소
-        </Button>
-        <Button variant="primary">확인</Button>
-      </Modal.Footer>
-    </Modal>
-  );
-}
-
 /**
  * 관리자가 예술가 등록 요청을 승인할 수 있는 페이지 컴포넌트
  * @returns
  */
 const GrantArtist = () => {
-  const [data, setData] = useState([]);
-  const [detailsShown, setDetailsShown] = useState([]);
-  const [modalShow, setModalShow] = React.useState(false);
+  const [totalPage, setTotalPage] = useState([]);
+  const [curPage, setCurPage] = useState(0);
 
-  async function getData() {
-    const result = await fetch('https://jsonplaceholder.typicode.com/users');
-    const getResults = await result.json();
-    setData(getResults);
-  }
+  const [list, setList] = useState([]);
+  const [detailsShown, setDetailsShown] = useState([]);
+
+  const onEnableClick = (userId) => {
+    confirm('예술가로 승인하시겠습니까?') &&
+      Axios.patch(`/users/artists/enable?userId=${userId}`).then(({ data }) => {
+        console.log(data);
+        getList(curPage);
+      });
+  };
+
+  const onDisableClick = (userId) => {
+    confirm('일반 사용자로 승인하시겠습니까?') &&
+      Axios.patch(`/users/artists/disable?userId=${userId}`).then(({ data }) => {
+        console.log(data);
+        getList(curPage);
+      });
+  };
+
+  const getList = (page) => {
+    Axios.get('/users/artists', {
+      params: {
+        page,
+        sort: 'id',
+      },
+    })
+      .then(({ data }) => data)
+      .then(async ({ data }) => {
+        setList(data.content);
+        setCurPage(page);
+        setTotalPage(data.totalPages);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const buttonStyle = {
+    cursor: 'pointer',
+  };
 
   useEffect(() => {
-    getData();
+    getList(curPage);
   }, []);
 
   const toggleShown = (id) => {
@@ -68,40 +84,52 @@ const GrantArtist = () => {
                 <tr>
                   <th>이용자 번호</th>
                   <th>이름</th>
+                  <th>권한</th>
                   <th>장애인 등록번호</th>
                   <th>증명서</th>
                   <th>처리</th>
                 </tr>
               </thead>
               <tbody>
-                {data &&
-                  data.map((item) => (
+                {list &&
+                  list.map((item) => (
                     <React.Fragment key={item.id}>
                       <tr className="align-middle">
                         <td>{item.id}</td>
                         <td>{item.name}</td>
-                        <td>{item.phone}</td>
+                        <td>{item.enabled ? '예술가' : '일반'}</td>
+                        <td>{item.registerNumber}</td>
                         <td>
-                          <button onClick={() => toggleShown(item.id)}>문서아이콘</button>
+                          <span style={buttonStyle} onClick={() => toggleShown(item.id)}>
+                            <i className="fa fa-file"></i>
+                          </span>
                         </td>
                         <td>
-                          <input
-                            type="button"
-                            className="btn-main d-inline-block me-2"
-                            value="승인"
-                            onClick={() => setModalShow(true)}
-                          />
-                          <input type="button" className="btn-main d-inline-block" value="거절" />
+                          {item.enabled ? (
+                            <input
+                              type="button"
+                              className="btn-grey d-inline-block"
+                              value="거절"
+                              onClick={() => onDisableClick(item.id)}
+                            />
+                          ) : (
+                            <input
+                              type="button"
+                              className="btn-main d-inline-block me-2"
+                              value="승인"
+                              onClick={() => onEnableClick(item.id)}
+                            />
+                          )}
                         </td>
                       </tr>
                       {detailsShown.includes(item.id) && (
                         <tr className="anti-hover">
-                          <td colSpan={5}>증명서 이미지 여기다가 뿌린다 {item.website}</td>
+                          <td colSpan={5}>증명서 이미지 여기다가 뿌린다 {item.filePath}</td>
                         </tr>
                       )}
                     </React.Fragment>
                   ))}
-                {!data && (
+                {!list && (
                   <tr>
                     <td colSpan={5}>데이터가 없습니다.</td>
                   </tr>
@@ -109,10 +137,13 @@ const GrantArtist = () => {
               </tbody>
             </Table>
           </div>
+          <div className="spacer-single"></div>
+          <Pagination totalPage={totalPage} curPage={curPage} fetch={getList} />
+          <div className="spacer-single"></div>
         </div>
       </section>
-      <MyVerticallyCenteredModal show={modalShow} onHide={() => setModalShow(false)} />
     </PanelLayout>
   );
 };
+
 export default GrantArtist;

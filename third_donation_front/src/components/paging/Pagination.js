@@ -9,9 +9,6 @@ const Pagination = ({ totalPage, curPage, fetch }) => {
 
   for (let number = 1; number <= totalPage; number++) {
     items.push(
-      // <li key={number} onClick={() => paginate(number - 1)} className="page-item page-link active">
-      //   {number}
-      // </li>,
       <li
         key={number}
         onClick={() => paginate(number - 1)}
@@ -25,17 +22,25 @@ const Pagination = ({ totalPage, curPage, fetch }) => {
     <div className="d-flex justify-content-center">
       <ul className="pagination">
         <li onClick={firstPaginate}>
-          <span className="a">&laquo;</span>
+          <span className="a">
+            <i className="fa fa-angle-double-left"></i>
+          </span>
         </li>
         <li onClick={prevPaginate}>
-          <span className="a">&lt;</span>
+          <span className="a">
+            <i className="fa fa-angle-left"></i>
+          </span>
         </li>
         {items}
         <li onClick={nextPaginate}>
-          <span className="a">&gt;</span>
+          <span className="a">
+            <i className="fa fa-angle-right"></i>
+          </span>
         </li>
         <li onClick={lastPaginate}>
-          <span className="a">&raquo;</span>
+          <span className="a">
+            <i className="fa fa-angle-double-right"></i>
+          </span>
         </li>
         {/* <li onClick={firstPaginate} className="page-link">
           &laquo;

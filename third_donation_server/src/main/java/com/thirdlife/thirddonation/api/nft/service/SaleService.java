@@ -1,5 +1,6 @@
 package com.thirdlife.thirddonation.api.nft.service;
 
+import com.thirdlife.thirddonation.api.nft.dto.MessageInfoDto;
 import com.thirdlife.thirddonation.api.nft.dto.SaleInfoDto;
 import com.thirdlife.thirddonation.api.nft.dto.request.BuyRequest;
 import com.thirdlife.thirddonation.api.nft.dto.request.SellRequest;
@@ -40,6 +41,14 @@ public interface SaleService {
      * @return List of Sales
      */
     Page<SaleInfoDto> getSalesList(Pageable pageable);
+
+    /**
+     * 판매 토큰 메시지 조회 메서드.
+     *
+     * @param pageable Pageable
+     * @return List of Messages
+     */
+    Page<MessageInfoDto> getMessageList(Pageable pageable);
 
     /**
      * 판매 리스트 필터링 조회 메서드.

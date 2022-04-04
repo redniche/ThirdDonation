@@ -1,5 +1,6 @@
 package com.thirdlife.thirddonation.api.nft.service;
 
+import com.thirdlife.thirddonation.api.nft.dto.MessageInfoDto;
 import com.thirdlife.thirddonation.api.nft.dto.SaleInfoDto;
 import com.thirdlife.thirddonation.api.nft.dto.request.BuyRequest;
 import com.thirdlife.thirddonation.api.nft.dto.request.SellRequest;
@@ -201,6 +202,19 @@ public class SaleServiceImpl implements SaleService {
         Page<Sales> page = salesRepository.findAllBySoldOutAndEnabled(false, true, pageable);
 
         return page.map(SaleInfoDto::of);
+    }
+
+    /**
+     * 판매 토큰 메시지 조회 메서드.
+     *
+     * @param pageable Pageable
+     * @return List of Messages
+     */
+    @Override
+    public Page<MessageInfoDto> getMessageList(Pageable pageable) {
+        Page<Sales> page =
+                salesRepository.findAllBySoldOutAndEnabled(true, true, pageable);
+        return page.map(MessageInfoDto::of);
     }
 
     /**

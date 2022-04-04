@@ -70,16 +70,15 @@ const Mint = () => {
     reader.onload = (e) => {
       const fileResult = e.target.result;
       getHash(Buffer(fileResult), file.type)
-        .then(({ fileHash, tokenUriHash }) => {
+        .then(({ fileHash, tokenUriHash, metadata }) => {
           console.log(fileHash, tokenUriHash);
-          const tokenUri = `${ipfs_apis.https_public}/${tokenUriHash}`;
-          return { fileHash, tokenUri };
+          return { fileHash, tokenUriHash, metadata };
         })
-        .then(({ fileHash, tokenUri, metadata }) => {
+        .then(({ fileHash, tokenUriHash, metadata }) => {
           // mint함수 부르기
-          if (fileHash && tokenUri) {
+          if (fileHash && tokenUriHash) {
             //fileHash랑 tokenUri가 null이 아니어야 작동.
-            sendMintTx(fileHash, tokenUri, metadata)
+            sendMintTx(fileHash, tokenUriHash, metadata)
               .then((result) => {
                 if (result) {
                   alert('NFT 생성에 성공했습니다!');
@@ -171,19 +170,21 @@ const Mint = () => {
      * @param {String} tokenUri
      * @returns
      */
-    const sendMintTx = async (fileHash, tokenUri, metadata) => {
-      if (fileHash && tokenUri) {
+    const sendMintTx = async (fileHash, tokenUriHash, metadata) => {
+      if (fileHash && tokenUriHash) {
+        const ipfsTokenUri = `${ipfs_apis.ipfs}${tokenUriHash}`;
         const ssafyNftContract = getSsafyNftContract(currentProvider);
         try {
+          //ipfsTokenUri로 NFT민팅
           const response = await ssafyNftContract.methods
-            .create(nowWalletAddress, fileHash, tokenUri)
+            .create(nowWalletAddress, fileHash, ipfsTokenUri)
             .send({ from: nowWalletAddress });
           if (response.status) {
             const tokenId = response.events.Transfer.returnValues.tokenId;
 
-            if (tokenId !== 0 && tokenUri !== '') {
+            if (tokenId !== 0 && tokenUriHash !== '') {
               try {
-                await handleSaveNFT(tokenId, tokenUri, metadata);
+                await handleSaveNFT(tokenId, ipfsTokenUri, metadata);
                 return true;
               } catch (error) {
                 console.log(error);
@@ -201,14 +202,14 @@ const Mint = () => {
     /**
      * 민팅 종료시 이를 백엔드에 저장한다.
      * @param {String} tokenId
-     * @param {String} tokenUri
+     * @param {String} ipfsTokenUri
      */
-    const handleSaveNFT = (tokenId, tokenUri, metadata) =>
+    const handleSaveNFT = (tokenId, ipfsTokenUri, metadata) =>
       Axios.post(
         apis.nfts.items,
         {
           id: tokenId,
-          tokenUri: tokenUri,
+          tokenUri: ipfsTokenUri,
           ownerAddress: nowWalletAddress,
           fileType: isVideo ? 'video' : 'image',
           name: metadata.title,

@@ -3,7 +3,7 @@ import { create } from 'ipfs-http-client';
 
 const apis = {
   https_public: 'https://ipfs.io/ipfs',
-  http_local: 'http://j6e207.p.ssafy.io/ipfs',
+  https_local: 'https://j6e207.p.ssafy.io/ipfs',
   ipfs: 'ipfs://',
 };
 
@@ -14,7 +14,14 @@ export const Ipfs = create({
 });
 
 export const IpfsAxios = axios.create({
-  baseURL: apis.http_local,
+  baseURL: apis.https_local,
 });
+
+export const convertIpfsToHttps = (ipfsLink) => {
+  if (typeof ipfsLink == 'string') {
+    return ipfsLink.replace(apis.ipfs, apis.https_local + '/');
+  }
+  //문자열이 아니면 null 반환
+};
 
 export default apis;

@@ -2,7 +2,8 @@ import { memo, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Clock from './Clock';
 import { navigate } from '@reach/router';
-import api from '../../core/api';
+import apis from '../../core/axios';
+import ipfs_apis from '../../core/ipfs';
 import { IpfsAxios } from '../../core/ipfs';
 
 const Outer = styled.div`

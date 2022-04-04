@@ -173,7 +173,7 @@ const Mint = () => {
      */
     const sendMintTx = async (fileHash, tokenUri, metadata) => {
       if (fileHash && tokenUri) {
-        const ssafyNftContract = getSsafyNftContract2(currentProvider);
+        const ssafyNftContract = getSsafyNftContract(currentProvider);
         try {
           const response = await ssafyNftContract.methods
             .create(nowWalletAddress, fileHash, tokenUri)

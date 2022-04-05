@@ -22,6 +22,9 @@
 //
 // const fs = require('fs');
 // const mnemonic = fs.readFileSync(".secret").toString().trim();
+var PrivateKeyProvider = require('truffle-privatekey-provider');
+const privateKey =
+  '888804e3288b1f2a0455ed136e1a2c7d55c837d6afe690eb3cab2192b91d6843';
 
 module.exports = {
   /**
@@ -45,6 +48,12 @@ module.exports = {
       host: '127.0.0.1', // Localhost (default: none)
       port: 8545, // Standard Ethereum port (default: none)
       network_id: '*', // Any network (default: none)
+    },
+
+    ssafynet: {
+      provider: () =>
+        new PrivateKeyProvider(privateKey, 'http://20.196.209.2:8545/'),
+      network_id: '*', // Match any network id
     },
     // Another network with more advanced options...
     // advanced: {

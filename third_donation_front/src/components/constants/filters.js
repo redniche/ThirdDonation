@@ -1,9 +1,5 @@
 export const categories = [
   {
-    value: 'all',
-    label: '전체',
-  },
-  {
     value: 'art',
     label: '그림',
   },
@@ -21,10 +17,6 @@ export const status = [
   {
     value: 'on_auction',
     label: '경매 입찰',
-  },
-  {
-    value: 'has_offers',
-    label: '제안 가능',
   },
 ];
 

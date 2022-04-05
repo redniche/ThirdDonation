@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "truffle-privatekey-provider": "^1.5.0",
     "web3": "^1.7.1"
   }
 }

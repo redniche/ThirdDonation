@@ -1,10 +1,17 @@
 import { combineReducers } from 'redux';
+import { persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 import nftReducer from './nfts';
 import hotCollectionsReducer from './hotCollections';
 import authorListReducer from './authorList';
 import filterReducer from './filters';
 import blogPostsReducer from './blogs';
 import accountReducer from './account';
+
+const persistConfig = {
+  key: 'root',
+  storage,
+};
 
 export const rootReducer = combineReducers({
   NFT: nftReducer,
@@ -17,4 +24,4 @@ export const rootReducer = combineReducers({
 
 const reducers = (state, action) => rootReducer(state, action);
 
-export default reducers;
+export default persistReducer(persistConfig, reducers);

@@ -42,7 +42,9 @@ const PanelLayout = ({ children, title }) => (
     <Header />
     <section
       className="jumbotron breadcumb no-bg"
-      style={{ backgroundImage: `url(${'./img/background/subheader.jpg'})` }}>
+      style={{
+        backgroundImage: `url(${process.env.PUBLIC_URL + '/img/background/subheader.jpg'})`,
+      }}>
       <div className="mainbreadcumb">
         <div className="container">
           <div className="row m-10-hor">

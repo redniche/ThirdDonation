@@ -80,9 +80,12 @@ public class SaleServiceImpl implements SaleService {
     @Override
     public void buy(BuyRequest buyRequest) {
 
-        final Long buyerId = buyRequest.getBuyerId();
-        User buyer = userRepository.findById(buyerId)
-                .orElseThrow(() -> new CustomException(ErrorCode.BUYER_NOT_FOUND));
+        User buyer;
+        try {
+            buyer = userService.getAuthUser();
+        } catch (Exception ex) {
+            throw new CustomException(ErrorCode.BUYER_NOT_FOUND);
+        }
 
         final Long saleId = buyRequest.getSaleId();
         Sales sales = salesRepository.findById(saleId)
@@ -93,7 +96,7 @@ public class SaleServiceImpl implements SaleService {
             throw new CustomException(ErrorCode.CANNOT_BUY_DISABLED);
         } else if (sales.getSoldOut()) {
             throw new CustomException(ErrorCode.CANNOT_BUY_SOLD_OUT);
-        } else if (seller.equals(buyer)) {
+        } else if (!seller.getId().equals(buyer.getId())) {
             throw new CustomException(ErrorCode.CANNOT_BUY_MINE);
         }
 
@@ -102,6 +105,7 @@ public class SaleServiceImpl implements SaleService {
 
         sales.setBuyer(buyer);
         sales.setSoldOut(true);
+        sales.getNft().setOwner(buyer);
 
         if (message != null) {
             sales.setMessage(message);

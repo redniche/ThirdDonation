@@ -12,6 +12,8 @@ import {
   getSsafyToeknContract,
   SALE_NFT_CONTRACT_ADDRESS,
 } from '../../contracts';
+import ipfs_apis from '../../core/ipfs';
+import { IpfsAxios, convertIpfsToHttps } from '../../core/ipfs';
 
 import { Modal } from 'react-bootstrap';
 import Spinner from 'react-bootstrap/Spinner';
@@ -158,7 +160,9 @@ const ItemDetail = function () {
       // 토큰 ID에 해당하는 tokenURI 가져오기
       const tokenUri = await artNftContract.methods.getTokenURI(nftId).call();
       console.log(tokenUri);
-      const { data: tokenUriJson } = await Axios.get(tokenUri, { params: [] });
+      const { data: tokenUriJson } = await IpfsAxios.get(convertIpfsToHttps(tokenUri), {
+        params: [],
+      });
       setTokenUri(tokenUriJson);
 
       const price = await saleArtContract.methods.artTokenPrices(nftId).call();
@@ -291,13 +295,18 @@ const ItemDetail = function () {
   if (nft.owner) console.log(nft.owner.id);
   return (
     <BasicLayout>
-      {/* {console.log(nft)}
-      {console.log(tokenUri)} */}
+      {/* {console.log(nft)} */}
+      {console.log(tokenUri)}
       <section className="container mt-4">
         <div className="row mt-md-5 pt-md-4">
-          <div className="col-md-6 text-center">
+          <div className="col-md-6 text-center align-self-center">
             {/* NFT 이미지 */}
-            <img style={{ height: '400px' }} src={tokenUri && tokenUri.image} alt="" />
+            <img
+              className=""
+              style={{ width: '100%' }}
+              src={tokenUri && `${ipfs_apis.https_local}/${tokenUri.hash}`}
+              alt=""
+            />
           </div>
           <div className="col-md-6">
             <div className="item_info">
@@ -339,7 +348,7 @@ const ItemDetail = function () {
                     </div>
                     <div className="author_list_info">
                       {/* 제작자 아이디 */}
-                      <span>{tokenUri && tokenUri.author.username}</span>
+                      <span>{tokenUri && tokenUri.artist.name}</span>
                       {/* <span>{nft.author && nft.author.username}</span> */}
                     </div>
                   </div>

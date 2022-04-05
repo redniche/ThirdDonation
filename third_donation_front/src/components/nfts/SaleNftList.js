@@ -65,7 +65,7 @@ const SaleNftList = () => {
   };
   const onChangeWishCount = (cnt) => {
     console.log(cnt);
-    setWishCount(cnt);
+    setWishCount(cnt - 1);
   };
 
   const getSaleNftList = async (price) => {
@@ -92,7 +92,7 @@ const SaleNftList = () => {
   };
 
   useEffect(() => {
-    getSaleNftList();
+    getSaleNftList(null);
   }, []);
 
   useEffect(() => {

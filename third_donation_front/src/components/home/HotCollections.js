@@ -11,16 +11,16 @@ import { Axios } from './../../core/axios';
  * @returns
  */
 const HotCollections = () => {
-  const [height, setHeight] = useState(0);
+  // const [height, setHeight] = useState(0);
 
-  const [hotCollections, setHotCollections] = useState([]);
+  const [hotCollections, setHotCollections] = useState(null);
 
-  const onFileLoad = ({ target: file }) => {
-    let currentHeight = height;
-    if (currentHeight < file.offsetHeight) {
-      setHeight(file.offsetHeight);
-    }
-  };
+  // const onFileLoad = ({ target: file }) => {
+  //   let currentHeight = height;
+  //   if (currentHeight < file.offsetHeight) {
+  //     setHeight(file.offsetHeight);
+  //   }
+  // };
 
   const getSaleNftList = async () => {
     await Axios.get('/nfts/exchange/sales')
@@ -50,12 +50,18 @@ const HotCollections = () => {
 
   return (
     <div className="nft">
-      <Slider {...settings}>
+      {/* <Slider {...settings}>
         {hotCollections &&
-          hotCollections.map((nft, index) => (
-            <CollectionItem key={index} nft={nft} onFileLoad={onFileLoad} height={height} />
+          hotCollections.map((nft, index) => nft && <CollectionItem key={index} nft={nft} />)}
+        {console.log('😀😀😀😀')}
+      </Slider> */}
+      {hotCollections && (
+        <Slider {...settings}>
+          {hotCollections.map((nft, index) => (
+            <CollectionItem key={index} nft={nft} />
           ))}
-      </Slider>
+        </Slider>
+      )}
     </div>
   );
 };

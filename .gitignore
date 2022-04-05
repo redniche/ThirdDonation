@@ -23,6 +23,7 @@ pnpm-debug.log*
 *.sw?
 
 ##### Back End #####
+upload/
 HELP.md
 .gradle
 build/

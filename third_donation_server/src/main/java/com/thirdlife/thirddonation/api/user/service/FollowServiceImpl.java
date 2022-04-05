@@ -1,14 +1,20 @@
 package com.thirdlife.thirddonation.api.user.service;
 
+import com.thirdlife.thirddonation.api.nft.dto.NftInfoDto;
+import com.thirdlife.thirddonation.api.user.dto.UserInfoDto;
 import com.thirdlife.thirddonation.api.user.dto.request.FollowRequest;
 import com.thirdlife.thirddonation.common.exception.CustomException;
 import com.thirdlife.thirddonation.common.exception.ErrorCode;
+import com.thirdlife.thirddonation.db.nft.entity.Nft;
 import com.thirdlife.thirddonation.db.user.entity.Follow;
 import com.thirdlife.thirddonation.db.user.entity.User;
 import com.thirdlife.thirddonation.db.user.repository.FollowRepository;
 import com.thirdlife.thirddonation.db.user.repository.UserRepository;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -78,8 +84,21 @@ public class FollowServiceImpl implements FollowService {
             throw new CustomException(ErrorCode.CANNOT_FOLLOW_MYSELF);
         }
 
-        User artist = userRepository.findById(followRequest.getArtistId())
+        return userRepository.findById(followRequest.getArtistId())
                 .orElseThrow(() -> new CustomException(ErrorCode.ARTIST_NOT_FOUND));
-        return artist;
+    }
+
+    /**
+     * 예술가 팔로워 리스트 조회.
+     *
+     * @param userId Long
+     * @param pageable Pageable
+     * @return Slice
+     */
+    @Override
+    public Slice<UserInfoDto> getFollowerList(Long userId, Pageable pageable) {
+        Slice<Follow> page = followRepository.findAllByFollowingArtist_Id(userId, pageable)
+                .orElseThrow(() -> new CustomException(ErrorCode.NFT_NOT_FOUND));
+        return page.map(UserInfoDto::of3);
     }
 }

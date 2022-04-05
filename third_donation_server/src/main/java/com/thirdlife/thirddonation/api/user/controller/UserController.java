@@ -1,10 +1,12 @@
 package com.thirdlife.thirddonation.api.user.controller;
 
+import com.thirdlife.thirddonation.api.user.dto.UserInfoDto;
 import com.thirdlife.thirddonation.api.user.dto.request.ArtistRegisterRequest;
 import com.thirdlife.thirddonation.api.user.dto.request.FollowRequest;
 import com.thirdlife.thirddonation.api.user.dto.request.UserProfileModifyRequest;
 import com.thirdlife.thirddonation.api.user.dto.request.UserRequest;
 import com.thirdlife.thirddonation.api.user.dto.response.ArtistListResponse;
+import com.thirdlife.thirddonation.api.user.dto.response.FollowerListResponse;
 import com.thirdlife.thirddonation.api.user.dto.response.UserDailyIncomeResponse;
 import com.thirdlife.thirddonation.api.user.dto.response.UserProfileResponse;
 import com.thirdlife.thirddonation.api.user.dto.response.UserResponse;
@@ -33,6 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.commons.codec.binary.Hex;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
@@ -185,8 +188,9 @@ public class UserController {
             @ApiResponse(code = 404, message = "사용자 없음"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    public ResponseEntity<BaseResponseBody> img(@Deprecated @ApiParam(value = "id") @RequestParam Long userId,
-                                                @RequestPart("img") MultipartFile img) {
+    public ResponseEntity<BaseResponseBody> img(
+            @Deprecated @ApiParam(value = "id") @RequestParam Long userId,
+            @RequestPart("img") MultipartFile img) {
 
         userService.uploadProfileImage(img);
 
@@ -294,6 +298,31 @@ public class UserController {
 
         return ResponseEntity.status(200)
                 .body(BaseResponseBody.builder().statusCode(200).message("Success").build());
+    }
+
+    /**
+     * 팔로워 리스트 조회.
+     *
+     * @param pageable Pageable
+     * @param userId Long
+     * @return ResponseEntity
+     */
+    @GetMapping("/follow")
+    @ApiOperation(value = "장애인 예술가 팔로워 조회")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<FollowerListResponse> followArtist(
+            @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC)
+            @ApiParam(value = "페이지네이션", required = true) final Pageable pageable,
+            @RequestParam(value = "userId") Long userId) {
+
+        Slice<UserInfoDto> slice = followService.getFollowerList(userId, pageable);
+
+        return ResponseEntity.status(200)
+                .body(FollowerListResponse.builder().statusCode(200).message("Success")
+                        .data(slice.getContent()).build());
     }
 
     /**

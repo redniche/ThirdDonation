@@ -7,6 +7,7 @@ import com.thirdlife.thirddonation.api.nft.dto.SaleInfoDto;
 import com.thirdlife.thirddonation.api.nft.dto.request.BuyRequest;
 import com.thirdlife.thirddonation.api.nft.dto.request.SellRequest;
 import com.thirdlife.thirddonation.api.nft.dto.response.SaleListResponse;
+import com.thirdlife.thirddonation.api.nft.dto.response.SalesHistoryResponse;
 import com.thirdlife.thirddonation.api.nft.dto.response.SalesMessageResponse;
 import com.thirdlife.thirddonation.api.nft.service.SaleService;
 import com.thirdlife.thirddonation.common.model.response.BaseResponseBody;
@@ -22,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
@@ -165,6 +167,32 @@ public class ExchangeController {
         return ResponseEntity.status(200)
                 .body(SalesMessageResponse.builder().statusCode(200).message("Success")
                         .data(messageList)
+                        .build());
+    }
+
+    /**
+     * 판메 완료된 NFT 메시지 리스트.
+     *
+     * @param pageable Pageable
+     * @return ResponseEntity
+     */
+    @GetMapping("/sales/history")
+    @ApiOperation(value = "판메 완료된 NFT 거래 기록",
+            notes = "?page=0&size=x")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 404, message = "사용자 없음"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<SalesHistoryResponse> getHistory(
+            @PageableDefault(sort = "dateLastUpdated", direction = Sort.Direction.DESC)
+            @ApiParam(value = "pageable", required = true) final Pageable pageable
+    ) {
+        Slice<SaleInfoDto> history = saleService.getHistory(pageable);
+
+        return ResponseEntity.status(200)
+                .body(SalesHistoryResponse.builder().statusCode(200).message("Success")
+                        .data(history)
                         .build());
     }
 

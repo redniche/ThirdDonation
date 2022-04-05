@@ -2,11 +2,12 @@ const MsgRecordListRow = ({ messages }) => {
   return (
     <tbody>
       {messages.map((msg) => (
-        <tr key={msg.id} classNamem="msgRow">
-          <td>{msg.name}</td>
-          <td>{msg.content}</td>
-          <td>{msg.nftName}</td>
-          <td>{msg.price}</td>
+        <tr key={msg.message} className="msgRow">
+          <td>{msg.buyer.id}</td>
+          <td>{msg.buyer.username}</td>
+          <td>{msg.message}</td>
+          <td>{msg.tokenName}</td>
+          <td>{msg.dateTraded.substr(0, 10)}</td>
         </tr>
       ))}
     </tbody>

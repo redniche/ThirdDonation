@@ -65,7 +65,7 @@ const SaleNftList = () => {
   };
   const onChangeWishCount = (cnt) => {
     console.log(cnt);
-    setWishCount(cnt);
+    setWishCount(cnt - 1);
   };
 
   const getSaleNftList = async (price) => {
@@ -76,7 +76,7 @@ const SaleNftList = () => {
         name: nftWord,
         seller_id: sellerWord,
         price_between: price,
-        wish_count_greater: wishCount - 1,
+        wish_count_greater: wishCount,
       },
     })
       .then((data) => data)

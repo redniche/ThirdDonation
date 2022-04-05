@@ -11,7 +11,7 @@ const Home = () => (
     <Header />
     <section
       className="jumbotron breadcumb no-bg h-vh"
-      style={{ backgroundImage: `url(${'./img/bg-shape-1.jpg'})` }}>
+      style={{ backgroundImage: `url(${'/img/bg-shape-1.jpg'})` }}>
       <SliderMain />
     </section>
 

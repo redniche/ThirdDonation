@@ -27,8 +27,10 @@ export const detectCurrentProvider = () => {
     // metamask가 깔려있지 않을 때 -> 메타마스크 설치 페이지로 이동
   } else {
     alert('Install Metamask!');
-    window.location =
-      'https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn/';
+    window.open(
+      'https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn',
+      '_blank',
+    );
   }
   return provider;
 };

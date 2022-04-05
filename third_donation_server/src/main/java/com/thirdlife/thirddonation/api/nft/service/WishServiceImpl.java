@@ -24,6 +24,7 @@ public class WishServiceImpl implements WishService {
 
     private final WishRepository wishRepository;
     private final NftRepository nftRepository;
+    private final UserRepository userRepository;
     private final UserService userService;
 
     /**
@@ -33,7 +34,8 @@ public class WishServiceImpl implements WishService {
      */
     @Override
     public void createWish(WishRequest wishRequest) {
-        final User user = userService.getAuthUser();
+        User user = userService.getAuthUser();
+        user = userRepository.getById(user.getId());
 
         Nft nft = nftRepository.findById(wishRequest.getTokenId())
                 .orElseThrow(() -> new CustomException(ErrorCode.NFT_NOT_FOUND));

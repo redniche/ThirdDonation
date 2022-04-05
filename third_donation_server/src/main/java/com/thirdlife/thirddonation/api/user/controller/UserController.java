@@ -1,7 +1,6 @@
 package com.thirdlife.thirddonation.api.user.controller;
 
 import com.thirdlife.thirddonation.api.user.dto.UserInfoDto;
-import com.thirdlife.thirddonation.api.user.dto.request.ArtistRegisterRequest;
 import com.thirdlife.thirddonation.api.user.dto.request.FollowRequest;
 import com.thirdlife.thirddonation.api.user.dto.request.UserProfileModifyRequest;
 import com.thirdlife.thirddonation.api.user.dto.request.UserRequest;
@@ -24,22 +23,16 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import java.math.BigInteger;
-import java.security.SignatureException;
 import java.util.List;
-import java.util.Objects;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import lombok.val;
-import org.apache.commons.codec.binary.Hex;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -53,12 +46,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.web3j.crypto.Hash;
-import org.web3j.crypto.Keys;
-import org.web3j.crypto.Sign;
-import org.web3j.crypto.Sign.SignatureData;
-import org.web3j.utils.Numeric;
-import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * 회원 관련의 요청을 처리하는 컨트롤러입니다.
@@ -201,7 +188,9 @@ public class UserController {
     /**
      * 장애인 예술가 등록 신청 메서드.
      *
-     * @param artistRegisterRequest ArtistRegisterRequest
+     * @param name String
+     * @param registerNumber String
+     * @param imageFile MultipartFile
      * @return ResponseEntity
      */
     @PostMapping("${request.path.artists}")
@@ -211,9 +200,11 @@ public class UserController {
             @ApiResponse(code = 500, message = "서버 오류")
     })
     public ResponseEntity<BaseResponseBody> registerArtist(
-            @Valid @ModelAttribute ArtistRegisterRequest artistRegisterRequest) {
+            @ApiParam(value = "name") @RequestParam String name,
+            @ApiParam(value = "registerNumber") @RequestParam String registerNumber,
+            @RequestPart("imageFile") MultipartFile imageFile) {
 
-        artistService.createArtist(artistRegisterRequest);
+        artistService.createArtist(name, registerNumber, imageFile);
 
         return ResponseEntity.status(200)
                 .body(BaseResponseBody.builder().statusCode(200).message("Success").build());

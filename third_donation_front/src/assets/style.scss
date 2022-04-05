@@ -84,7 +84,7 @@ strong {
   font-weight: bold;
 }
 section {
-  padding: 90px 0;
+  padding: 20px 0;
   &.no-top {
     padding-top: 0 !important;
   }
@@ -654,6 +654,36 @@ p.lead {
   text-align: center;
   color: #fff !important;
   background: #8364e2;
+  border-radius: 6px;
+  letter-spacing: normal;
+  outline: 0;
+  font-weight: 800;
+  text-decoration: none;
+  padding: 8px 40px;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 2px 2px 20px 0px rgba(131, 100, 226, 0);
+  transition: all 0.3s ease;
+  &:hover {
+    box-shadow: 2px 2px 20px 0px rgba(131, 100, 226, 0.5);
+    transition: all 0.3s ease;
+  }
+  &.inline {
+    display: inline-block;
+    margin-right: 15px;
+    &.white {
+      color: $color_more !important;
+      background: $white;
+    }
+  }
+}
+.btn-grey {
+  display: block;
+  width: max-content;
+  text-align: center;
+  color: #fff !important;
+  background: #6c757d;
   border-radius: 6px;
   letter-spacing: normal;
   outline: 0;
@@ -2053,15 +2083,16 @@ address {
   -webkit-border-radius: 3px;
 }
 .pagination li .a {
-  font-size: 14px;
-  color: #888;
+  font-size: 1.1rem;
   border: solid 1px #dddddd;
   border-right: none;
   background: none;
-  padding: 15px 20px 15px 20px;
+  padding: 10px 15px 10px 15px;
   border-radius: 0;
-  background: $white;
   cursor: pointer;
+}
+.pagination li:not(.active) .a:hover {
+  background: #eeeeee;
 }
 .dark-scheme .pagination li .a {
   border-color: rgba(255, 255, 255, 0.1);
@@ -3257,7 +3288,7 @@ i.font60 {
   position: relative;
 }
 .d_profile {
-  margin-bottom: 40px;
+  margin-bottom: 0px;
 }
 .profile_avatar {
   display: flex;
@@ -3336,6 +3367,23 @@ i.font60 {
   display: inline-block;
   float: none;
 }
+
+.profile_description {
+  background-color: #00000018;
+  white-space: pre-line;
+  border-radius: 20px;
+  margin: 10px 20px 0px 20px;
+  padding: 10px 30px;
+  font-size: 15px;
+  display: block;
+  max-width: fit-content;
+  color: #727272;
+}
+
+.result_log {
+  text-align: center;
+}
+
 #btn_copy {
   position: absolute;
   font-size: 12px;
@@ -4920,7 +4968,7 @@ blockquote {
     }
     .popshow {
       cursor: default;
-      width: 250px;
+      width: 300px;
       position: absolute;
       background: $white;
       border-radius: 5px;
@@ -4963,7 +5011,6 @@ blockquote {
             .d-desc {
               position: relative;
               top: -20px;
-              margin-left: 45px;
               b {
                 font-weight: bold;
               }
@@ -4997,7 +5044,7 @@ blockquote {
     }
     .popshow {
       cursor: default;
-      width: 250px;
+      width: 300px;
       position: absolute;
       background: $white;
       border-radius: 5px;

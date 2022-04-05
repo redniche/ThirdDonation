@@ -1,21 +1,18 @@
-import { memo, useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { memo, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Form, Formik, Field, ErrorMessage } from 'formik';
 import { navigate } from '@reach/router';
 import * as Yup from 'yup';
-import auth, { authorUrl } from '../../core/auth';
-import request from '../../core/auth/request';
-import api from '../../core/api';
 import BasicLayout from '../../components/layout/BasicLayout';
-import { fetchAuthorList } from '../../store/actions/thunks';
 import * as selectors from '../../store/selectors';
-import axios from 'axios';
+import apis, { Axios } from '../../core/axios';
+// import { Axios } from '../../core/axios';
 
 // 경고창
 // 유저이름, 지갑주소 안적으면 경고창 날림
 const validationSchema = Yup.object().shape({
-  username: Yup.lazy(() => Yup.string().required('예술가 이름을 안적어주셨습니다. ')),
-  wallet: Yup.lazy(() => Yup.string().required('장애인 등록번호를 안적어주셨습니다.')),
+  realName: Yup.lazy(() => Yup.string().required('예술가 이름을 안적어주셨습니다. ')),
+  registNumber: Yup.lazy(() => Yup.string().required('장애인 등록번호를 안적어주셨습니다.')),
 });
 
 /**
@@ -23,18 +20,21 @@ const validationSchema = Yup.object().shape({
  * @param {*} param0 authorId
  * @returns
  */
-const ArtistRegistration = ({ authorId }) => {
-  const jwt = auth.getToken();
-  const authorsState = useSelector(selectors.authorsState);
-  const author = authorsState.data ? authorsState.data[0] : null;
+const ArtistRegistration = () => {
+  // state
+  const [file, setFile] = useState();
+  const { data: account } = useSelector(selectors.accountState);
+  const author = account;
+  console.log(author);
+
   const initialValues = {
-    username: author ? author.username : '',
-    wallet: author ? author.wallet : '',
+    realName: '',
+    registNumber: '',
   };
 
   // 디스패치 함수를 실행하는 Hooks 이다.
   // action을 발생시켜 state를 변하게함
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   // navigate()
   // 새로 이동할 화면이 현재 화면과 같으면 새로운 화면을 쌓지 않고 파라미터만 변경한다.
@@ -44,62 +44,87 @@ const ArtistRegistration = ({ authorId }) => {
 
   // 폼 제출
   const handleSubmitForm = async (data) => {
-    const requestURL = authorUrl(authorId);
+    console.log(data);
+    console.log(account.id);
+    const formData = new FormData();
+    formData.append('userId', account.id);
+    formData.append('name', data.realName);
+    formData.append('registerNumber', data.registNumber);
+    formData.append('imageFile', file);
 
-    await request(requestURL, { method: 'PUT', body: data })
+    console.log(file);
+
+    await Axios.post(apis.users.artists, formData, {
+      'Content-Type': 'multipart/form-data',
+    })
       .then((response) => {
         console.log(response);
-        redirectUser(`/Author/${authorId}`);
+        alert('등록 신청이 완료되었습니다!');
+        redirectUser();
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
-  // 프로필 사진 제출
-  const handleSubmitProfilePicture = async (file, field) => {
-    var formData = new FormData();
-
-    formData.append('files', file);
-    formData.append('ref', 'author'); // link the image to a content type
-    formData.append('refId', authorId); // link the image to a specific entry
-    formData.append('field', field); // link the image to a specific field
-
-    await axios({
-      method: 'post',
-      url: `${api.baseUrl}/upload`,
-      data: formData,
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-        'Content-Type': 'multipart/form-data',
-      },
-    })
-      .then((res) => {
-        redirectUser(`/Author/${authorId}`);
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  // state
-  const [profileImage, setProfileImage] = useState();
-
-  // 사진 올리기
+  // 파일 올리기
   const handleProfilePicture = (event) => {
     let file = event.target.files[0];
-    setProfileImage(file);
+    setFile(file);
+
+    if (!file) return;
+
+    let maxSize = 5 * 1024 * 1024;
+    if (maxSize <= file.size) {
+      alert('파일 용량은 5MB 이내로 등록 가능합니다.');
+      return;
+    }
+
     let reader = new FileReader();
     reader.readAsDataURL(file);
   };
 
-  // 리액트 컴포넌트가 렌더링될 때마다 특정 작업을 실행할 수 있도록 하는 Hook
-  // authorId(특정값)가 바뀔때 실행된다.
-  useEffect(() => {
-    dispatch(fetchAuthorList(authorId));
-  }, [dispatch, authorId]);
+  // const { data: wallet } = useSelector(selectors.accountState);
+  // const [name, setName] = useState('');
+  // const [regNum, setRegNum] = useState('');
 
+  // const onChangeName = (e) => {
+  //   setName(e.target.value);
+  // };
+
+  // const onChangeRegNum = (e) => {
+  //   setRegNum(e.target.value);
+  // };
+
+  // console.log(wallet);
+
+  // function artistRegist() {
+  //   Axios.post(
+  //     '/users/artists',
+  //     {
+  //       filePath: 'string',
+  //       name: name,
+  //       registerNumber: regNum,
+  //       userId: wallet.id,
+  //     },
+  //     {
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       withCredentials: true,
+  //     },
+  //   )
+  //     .then(() => {
+  //       window.alert(name + '은 자선단체 등록을 성공하였습니다.');
+  //     })
+  //     .catch((err) => {
+  //       console.log('에러발생' + err);
+  //       window.alert('자선단체 등록을 실패하였습니다.');
+  //     });
+  //   // console.log(name);
+  //   // console.log(url);
+  //   // console.log(wallet.walletAddress);
+  // }
   return (
     <BasicLayout>
       <section id="section-main" aria-label="section">
@@ -146,56 +171,42 @@ const ArtistRegistration = ({ authorId }) => {
                                   <h5>이름</h5>
                                   <Field
                                     type="text"
-                                    name="username"
-                                    id="username"
+                                    name="realName"
+                                    id="realName"
                                     className="form-control"
                                     placeholder="예술가님의 이름을 적어주세요"
+                                    // onChange={onChangeName}
                                   />
-                                  <ErrorMessage name="username" component="div" />
+                                  <ErrorMessage name="realName" component="div" />
                                   <div className="spacer-20"></div>
 
                                   <h5>등록번호</h5>
                                   <Field
                                     type="text"
-                                    name="regist-number"
-                                    id="regist-number"
+                                    name="registNumber"
+                                    id="registNumber"
                                     className="form-control"
                                     placeholder="장애인 등록번호를 적어주세요"
+                                    // onChange={onChangeRegNum}
                                   />
-                                  <ErrorMessage name="wallet" component="div" />
+                                  <ErrorMessage name="registNumber" component="div" />
                                   <div className="spacer-20"></div>
 
                                   <h5>장애인 인증서 제출</h5>
-                                  <Formik
-                                    onSubmit={async (values, { setSubmitting, resetForm }) => {
-                                      setSubmitting(true);
-                                      await handleSubmitProfilePicture(profileImage, 'avatar');
-                                      setSubmitting(false);
-                                      resetForm();
-                                    }}>
-                                    {/* {({ values, isSubmitting, isValid }) => { */}
-                                    {() => {
-                                      return (
-                                        <Form>
-                                          <input
-                                            name="profile_image"
-                                            type="file"
-                                            id="upload_profile_img"
-                                            onChange={(event) => {
-                                              handleProfilePicture(event);
-                                            }}
-                                          />
-                                        </Form>
-                                      );
+
+                                  <Field
+                                    name="certificationImg"
+                                    type="file"
+                                    id="certificationImg"
+                                    accept=".png,.jpg,.jpeg"
+                                    onChange={(event) => {
+                                      handleProfilePicture(event);
                                     }}
-                                  </Formik>
-                                  <div className="spacer-40"></div>
-                                  <input
-                                    type="submit"
-                                    id="submit"
-                                    className="btn btn-main"
-                                    value="등록"
                                   />
+                                  <div className="spacer-40"></div>
+                                  <button type="submit" id="submit" className="btn btn-main">
+                                    등록하기
+                                  </button>
                                 </div>
                               </div>
                             </div>

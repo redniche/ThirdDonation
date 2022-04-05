@@ -1,16 +1,25 @@
 import { Axios, Canceler } from '../../../core/axios';
-import * as actions from '../../actions';
+import * as actions from '..';
 import api from '../../../core/api';
+import apis from '../../../core/axios';
+// import { useSelector } from 'react-redux';
+// import * as selectors from '../../selectors';
 
-export const fetchAuthorList = (authorId) => async (dispatch) => {
+export const fetchAuthor = (authorId) => async (dispatch) => {
+  // await new Promise(() => alert('헬로'));
   dispatch(actions.getAuthorList.request(Canceler.cancel));
   try {
-    let filter = authorId ? 'id=' + authorId : '';
-    const { data } = await Axios.get(`${api.baseUrl}${api.authors}?${filter}`, {
+    Axios.get(`${apis.users.profile}/${authorId}`, {
       cancelToken: Canceler.token,
       params: {},
-    });
-    dispatch(actions.getAuthorList.success(data));
+    })
+      .then(({ data: { data } }) => {
+        data.imagePath = `${apis.file}/${data.imagePath}`;
+        dispatch(actions.getAuthorList.success(data));
+      })
+      .then((err) => {
+        dispatch(actions.getAuthorList.failure(err));
+      });
   } catch (err) {
     dispatch(actions.getAuthorList.failure(err));
   }

@@ -3,6 +3,8 @@ package com.thirdlife.thirddonation.db.user.repository;
 import com.thirdlife.thirddonation.db.user.entity.Follow;
 import com.thirdlife.thirddonation.db.user.entity.User;
 import java.util.Optional;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,6 +13,15 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Transactional(readOnly = true)
 public interface FollowRepository extends JpaRepository<Follow, Long> {
+
+    /**
+     * 팔로워 목록 데이터 조회.
+     * @param artistId Long
+     * @param pageable Pageable
+     * @return Optional
+     */
+    Optional<Slice<Follow>> findAllByFollowingArtist_Id(Long artistId, Pageable pageable);
+
     /**
      * 팔로잉 데이터 조회.
      *
@@ -19,4 +30,6 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
      * @return Optional
      */
     Optional<Follow> findByUserAndFollowingArtist(User user, User followingArtist);
+
+
 }

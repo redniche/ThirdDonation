@@ -2,6 +2,7 @@ package com.thirdlife.thirddonation.api.user.dto;
 
 import com.thirdlife.thirddonation.config.WebMvcConfig;
 import com.thirdlife.thirddonation.db.user.entity.Authority;
+import com.thirdlife.thirddonation.db.user.entity.Follow;
 import com.thirdlife.thirddonation.db.user.entity.User;
 import com.thirdlife.thirddonation.db.user.entity.UserImg;
 import java.time.LocalDateTime;
@@ -73,6 +74,25 @@ public class UserInfoDto {
                 .imagePath(userPath)
                 .description(user.getDescription())
                 .authority(user.getAuthority())
+                .build();
+    }
+
+    /**
+     * 팔로워 엔티티를 입력하여 유저의 간단한 프로필을 반환합니다.
+     *
+     * @param follow User 유저 객체
+     * @return UserInfoDto 유저 정보 Dto
+     */
+    public static UserInfoDto of3(Follow follow) {
+        User follower = follow.getUser();
+        UserImg userImg = follower.getUserImg();
+        String userPath = userImg == null ? null : userImg.getFileUrl();
+        return UserInfoDto.builder()
+                .id(follower.getId())
+                .walletAddress(follower.getWalletAddress())
+                .dateCreated(follower.getDateCreated())
+                .username(follower.getUsername())
+                .imagePath(userPath)
                 .build();
     }
 }

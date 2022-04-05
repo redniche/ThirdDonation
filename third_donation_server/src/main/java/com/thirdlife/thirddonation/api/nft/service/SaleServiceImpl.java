@@ -216,9 +216,9 @@ public class SaleServiceImpl implements SaleService {
      * @return List of Messages
      */
     @Override
-    public Page<MessageInfoDto> getMessageList(Pageable pageable) {
+    public Page<MessageInfoDto> getMessageList(Long artistId, Pageable pageable) {
         Page<Sales> page =
-                salesRepository.findAllBySoldOutAndEnabled(true, true, pageable);
+                salesRepository.findAllBySoldOutAndNft_ArtistId(true, artistId, pageable);
         return page.map(MessageInfoDto::of);
     }
 
@@ -238,7 +238,7 @@ public class SaleServiceImpl implements SaleService {
     /**
      * 판매 리스트 필터링 조회 메서드.
      *
-     * @param pageable Pageable
+     * @param pageable       Pageable
      * @param searchKeywords Specification
      * @return Page of SaleInfoDto
      */

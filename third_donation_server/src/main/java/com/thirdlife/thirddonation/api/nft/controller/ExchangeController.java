@@ -150,7 +150,7 @@ public class ExchangeController {
      * @param pageable Pageable
      * @return ResponseEntity
      */
-    @GetMapping("/sales/messages")
+    @GetMapping("/sales/messages/{artistId}")
     @ApiOperation(value = "판메 완료된 NFT 메시지 리스트",
             notes = "?page=0&size=x")
     @ApiResponses({
@@ -160,9 +160,11 @@ public class ExchangeController {
     })
     public ResponseEntity<SalesMessageResponse> getMessageList(
             @PageableDefault(sort = "dateLastUpdated", direction = Sort.Direction.DESC)
-            @ApiParam(value = "pageable", required = true) final Pageable pageable
+            @ApiParam(value = "pageable", required = true) final Pageable pageable,
+            @PathVariable @ApiParam(value = "NFT 민팅 예술가 아이디", required = true)
+                    Long artistId
     ) {
-        Page<MessageInfoDto> messageList = saleService.getMessageList(pageable);
+        Page<MessageInfoDto> messageList = saleService.getMessageList(artistId, pageable);
 
         return ResponseEntity.status(200)
                 .body(SalesMessageResponse.builder().statusCode(200).message("Success")

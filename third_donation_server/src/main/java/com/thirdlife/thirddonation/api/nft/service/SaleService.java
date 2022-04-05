@@ -7,6 +7,7 @@ import com.thirdlife.thirddonation.api.nft.dto.request.SellRequest;
 import com.thirdlife.thirddonation.db.nft.entity.Sales;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.domain.Specification;
 
 /**
@@ -49,6 +50,14 @@ public interface SaleService {
      * @return List of Messages
      */
     Page<MessageInfoDto> getMessageList(Pageable pageable);
+
+    /**
+     * 판매 완료된 거래 기록 조회.
+     *
+     * @param pageable Pageable
+     * @return Slice of SaleInfo
+     */
+    Slice<SaleInfoDto> getHistory(Pageable pageable);
 
     /**
      * 판매 리스트 필터링 조회 메서드.

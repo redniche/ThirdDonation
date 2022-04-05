@@ -23,6 +23,7 @@ public class SaleInfoDto {
     private NftInfoDto nft;
     private Long basePrice;
     private UserInfoDto seller;
+    private UserInfoDto buyer;
 
     /**
      * 판매 정보 빌드 메서드.
@@ -37,6 +38,23 @@ public class SaleInfoDto {
                 .nft(NftInfoDto.of(sales.getNft()))
                 .basePrice(sales.getBasePrice())
                 .seller(UserInfoDto.of(sales.getSeller()))
+                .build();
+    }
+
+    /**
+     * 판매 완료 기록 빌드 메서드.
+     *
+     * @param sales Sales
+     * @return SalesInfoDto
+     */
+    public static SaleInfoDto of2(Sales sales) {
+        return SaleInfoDto.builder()
+                .id(sales.getId())
+                .saleType(sales.getSaleType())
+                .nft(NftInfoDto.of(sales.getNft()))
+                .basePrice(sales.getBasePrice())
+                .seller(UserInfoDto.of(sales.getSeller()))
+                .buyer(UserInfoDto.of(sales.getBuyer()))
                 .build();
     }
 }

@@ -26,6 +26,7 @@ import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -219,6 +220,19 @@ public class SaleServiceImpl implements SaleService {
         Page<Sales> page =
                 salesRepository.findAllBySoldOutAndEnabled(true, true, pageable);
         return page.map(MessageInfoDto::of);
+    }
+
+    /**
+     * 판매 완료된 거래 기록 조회.
+     *
+     * @param pageable Pageable
+     * @return Slice of SaleInfo
+     */
+    public Slice<SaleInfoDto> getHistory(Pageable pageable) {
+        Slice<Sales> sales =
+                salesRepository.findAllBySoldOut(true, pageable);
+
+        return sales.map(SaleInfoDto::of2);
     }
 
     /**

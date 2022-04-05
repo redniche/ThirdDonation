@@ -10,6 +10,7 @@ import FollowerModal from '../../components/accounts/FollowerModal';
 import { clearFilter, clearNfts } from '../../store/actions';
 import { doCopy } from '../../common/utils';
 import LineChart from '../../components/nfts/chart/LineChart';
+import { Axios } from '../../core/axios';
 
 /**
  * authorId를 받아 해당 유저의 프로필을 표시해주는 페이지 컴포넌트
@@ -84,7 +85,38 @@ const Profile = ({ authorId }) => {
   const authorsState = useSelector(selectors.authorsState);
 
   const author = authorsState.data;
-  // console.log(author);
+  // console.log('dd');
+  // console.log(author.id);
+  // console.log(account.id);
+  // console.log(author.followerCount);
+
+  function follow() {
+    Axios.post('/users/follow', {
+      artistId: author.id,
+      userId: account.id,
+    })
+      .then(() => {
+        window.alert('팔로우 성공');
+      })
+      .catch((err) => {
+        console.log('에러발생' + err);
+      });
+  }
+
+  function unfollow() {
+    Axios.delete('/users/follow', {
+      data: {
+        artistId: author.id,
+        userId: account.id,
+      },
+    })
+      .then(() => {
+        window.alert('언팔로우 성공');
+      })
+      .catch((err) => {
+        console.log('에러발생' + err);
+      });
+  }
 
   useEffect(() => {
     dispatch(clearFilter());
@@ -149,7 +181,12 @@ const Profile = ({ authorId }) => {
                       </React.Fragment>
                     </div>
                     <div className="de-flex-col">
-                      <span className="btn-main">팔로우</span>
+                      <span className="btn-main" onClick={follow}>
+                        팔로우
+                      </span>
+                      <span className="btn-main" onClick={unfollow}>
+                        언팔로우
+                      </span>
                     </div>
                   </div>
                 </div>

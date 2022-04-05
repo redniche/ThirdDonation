@@ -37,7 +37,7 @@ const slidermain = () => (
       </div>
       <div className="col-md-6 xs-hide">
         <Reveal className="onStep" keyframes={fadeIn} delay={900} duration={1500} triggerOnce>
-          <img src="./img/misc/main-image.png" className="lazy img-fluid" alt="" />
+          <img src="/img/misc/main-image.png" className="lazy img-fluid" alt="" />
         </Reveal>
       </div>
     </div>

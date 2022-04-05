@@ -233,9 +233,7 @@ const EditProfile = ({ authorId }) => {
                             profileImageTemp
                               ? profileImageTemp
                               : author &&
-                                (author.imagePath
-                                  ? author.imagePath
-                                  : process.env.PUBLIC_URL + '/img/기본프로필이미지.png')
+                                (author.imagePath ? author.imagePath : '/img/기본프로필이미지.png')
                           }
                           id="click_profile_img"
                           className="d-profile-img-edit img-fluid"

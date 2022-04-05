@@ -14,7 +14,6 @@ import Mint from './pages/nfts/Mint';
 import ArtistRecord from './pages/artist/ArtistRecord';
 import ArtistRegistration from './pages/artist/ArtistRegistration';
 import CharityRegistration from './pages/charity/CharityRegistration';
-import NftDetail from './pages/nfts/NftDetail';
 import GrantArtist from './pages/admin/GrantArtist';
 import GrantCharity from './pages/admin/GrantCharity';
 import ChartProfile from './pages/profile/ChartProfile';
@@ -82,7 +81,6 @@ const App = () => {
           <Donation path="/donation" />
           <ArtistRegistration path="/artistRegistration" />
           <CharityRegistration path="/charityRegistration" />
-          <NftDetail path="/nftDetail/:nftId" />
           <GrantArtist path="/admin/grantArtist" />
           <GrantCharity path="/admin/grantCharity" />
           <Recommended path="/recommended" />

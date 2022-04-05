@@ -2,14 +2,11 @@
   "API": {
     "HTTPHeaders": {
       "Access-Control-Allow-Methods": [
-        "PUT",
         "POST"
       ],
       "Access-Control-Allow-Origin": [
-        "https://webui.ipfs.io",
-        "http://j6e207.p.ssafy.io:8080",
-        "http://j6e207.p.ssafy.io:5001",
-        "http://j6e207.p.ssafy.io:32080"
+        "https://j6e207.p.ssafy.io",
+        "http://127.0.0.1"
       ]
     }
   },

@@ -97,7 +97,7 @@ public class SaleServiceImpl implements SaleService {
             throw new CustomException(ErrorCode.CANNOT_BUY_DISABLED);
         } else if (sales.getSoldOut()) {
             throw new CustomException(ErrorCode.CANNOT_BUY_SOLD_OUT);
-        } else if (!seller.getId().equals(buyer.getId())) {
+        } else if (seller.getId().equals(buyer.getId())) {
             throw new CustomException(ErrorCode.CANNOT_BUY_MINE);
         }
 

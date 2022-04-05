@@ -30,5 +30,5 @@ public interface FollowService {
      * @param pageable Pageable
      * @return Slice
      */
-    Slice<UserInfoDto> getFollowerList(Long userId, Pageable pageable)
+    Slice<UserInfoDto> getFollowerList(Long userId, Pageable pageable);
 }

@@ -21,6 +21,7 @@ public class MessageInfoDto {
     private Long saleId;
     private String tokenName;
     private UserInfoDto buyer;
+    private UserInfoDto artist;
     private String message;
     private LocalDateTime dateTraded;
 
@@ -35,6 +36,7 @@ public class MessageInfoDto {
                 .saleId(sales.getId())
                 .tokenName(sales.getNft().getName())
                 .buyer(UserInfoDto.of(sales.getBuyer()))
+                .artist(UserInfoDto.of(sales.getNft().getArtist()))
                 .message(sales.getMessage())
                 .dateTraded(sales.getDateLastUpdated())
                 .build();

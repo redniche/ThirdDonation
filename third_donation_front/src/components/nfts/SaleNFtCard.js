@@ -1,9 +1,8 @@
 import { memo, useEffect, useState } from 'react';
 import styled from 'styled-components';
-// import Clock from './Clock';
 import { navigate } from '@reach/router';
-import { Axios } from './../../core/axios';
-import api from '../../core/api';
+import ipfs_apis from '../../core/ipfs';
+import { IpfsAxios, convertIpfsToHttps } from '../../core/ipfs';
 
 const Outer = styled.div`
   display: flex;
@@ -35,7 +34,10 @@ const NftCard = ({
   };
   useEffect(async () => {
     try {
-      const { data: tokenUriJson } = await Axios.get(nft.nft.tokenUri, { params: [] });
+      // const { data: tokenUriJson } = await Axios.get(nft.nft.tokenUri, { params: [] });
+      const { data: tokenUriJson } = await IpfsAxios.get(convertIpfsToHttps(nft.nft.tokenUri), {
+        params: [],
+      });
       setTokenUri(tokenUriJson);
       console.log(tokenUriJson);
     } catch (err) {
@@ -46,6 +48,8 @@ const NftCard = ({
   return (
     tokenUri && (
       <div className={className} onClick={() => navigateTo(`/ItemDetail/${nft.nft.id}`)}>
+        {console.log(tokenUri)}
+
         <div className="nft__item m-0">
           {nft.item_type === 'single_items' ? (
             <div className="icontype">
@@ -57,14 +61,14 @@ const NftCard = ({
             </div>
           )}
           <div className="author_list_pp">
-            <span onClick={() => navigateTo(`/profile/${tokenUri.author.id}`)}>
+            <span onClick={() => navigateTo(`/profile/${tokenUri.artist.id}`)}>
               <img
                 className="lazy"
-                src={
-                  tokenUri.author.imagePath
-                    ? tokenUri.author.imagePath
-                    : api.baseUrl + '/uploads/기본프로필이미지.png'
-                }
+                // src={
+                //   tokenUri.author.imagePath
+                //     ? tokenUri.author.imagePath
+                //     : api.baseUrl + '/uploads/기본프로필이미지.png'
+                // }
                 alt=""
               />
               <i className="fa fa-check"></i>
@@ -75,7 +79,7 @@ const NftCard = ({
               <span>
                 <img
                   onLoad={onFileLoad}
-                  src={tokenUri.image}
+                  src={tokenUri && `${ipfs_apis.https_local}/${tokenUri.hash}`}
                   className="lazy nft__item_preview"
                   alt=""
                 />

@@ -11,8 +11,10 @@ import {
 } from '../../contracts';
 import { detectCurrentProvider } from '../../core/ethereum';
 import { navigate } from '@reach/router';
-import Spinner from 'react-bootstrap/Spinner';
+import ipfs_apis from '../../core/ipfs';
+import { IpfsAxios, convertIpfsToHttps } from '../../core/ipfs';
 
+import Spinner from 'react-bootstrap/Spinner';
 import PanelLayout from '../../components/layout/PanelLayout';
 
 /**
@@ -29,11 +31,6 @@ const Sell = () => {
   const nftId = useParams().nftId;
   console.log(nftId);
 
-  // const privateKey = '0x94fa80f5c0885863488f5e0975929faa53b83a5791b098b85d0b7326f174a38e';
-  // const walletAccount = web3.eth.accounts.privateKeyToAccount(privateKey);
-
-  // const [artPrice, setArtPrice] = useState('');
-  // const [account, setAccount] = useState('');
   const [sellPrice, setSellPrice] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -51,14 +48,6 @@ const Sell = () => {
     document.getElementById('tab_opt_2').classList.remove('show');
     document.getElementById('btn1').classList.add('active');
     document.getElementById('btn2').classList.remove('active');
-  };
-
-  const handleShow1 = () => {
-    document.getElementById('tab_opt_1').classList.add('hide');
-    document.getElementById('tab_opt_1').classList.remove('show');
-    document.getElementById('tab_opt_2').classList.add('show');
-    document.getElementById('btn1').classList.remove('active');
-    document.getElementById('btn2').classList.add('active');
   };
 
   // 판매 등록을 승인하는 함수
@@ -136,6 +125,10 @@ const Sell = () => {
 
   // 백엔드에 판매 정보 등록하는 함수
   const saveSaleNFT = () => {
+    console.log(sellPrice);
+    console.log(SALE_NFT_CONTRACT_ADDRESS);
+    console.log(account.id);
+    console.log(nft.id);
     Axios.post(
       '/nfts/exchange/sell',
       {
@@ -149,7 +142,6 @@ const Sell = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        // withCredentials: true,
       },
     )
       .then((res) => {
@@ -170,7 +162,10 @@ const Sell = () => {
         setNft(nftData);
 
         try {
-          const { data: tokenUriJson } = await Axios.get(nftData.tokenUri, { params: [] });
+          // const { data: tokenUriJson } = await Axios.get(nftData.tokenUri, { params: [] });
+          const { data: tokenUriJson } = await IpfsAxios.get(convertIpfsToHttps(nftData.tokenUri), {
+            params: [],
+          });
           setTokenUri(tokenUriJson);
         } catch (err) {
           console.log(err);
@@ -206,11 +201,11 @@ const Sell = () => {
                         <i className="fa fa-tag"></i>일반 판매
                       </span>
                     </li>
-                    <li id="btn2" onClick={handleShow1}>
+                    {/* <li id="btn2" onClick={handleShow1}>
                       <span>
                         <i className="fa fa-hourglass-1"></i>경매
                       </span>
-                    </li>
+                    </li> */}
                     {/* <li id="btn3" onClick={this.handleShow2}>
                         <span>
                           <i className="fa fa-users"></i>Open for bids
@@ -232,7 +227,7 @@ const Sell = () => {
                       />
                     </div>
 
-                    <div id="tab_opt_2" className="hide">
+                    {/* <div id="tab_opt_2" className="hide">
                       <h5>경매 시작가</h5>
                       <input
                         type="text"
@@ -265,7 +260,7 @@ const Sell = () => {
                           />
                         </div>
                       </div>
-                    </div>
+                    </div> */}
 
                     <div id="tab_opt_3"></div>
                   </div>
@@ -316,7 +311,7 @@ const Sell = () => {
               <div className="nft__item_wrap">
                 <span>
                   <img
-                    src={tokenUri && tokenUri.image}
+                    src={tokenUri && `${ipfs_apis.https_local}/${tokenUri.hash}`}
                     id="get_file_2"
                     className="lazy nft__item_preview"
                     alt=""

@@ -7,28 +7,14 @@ import { Axios } from './../../core/axios';
 
 import NftsItem from './NftsItem';
 
-// const Outer = styled.div`
-//   display: flex;
-//   justify-content: center;
-//   align-content: center;
-//   align-items: center;
-// `;
+// import NftsItem from './NftsItem';
 
 /**
  * 판매할 NFT를 등록하는 페이지 컴포넌트
  * @returns
  */
 const NewNfts = () => {
-  const [nfts, setNfts] = useState([]);
-
-  const [height, setHeight] = useState(0);
-
-  const onFileLoad = ({ target: file }) => {
-    let currentHeight = height;
-    if (currentHeight < file.offsetHeight) {
-      setHeight(file.offsetHeight);
-    }
-  };
+  const [nfts, setNfts] = useState(null);
 
   const getSaleNftList = async () => {
     await Axios.get('/nfts/exchange/sales')
@@ -57,12 +43,14 @@ const NewNfts = () => {
 
   return (
     <div className="nft">
-      <Slider {...carouselNew}>
-        {nfts &&
-          nfts.map((nft, index) => (
-            <NftsItem key={index} nft={nft} onFileLoad={onFileLoad} height={height} />
+      {console.log(nfts)}
+      {nfts && (
+        <Slider {...carouselNew}>
+          {nfts.map((nft, index) => (
+            <NftsItem key={index} nft={nft} />
           ))}
-      </Slider>
+        </Slider>
+      )}
     </div>
   );
 };

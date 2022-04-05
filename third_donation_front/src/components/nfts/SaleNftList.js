@@ -76,7 +76,7 @@ const SaleNftList = () => {
         name: nftWord,
         seller_id: sellerWord,
         price_between: price,
-        wish_count_greater: wishCount,
+        wish_count_greater: wishCount - 1,
       },
     })
       .then((data) => data)
@@ -92,7 +92,7 @@ const SaleNftList = () => {
   };
 
   useEffect(() => {
-    getSaleNftList();
+    getSaleNftList(null);
   }, []);
 
   useEffect(() => {

@@ -26,14 +26,7 @@ const ProfilePopup = () => {
       className="de-menu-profile"
       onClick={() => setProfilePopup(!profilePopup)}
       ref={refProfilePopup}>
-      <img
-        src={
-          account.imagePath
-            ? account.imagePath
-            : process.env.PUBLIC_URL + '/img/기본프로필이미지.png'
-        }
-        alt="프로필"
-      />
+      <img src={account.imagePath ? account.imagePath : '/img/기본프로필이미지.png'} alt="프로필" />
       {profilePopup && (
         <div className="popshow">
           <div className="d-name">

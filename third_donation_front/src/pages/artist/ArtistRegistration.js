@@ -44,18 +44,17 @@ const ArtistRegistration = () => {
 
   // 폼 제출
   const handleSubmitForm = async (data) => {
-    console.log(data);
-    console.log(account.id);
     const formData = new FormData();
-    formData.append('userId', account.id);
-    formData.append('name', data.realName);
-    formData.append('registerNumber', data.registNumber);
     formData.append('imageFile', file);
 
-    console.log(file);
-
     await Axios.post(apis.users.artists, formData, {
-      'Content-Type': 'multipart/form-data',
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      params: {
+        name: data.realName,
+        registerNumber: data.registNumber,
+      },
     })
       .then((response) => {
         console.log(response);

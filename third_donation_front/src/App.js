@@ -58,7 +58,9 @@ const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    window.ethereum.on('accountsChanged', (account) => dispatch(fetchAccount(account[0])));
+    if (window.ethereum) {
+      window.ethereum.on('accountsChanged', (account) => dispatch(fetchAccount(account[0])));
+    }
   }, []);
 
   return (

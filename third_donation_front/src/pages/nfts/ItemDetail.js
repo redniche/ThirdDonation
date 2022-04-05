@@ -148,6 +148,14 @@ const ItemDetail = function () {
       });
   };
 
+  var keepCalling = true;
+  setTimeout(function () {
+    keepCalling = false;
+  }, 1500);
+  while (keepCalling || !window.ethereum._state.initialized) {
+    continue;
+  }
+
   const currentProvider = detectCurrentProvider();
   if (!currentProvider) return;
   const artNftContract = getSsafyNftContract(currentProvider);

@@ -2586,7 +2586,9 @@ i.font60 {
 }
 .nft_coll_pp img {
   width: 60px;
-  height: auto;
+  // height: auto;
+  height: 60px;
+
   border-radius: 100%;
   -moz-border-radius: 100%;
   -webkit-border-radius: 100%;

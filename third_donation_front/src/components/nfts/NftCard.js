@@ -51,9 +51,7 @@ const NftCard = ({
           setWish(isWish + 1);
         })
         .catch(() => {
-          Axios.delete('/nfts/wish', {
-            tokenId: nft.id,
-          }).then(() => {
+          Axios.delete(`/nfts/wish/${nft.id}`).then(() => {
             setWish(isWish - 1);
           });
         });

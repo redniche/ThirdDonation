@@ -109,7 +109,7 @@ const Item = ({ item, textColor }) => {
       <span className="my-1" style={textColor}>
         <Image
           className="lazy mx-2"
-          src={item.imagePath ? item.imagePath : '/img/기본프로필이미지.png'}
+          src={item.imagePath ? `/upload/file/${item.imagePath}` : '/img/기본프로필이미지.png'}
           alt=""></Image>
         <Icon className="fa fa-check"></Icon>
         <span>{item.username}</span>

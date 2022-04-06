@@ -3,6 +3,8 @@ import { Table } from 'react-bootstrap';
 import PanelLayout from '../../components/layout/PanelLayout';
 import Pagination from '../../components/paging/Pagination';
 import { Axios } from '../../core/axios';
+import { detectCurrentProvider } from '../../core/ethereum';
+import { getSsafyNftContract } from '../../contracts';
 
 // 증명서 이미지 행 hover 이벤트 방지 설정 (작동 안 됨 - 수정 필요)
 /* .table-hover > tbody > tr.anti-hover:hover > td,
@@ -21,20 +23,62 @@ const GrantArtist = () => {
   const [list, setList] = useState([]);
   const [detailsShown, setDetailsShown] = useState([]);
 
-  const onEnableClick = (userId) => {
-    confirm('예술가로 승인하시겠습니까?') &&
-      Axios.patch(`/users/artists/enable?userId=${userId}`).then(({ data }) => {
-        console.log(data);
-        getList(curPage);
-      });
+  const getUserAddress = async (userId) => {
+    return Axios.get(`/users/profile/${userId}`);
   };
 
-  const onDisableClick = (userId) => {
-    confirm('일반 사용자로 승인하시겠습니까?') &&
-      Axios.patch(`/users/artists/disable?userId=${userId}`).then(({ data }) => {
-        console.log(data);
-        getList(curPage);
-      });
+  const currentProvider = detectCurrentProvider();
+  if (!currentProvider) return;
+
+  const artNftContract = getSsafyNftContract(currentProvider);
+  console.log(artNftContract.methods);
+
+  const onEnableClick = async (userId) => {
+    confirm('예술가로 승인하시겠습니까?');
+    try {
+      const userData = await getUserAddress(userId);
+      console.log(userData.data.data.walletAddress);
+      const userAddress = userData.data.data.walletAddress;
+
+      const accounts = await currentProvider.request({ method: 'eth_requestAccounts' });
+      const currentWallet = accounts[0];
+
+      await artNftContract.methods
+        .addArtistAddress(userAddress)
+        .send({ from: currentWallet })
+        .then(() => {
+          Axios.patch(`/users/artists/enable?userId=${userId}`).then(({ data }) => {
+            console.log(data);
+            getList(curPage);
+          });
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const onDisableClick = async (userId) => {
+    confirm('일반 사용자로 승인하시겠습니까?');
+    try {
+      const userData = await getUserAddress(userId);
+      console.log(userData.data.data.walletAddress);
+      const userAddress = userData.data.data.walletAddress;
+
+      const accounts = await currentProvider.request({ method: 'eth_requestAccounts' });
+      const currentWallet = accounts[0];
+
+      await artNftContract.methods
+        .deleteArtistAddress(userAddress)
+        .send({ from: currentWallet })
+        .then(() => {
+          Axios.patch(`/users/artists/disable?userId=${userId}`).then(({ data }) => {
+            console.log(data);
+            getList(curPage);
+          });
+        });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const getList = (page) => {
@@ -95,6 +139,7 @@ const GrantArtist = () => {
                   list.map((item) => (
                     <React.Fragment key={item.id}>
                       <tr className="align-middle">
+                        <button onClick={() => getUserAddress(item.id)}>테스트</button>
                         <td>{item.id}</td>
                         <td>{item.name}</td>
                         <td>{item.enabled ? '예술가' : '일반'}</td>

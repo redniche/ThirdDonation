@@ -16,10 +16,10 @@ const Footer = () => (
             <h5>NFT 시장</h5>
             <ul>
               <li>
-                <Link to="/explore">찾아보기</Link>
+                <Link to="/">메인 홈</Link>
               </li>
               <li>
-                <Link to="/recommended">추천 NFT</Link>
+                <Link to="/explore">마켓 접속</Link>
               </li>
             </ul>
           </div>

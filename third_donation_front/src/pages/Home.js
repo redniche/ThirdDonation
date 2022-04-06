@@ -77,12 +77,12 @@ const Home = () => {
         <FeatureBox />
       </section>
 
-    <section className="container no-bottom mb-4">
-      <div className="row">
-        <div className="col-lg-12">
-          <div className="text-center">
-            <h2>인기 NFT</h2>
-            <div className="small-border mb-3"></div>
+      <section className="container no-bottom mb-4">
+        <div className="row">
+          <div className="col-lg-12">
+            <div className="text-center">
+              <h2>인기 NFT</h2>
+              <div className="small-border mb-3"></div>
             </div>
           </div>
           <div className="col-lg-12">
@@ -91,12 +91,12 @@ const Home = () => {
         </div>
       </section>
 
-    <section className="container no-bottom">
-      <div className="row">
-        <div className="col-lg-12">
-          <div className="text-center">
-            <h2>신규 NFT</h2>
-            <div className="small-border mb-3"></div>
+      <section className="container no-bottom">
+        <div className="row">
+          <div className="col-lg-12">
+            <div className="text-center">
+              <h2>신규 NFT</h2>
+              <div className="small-border mb-3"></div>
             </div>
           </div>
           <div className="col-lg-12">

@@ -27,7 +27,7 @@ const HotCollections = () => {
       .then((data) => data)
       .then(async (res) => {
         const nftData = res.data.data;
-        console.log(nftData);
+        // console.log(nftData);
         setHotCollections(nftData);
       })
       .then(() => {

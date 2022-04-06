@@ -165,7 +165,7 @@ const FollowerModal = (props) => {
   return (
     <div className={open ? 'openModal modal' : 'modal'}>
       {open ? (
-        <section>
+        <section style={{ width: '400px' }}>
           <header>
             {header}
             <button className="close" onClick={close}>

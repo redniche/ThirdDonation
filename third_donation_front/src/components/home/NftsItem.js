@@ -22,7 +22,7 @@ const Outer = styled.div`
  */
 const NftsItem = ({ nft }) => {
   const [tokenUri, setTokenUri] = useState(null);
-  console.log(nft);
+  // console.log(nft);
 
   const navigateTo = (link) => {
     navigate(link);
@@ -33,7 +33,7 @@ const NftsItem = ({ nft }) => {
         params: [],
       });
       setTokenUri(tokenUriJson);
-      console.log(tokenUriJson);
+      // console.log(tokenUriJson);
     } catch (err) {
       console.log(err);
     }

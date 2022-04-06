@@ -24,7 +24,7 @@ const CollectionItem = ({ nft }) => {
         params: [],
       });
       setTokenUri(tokenUriJson);
-      console.log(tokenUriJson);
+      // console.log(tokenUriJson);
     } catch (err) {
       console.log(err);
     }

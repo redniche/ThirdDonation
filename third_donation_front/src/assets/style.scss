@@ -3204,7 +3204,7 @@ i.font60 {
   right: 0;
   bottom: 0;
   left: 0;
-  z-index: 99;
+  z-index: 999999;
   background-color: rgba(0, 0, 0, 0.6);
 }
 .modal button {
@@ -3213,9 +3213,13 @@ i.font60 {
   border: 0;
 }
 .modal > section {
-  width: 90%;
-  max-width: 450px;
-  margin: 0 auto;
+  // width: 90%;
+  // max-width: 450px;
+  margin-top: 8%;
+  // margin-bottom: 10%;
+  margin-left: auto;
+  margin-right: auto;
+  // margin: 0 auto;
   border-radius: 0.3rem;
   background-color: #fff;
   /* 팝업이 열릴때 스르륵 열리는 효과 */

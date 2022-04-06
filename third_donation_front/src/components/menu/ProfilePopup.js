@@ -1,4 +1,4 @@
-import { memo, useState } from 'react';
+import { memo, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import useOnclickOutside from 'react-cool-onclickoutside';
 import Wallet from '../accounts/Wallet';
@@ -6,6 +6,7 @@ import { clearAccount } from '../../store/actions';
 import * as selectors from '../../store/selectors';
 import auth from '../../core/auth';
 import { Link } from '@reach/router';
+import { fetchAccount } from './../../store/actions/thunks/account';
 
 const ProfilePopup = () => {
   const dispatch = useDispatch();
@@ -19,6 +20,10 @@ const ProfilePopup = () => {
     dispatch(clearAccount());
     auth.clearToken();
   };
+
+  useEffect(() => {
+    dispatch(fetchAccount(account.walletAddress, true));
+  }, []);
 
   return (
     <div

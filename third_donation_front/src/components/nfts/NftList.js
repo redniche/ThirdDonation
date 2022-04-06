@@ -40,7 +40,7 @@ const NftList = ({
     dispatch(clearNfts());
     dispatch(clearFilter());
     dispatch(actions.fetchNftsBreakdown(userId, artistFlag, sellFlag));
-  }, [dispatch, userId]);
+  }, [userId]);
 
   //will run when component unmounted
   useEffect(() => {

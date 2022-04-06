@@ -56,77 +56,77 @@ const SaleFilterBar = ({
 
   return (
     <div>
-      <div className="items_filter mb-0">
-        <div className="dropdownSelect one">
-          <Select
-            placeholder={<div> {searchValue.label} </div>}
-            styles={customStyles}
-            menuContainerStyle={{ zIndex: 999 }}
-            options={[searchValue, ...search]}
-            onChange={(e) => searchKind(e)}
-          />
-        </div>
-        <div className="row form-dark" id="form_quick_search" name="form_quick_search">
-          <div className="col">
+      <div className="items_filter mt-1">
+        <div className="d-flex">
+          <div className="dropdownSelect one">
+            <Select
+              placeholder={<div> {searchValue.label} </div>}
+              styles={customStyles}
+              menuContainerStyle={{ zIndex: 999 }}
+              options={[searchValue, ...search]}
+              onChange={(e) => searchKind(e)}
+            />
+          </div>
+          <div className="row form-dark" id="form_quick_search" name="form_quick_search">
+            <div className="col">
+              <input
+                className="form-control"
+                id="name_1"
+                name="name_1"
+                placeholder="검색어"
+                type="text"
+                value={text}
+                onChange={onChangeWord}
+              />
+              <button id="btn-submit">
+                <i
+                  className="fa fa-search bg-color-secondary"
+                  onClick={() => {
+                    setText('');
+                    searchWord(text);
+                  }}></i>
+              </button>
+              <div className="clearfix"></div>
+            </div>
+          </div>
+          <div className="dropdownSelect one" style={{ marginLeft: '10px' }}>
+            <Select
+              placeholder={<div> {defaultValue1.label} </div>}
+              styles={customStyles}
+              menuContainerStyle={{ zIndex: 999 }}
+              options={[defaultValue1, ...categories]}
+              onChange={(e) => fileType(e)}
+            />
+          </div>
+          <div className="d-flex" style={{ marginLeft: '20px' }}>
             <input
               className="form-control"
-              id="name_1"
-              name="name_1"
-              placeholder="검색어"
-              type="text"
-              value={text}
-              onChange={onChangeWord}
+              style={{ width: '150px' }}
+              id="minPrice"
+              name="minPrice"
+              placeholder="최소 가격 (SSF)"
+              type="number"
+              onChange={(e) => onChangeMinPrice(e.target.value)}
             />
-            <button id="btn-submit">
-              <i
-                className="fa fa-search bg-color-secondary"
-                onClick={() => {
-                  setText('');
-                  searchWord(text);
-                }}></i>
-            </button>
-            <div className="clearfix"></div>
+            <input
+              className="form-control"
+              style={{ width: '150px' }}
+              id="maxPrice"
+              name="maxPrice"
+              placeholder="최대 가격 (SSF)"
+              type="number"
+              onChange={(e) => onChangeMaxPrice(e.target.value)}
+            />
+            <input
+              className="form-control"
+              style={{ marginLeft: '20px', width: '90px' }}
+              id="wishCount"
+              name="wishCount"
+              placeholder="하트 수"
+              type="number"
+              onChange={(e) => onChangeWishCount(e.target.value)}
+            />
           </div>
-        </div>
-        <div className="dropdownSelect one">
-          <Select
-            placeholder={<div> {defaultValue1.label} </div>}
-            styles={customStyles}
-            menuContainerStyle={{ zIndex: 999 }}
-            options={[defaultValue1, ...categories]}
-            onChange={(e) => fileType(e)}
-          />
-        </div>
-      </div>
-      <div className="row form-dark mb-3" id="form_quick_search" name="form_quick_search">
-        <div className="col d-flex">
-          <input
-            className="form-control"
-            style={{ width: '150px' }}
-            id="minPrice"
-            name="minPrice"
-            placeholder="최소 가격 (SSF)"
-            type="number"
-            onChange={(e) => onChangeMinPrice(e.target.value)}
-          />
-          <input
-            className="form-control"
-            style={{ width: '150px' }}
-            id="maxPrice"
-            name="maxPrice"
-            placeholder="최대 가격 (SSF)"
-            type="number"
-            onChange={(e) => onChangeMaxPrice(e.target.value)}
-          />
-          <input
-            className="form-control"
-            style={{ marginLeft: '20px', width: '90px' }}
-            id="wishCount"
-            name="wishCount"
-            placeholder="하트 수"
-            type="number"
-            onChange={(e) => onChangeWishCount(e.target.value)}
-          />
         </div>
       </div>
     </div>

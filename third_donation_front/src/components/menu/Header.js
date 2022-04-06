@@ -116,7 +116,7 @@ const Header = ({ className }) => {
             </div>
           </div>
 
-          <div className="search">
+          {/* <div className="search">
             <input
               id="quick_search"
               className="xs-hide"
@@ -124,7 +124,7 @@ const Header = ({ className }) => {
               placeholder="검색어를 입력하세요"
               type="text"
             />
-          </div>
+          </div> */}
 
           <BreakpointProvider>
             <Breakpoint l down>

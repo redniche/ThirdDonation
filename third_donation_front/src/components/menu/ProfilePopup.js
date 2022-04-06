@@ -5,7 +5,7 @@ import Wallet from '../accounts/Wallet';
 import { clearAccount } from '../../store/actions';
 import * as selectors from '../../store/selectors';
 import auth from '../../core/auth';
-import { NavLink } from 'react-bootstrap';
+import { Link } from '@reach/router';
 
 const ProfilePopup = () => {
   const dispatch = useDispatch();
@@ -40,16 +40,16 @@ const ProfilePopup = () => {
           <ul className="de-submenu-profile">
             <li>
               <span className="profile-popup-content">
-                <NavLink to={'/profile/' + account.id}>
+                <Link to={'/profile/' + account.id}>
                   <i className="fa fa-user profile"></i>프로필 보기
-                </NavLink>
+                </Link>
               </span>
             </li>
             <li>
               <span className="profile-popup-content">
-                <NavLink to={'/editProfile/' + account.id}>
+                <Link to={'/editProfile/' + account.id}>
                   <i className="fa fa-pencil"></i>프로필 수정하기
-                </NavLink>
+                </Link>
               </span>
             </li>
             <li onClick={() => onLogout()}>

@@ -31,5 +31,12 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
      */
     Optional<Follow> findByUserAndFollowingArtist(User user, User followingArtist);
 
-
+    /**
+     * 팔로잉 여부 조회.
+     *
+     * @param userId Long
+     * @param artistId Long
+     * @return Boolean
+     */
+    Boolean existsByUserIdAndFollowingArtistId(Long userId, Long artistId);
 }

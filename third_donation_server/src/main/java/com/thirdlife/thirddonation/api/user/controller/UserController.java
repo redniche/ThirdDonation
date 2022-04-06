@@ -210,9 +210,9 @@ public class UserController {
     /**
      * 장애인 예술가 등록 신청 메서드.
      *
-     * @param name String
+     * @param name           String
      * @param registerNumber String
-     * @param imageFile MultipartFile
+     * @param imageFile      MultipartFile
      * @return ResponseEntity
      */
     @PostMapping("${request.path.artists}")
@@ -317,7 +317,7 @@ public class UserController {
      * 팔로워 리스트 조회.
      *
      * @param pageable Pageable
-     * @param userId Long
+     * @param userId   Long
      * @return ResponseEntity
      */
     @GetMapping("/follow")
@@ -336,6 +336,30 @@ public class UserController {
         return ResponseEntity.status(200)
                 .body(FollowerListResponse.builder().statusCode(200).message("Success")
                         .data(slice.getContent()).build());
+    }
+
+
+    /**
+     * 팔로워 여부 확인
+     *
+     * @param artistId Long
+     * @return ResponseEntity
+     */
+    @GetMapping("/follow/{artistId}")
+    @ApiOperation(value = "장애인 예술가 팔로워 조회")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<BaseResponseBody> getFollowInfo(
+            @Positive @PathVariable @ApiParam(value = "조회할 회원 id를 입력받음", required = true)
+                    Long artistId) {
+        if (!followService.getFollowerInfo(artistId)) {
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+        }
+        return ResponseEntity.status(200)
+                .body(BaseResponseBody.builder().statusCode(200).message("Success")
+                        .build());
     }
 
     /**

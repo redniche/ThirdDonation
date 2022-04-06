@@ -101,4 +101,16 @@ public class FollowServiceImpl implements FollowService {
                 .orElseThrow(() -> new CustomException(ErrorCode.NFT_NOT_FOUND));
         return page.map(UserInfoDto::of3);
     }
+
+    /**
+     * 해당 아티스트 아이디에 내 팔로워 정보가 존재하는지 보기.
+     *
+     * @param artistId Long
+     * @return artistId
+     */
+    @Override
+    public Boolean getFollowerInfo(Long artistId) {
+        final User user = userService.getAuthUser();
+        return followRepository.existsByUserIdAndFollowingArtistId(artistId, user.getId());
+    }
 }

@@ -43,7 +43,7 @@ const states = (state = defaultState, action) => {
       return { ...state, nftShowcase: entityLoadingFailed(state.nftShowcase) };
 
     case getType(actions.clearNfts):
-      return { ...state, nftBreakdown: initEntityState(null) };
+      return { ...state, nftBreakdown: initEntityState([]) };
 
     case getType(actions.clearPage):
       return { ...state, nftPage: initEntityState(0) };

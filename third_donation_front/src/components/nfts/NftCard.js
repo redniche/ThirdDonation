@@ -6,6 +6,9 @@ import axios_apis from '../../core/axios';
 import ipfs_apis from '../../core/ipfs';
 import { IpfsAxios } from '../../core/ipfs';
 import { convertIpfsToHttps } from './../../core/ipfs';
+import { Axios } from '../../core/axios';
+import { useSelector } from 'react-redux';
+import * as selectors from '../../store/selectors';
 
 const Outer = styled.div`
   display: flex;
@@ -29,23 +32,46 @@ const NftCard = ({
   clockTop = true,
   height,
   onFileLoad,
+  price = -1,
 }) => {
+  const [isWish, setWish] = useState(false);
   const [tokenUri, setTokenUri] = useState(null);
-  console.log(nft);
-
+  const { data: account } = useSelector(selectors.accountState);
   const navigateTo = (link) => {
     navigate(link);
   };
 
-  const heartClickHandle = () => {};
+  const heartClickHandle = () => {
+    console.log(account);
+    console.log(account.id != nft.artist.id);
+    if (account && account.id != nft.artist.id) {
+      Axios.post('/nfts/wish', {
+        userId: account.id,
+        tokenId: nft.id,
+      })
+        .then(() => {
+          setWish(true);
+        })
+        .catch(() => {
+          Axios.delete('/nfts/wish', {
+            userId: account.id,
+            tokenId: nft.id,
+          }).then(() => {
+            setWish(false);
+          });
+        });
+    }
+  };
   useEffect(async () => {
-    try {
-      const { data: tokenUriJson } = await IpfsAxios.get(convertIpfsToHttps(nft.tokenUri), {
-        params: [],
-      });
-      setTokenUri(tokenUriJson);
-    } catch (err) {
-      console.log(err);
+    if (nft && nft.tokenUri) {
+      try {
+        const { data: tokenUriJson } = await IpfsAxios.get(convertIpfsToHttps(nft.tokenUri), {
+          params: [],
+        });
+        setTokenUri(tokenUriJson);
+      } catch (err) {
+        console.log(err);
+      }
     }
   }, []);
 
@@ -114,26 +140,26 @@ const NftCard = ({
             <span>
               <h4>{nft.name}</h4>
             </span>
-            {nft.price && (
+            {price != -1 && (
               <>
                 <div className="nft__item_price">
-                  {nft.price} ETH
+                  {price} SSF
                   {nft.status === 'on_auction' && (
                     <span>
                       {nft.bid}/{nft.max_bid}
                     </span>
                   )}
                 </div>
-                <div className="nft__item_action">
+                {/* <div className="nft__item_action">
                   <span onClick={() => navigateTo(`${nft.bid_link}/${nft.id}`)}>
                     {nft.status === 'on_auction' ? '경매 입찰' : '바로 구매'}
                   </span>
-                </div>
+                </div> */}
               </>
             )}
-            <div className="nft__item_like">
-              <i className="fa fa-heart" onClick={heartClickHandle}></i>
-              <span>{nft.wishCount}</span>
+            <div className="nft__item_like" onClick={heartClickHandle}>
+              <i className="fa fa-heart"></i>
+              <span>{isWish ? nft.wishCount + 1 : nft.wishCount}</span>
             </div>
           </div>
         </div>

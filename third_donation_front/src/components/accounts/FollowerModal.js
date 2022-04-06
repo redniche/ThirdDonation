@@ -126,8 +126,6 @@ const renderItem = ({ item }) => {
 
 const FollowerModal = (props) => {
   const { user, open, close, header } = props;
-  var followers = user;
-  followers;
 
   const [page, setPage] = useState(0);
   const [result, setResult] = useState(0);
@@ -137,7 +135,7 @@ const FollowerModal = (props) => {
   const getList = () => {
     Axios.get('/users/follow', {
       params: {
-        userId: 16,
+        userId: user,
         page,
       },
     })
@@ -183,7 +181,7 @@ const FollowerModal = (props) => {
             <span onClick={loadMore} className="btn-main lead m-auto">
               더 보기
             </span>
-            {result == 1 && <div className="result_log">마지막 NFT 입니다.</div>}
+            {result == 1 && <div className="result_log">마지막 팔로워 입니다.</div>}
           </main>
           <footer>
             <button className="close" onClick={close}>

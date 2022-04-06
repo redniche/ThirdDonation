@@ -40,7 +40,7 @@ public class WishServiceImpl implements WishService {
         Nft nft = nftRepository.findById(wishRequest.getTokenId())
                 .orElseThrow(() -> new CustomException(ErrorCode.NFT_NOT_FOUND));
 
-        if (user.equals(nft.getOwner())) {
+        if (user.equals(nft.getArtist())) {
             throw new CustomException(ErrorCode.CANNOT_WISH_MYSELF);
         }
 
@@ -61,14 +61,14 @@ public class WishServiceImpl implements WishService {
     /**
      * NFT 찜 정보를 삭제하는 메서드입니다.
      *
-     * @param wishRequest WishRequest
+     * @param tokenId Long
      */
     @Override
-    public void deleteWish(WishRequest wishRequest) {
+    public void deleteWish(Long tokenId) {
         User user = userService.getAuthUser();
         user = userRepository.getById(user.getId());
 
-        Nft nft = nftRepository.findById(wishRequest.getTokenId())
+        Nft nft = nftRepository.findById(tokenId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NFT_NOT_FOUND));
 
         Wish wish = wishRepository.findByUserAndNft(user, nft)

@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -58,10 +59,10 @@ public class WishController {
     /**
      * 찜하기 데이터 해제 요청을 처리합니다.
      *
-     * @param wishRequest WishRequest
+     * @param tokenId Long
      * @return ResponseEntity
      */
-    @DeleteMapping
+    @DeleteMapping("/{tokenId}")
     @ApiOperation(value = "찜하기 해제")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
@@ -69,10 +70,9 @@ public class WishController {
             @ApiResponse(code = 500, message = "서버 오류")
     })
     public ResponseEntity<BaseResponseBody> deleteWish(
-            @Valid @RequestBody @ApiParam(value = "찜하기 삭제 데이터", required = true)
-                    WishRequest wishRequest) {
+            @PathVariable @ApiParam(value = "토큰아이디", required = true) Long tokenId) {
 
-        wishService.deleteWish(wishRequest);
+        wishService.deleteWish(tokenId);
 
         return ResponseEntity.status(200)
                 .body(BaseResponseBody.builder().statusCode(200).message("Success").build());

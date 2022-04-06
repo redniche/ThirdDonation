@@ -16,8 +16,8 @@ public interface WishService {
     /**
      * NFT 찜 정보를 삭제하는 메서드입니다.
      *
-     * @param wishRequest WishRequest
+     * @param tokenId Long
      */
-    void deleteWish(WishRequest wishRequest);
+    void deleteWish(Long tokenId);
 
 }

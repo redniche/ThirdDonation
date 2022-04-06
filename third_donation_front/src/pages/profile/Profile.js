@@ -11,6 +11,7 @@ import { clearFilter, clearNfts, clearPage } from '../../store/actions';
 import { doCopy } from '../../common/utils';
 import LineChart from '../../components/nfts/chart/LineChart';
 import { Axios } from '../../core/axios';
+import { navigate } from '@reach/router';
 
 /**
  * authorId를 받아 해당 유저의 프로필을 표시해주는 페이지 컴포넌트
@@ -97,7 +98,7 @@ const Profile = ({ authorId }) => {
       userId: account.id,
     })
       .then(() => {
-        window.alert('팔로우 성공');
+        navigate();
       })
       .catch((err) => {
         console.log('에러발생' + err);
@@ -112,7 +113,7 @@ const Profile = ({ authorId }) => {
       },
     })
       .then(() => {
-        window.alert('언팔로우 성공');
+        navigate();
       })
       .catch((err) => {
         console.log('에러발생' + err);

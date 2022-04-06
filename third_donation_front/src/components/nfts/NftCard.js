@@ -30,7 +30,6 @@ const NftCard = ({
   className = 'd-item col-lg-3 col-md-6 col-sm-6 col-xs-12 mb-4',
   // preview = false,
   clockTop = true,
-  height,
   onFileLoad,
   price = -1,
 }) => {
@@ -110,7 +109,7 @@ const NftCard = ({
           <div
             className="nft__item_wrap"
             onClick={() => navigateTo(`/ItemDetail/${nft.id}`)}
-            style={{ height: `${height}px` }}>
+            style={{ height: '264px' }}>
             <Outer>
               <span>
                 {nft.fileType == 'video' ? (

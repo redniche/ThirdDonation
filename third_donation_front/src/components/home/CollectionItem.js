@@ -2,6 +2,7 @@ import { memo, useEffect, useState } from 'react';
 // import styled from 'styled-components';
 import { navigate } from '@reach/router';
 import ipfs_apis from '../../core/ipfs';
+import axios_apis from '../../core/axios';
 import { IpfsAxios, convertIpfsToHttps } from '../../core/ipfs';
 
 /**
@@ -30,12 +31,13 @@ const CollectionItem = ({ nft }) => {
   }, [nft]);
   return (
     tokenUri && (
-      <div
-        className="itm"
-        style={{ height: '500px' }}
-        onClick={() => navigateTo(`/ItemDetail/${nft.nft.id}`)}>
+      <div className="itm" style={{ height: '500px' }}>
+        {console.log(nft && nft.nft.owner.imagePath)}
         <div className="nft_coll">
-          <div className="nft_wrap d-flex justify-content-center" style={{ height: '400px' }}>
+          <div
+            className="nft_wrap d-flex justify-content-center"
+            style={{ height: '400px' }}
+            onClick={() => navigateTo(`/ItemDetail/${nft.nft.id}`)}>
             {/* 토큰 이미지 */}
             <div className="align-self-center">
               <img
@@ -45,9 +47,19 @@ const CollectionItem = ({ nft }) => {
               />
             </div>
           </div>
-          <div className="nft_coll_pp mt-2">
+          <div
+            className="nft_coll_pp mt-2"
+            onClick={() => navigateTo(`/profile/${nft.nft.owner.id}`)}>
             <span>
-              <img className="lazy" alt="" />
+              <img
+                className="lazy"
+                src={
+                  nft.nft.owner && nft.nft.owner.imagePath
+                    ? `${axios_apis.file}/${nft.nft.owner.imagePath}`
+                    : '/img/기본프로필이미지.png'
+                }
+                alt=""
+              />
             </span>
             <i className="fa fa-check"></i>
           </div>

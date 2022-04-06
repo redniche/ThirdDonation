@@ -1,4 +1,4 @@
-import { memo, useState } from 'react';
+import { memo, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import useOnclickOutside from 'react-cool-onclickoutside';
 import Wallet from '../accounts/Wallet';
@@ -6,6 +6,7 @@ import { clearAccount } from '../../store/actions';
 import * as selectors from '../../store/selectors';
 import auth from '../../core/auth';
 import { Link } from '@reach/router';
+import { fetchAccount } from './../../store/actions/thunks/account';
 
 const ProfilePopup = () => {
   const dispatch = useDispatch();
@@ -20,6 +21,10 @@ const ProfilePopup = () => {
     auth.clearToken();
   };
 
+  useEffect(() => {
+    dispatch(fetchAccount(account.walletAddress, true));
+  }, []);
+
   return (
     <div
       id="de-click-menu-profile"
@@ -30,10 +35,7 @@ const ProfilePopup = () => {
       {profilePopup && (
         <div className="popshow">
           <div className="d-name">
-            <h4>Unnamed</h4>
-            <span className="name" onClick={() => window.open('', '_self')}>
-              이름 변경
-            </span>
+            <h4>{account.username}</h4>
           </div>
 
           <Wallet />
@@ -42,14 +44,14 @@ const ProfilePopup = () => {
 
           <ul className="de-submenu-profile">
             <li>
-              <span>
+              <span className="profile-popup-content">
                 <Link to={'/profile/' + account.id}>
-                  <i className="fa fa-user"></i>나의 프로필
+                  <i className="fa fa-user profile"></i>프로필 보기
                 </Link>
               </span>
             </li>
             <li>
-              <span>
+              <span className="profile-popup-content">
                 <Link to={'/editProfile/' + account.id}>
                   <i className="fa fa-pencil"></i>프로필 수정하기
                 </Link>

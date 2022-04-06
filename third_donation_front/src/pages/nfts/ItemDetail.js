@@ -12,12 +12,15 @@ import {
   getSsafyToeknContract,
   SALE_NFT_CONTRACT_ADDRESS,
 } from '../../contracts';
+import axios_apis from '../../core/axios';
 import ipfs_apis from '../../core/ipfs';
 import { IpfsAxios, convertIpfsToHttps } from '../../core/ipfs';
 
 import { Modal } from 'react-bootstrap';
 import Spinner from 'react-bootstrap/Spinner';
 import Select from 'react-select';
+
+import ExchangeRecord from './../../components/exchange/ExchangeRecord';
 
 /**
  * NFT의 상세 정보를 보여주는 페이지 컴포넌트
@@ -46,8 +49,6 @@ const ItemDetail = function () {
   };
 
   const [charities] = useState([]);
-  // const [charityWallet, setCharityWallet] = useState('');
-  // const [msg, setMsg] = useState('');
 
   const selectInfo = useRef();
   const msgInfo = useRef();
@@ -63,7 +64,6 @@ const ItemDetail = function () {
           const walletAddress = charityList[i].walletAddress;
           console.log('😀😀');
           const charity = { value: walletAddress, label: name };
-          // setCharities(charities.concat(charity));
           charities.push(charity);
         }
       })
@@ -72,19 +72,6 @@ const ItemDetail = function () {
         // 만약 NFT생성은 완료 되었는데 서버전송에서 오류날 경우따로 DB저장 처리 가능한 함수 필요
       });
   };
-
-  // const handleSelect = (e) => {
-  //   console.log(e.value);
-  //   setCharityWallet(e.value);
-  //   console.log(charityWallet);
-  //   e.preventDefault();
-  // };
-
-  // const msgChange = (e) => {
-  //   console.log(e.target.value);
-  //   setMsg(e.target.value);
-  //   console.log(msg);
-  // };
 
   function MyVerticallyCenteredModal(props) {
     return (
@@ -147,14 +134,6 @@ const ItemDetail = function () {
         // 만약 NFT생성은 완료 되었는데 서버전송에서 오류날 경우따로 DB저장 처리 가능한 함수 필요
       });
   };
-
-  var keepCalling = true;
-  setTimeout(function () {
-    keepCalling = false;
-  }, 1500);
-  while (keepCalling || !window.ethereum._state.initialized) {
-    continue;
-  }
 
   const currentProvider = detectCurrentProvider();
   if (!currentProvider) return;
@@ -303,14 +282,14 @@ const ItemDetail = function () {
   if (nft.owner) console.log(nft.owner.id);
   return (
     <BasicLayout>
-      {/* {console.log(nft)} */}
+      {console.log(nft)}
       {console.log(tokenUri)}
       <section className="container mt-4">
         <div className="row mt-md-5 pt-md-4">
-          <div className="col-md-6 text-center align-self-center">
+          <div className="col-md-6 text-center">
             {/* NFT 이미지 */}
             <img
-              className=""
+              className="mt-5"
               style={{ width: '100%' }}
               src={tokenUri && `${ipfs_apis.https_local}/${tokenUri.hash}`}
               alt=""
@@ -323,21 +302,21 @@ const ItemDetail = function () {
               {/* 작품 항목 */}
               <div className="item_info_counts">
                 <div className="item_info_type">
-                  <i className="fa fa-image"></i>Art
+                  {nft.fileType == 'image' ? (
+                    <i className="fa fa-image">
+                      <span>Art</span>
+                    </i>
+                  ) : (
+                    <i className="fa fa-camera">
+                      <span>Video</span>
+                    </i>
+                  )}
                 </div>
-                {/* <div className="item_info_type"><i className="fa fa-image"></i>{nft.category}</div> */}
-
-                {/* 본 사람 */}
-                <div className="item_info_views">
-                  <i className="fa fa-eye"></i>250
-                </div>
-                {/* <div className="item_info_views"><i className="fa fa-eye"></i>{nft.views}</div> */}
-
                 {/* 좋아요 수 */}
                 <div className="item_info_like">
-                  <i className="fa fa-heart"></i>18
+                  <i className="fa fa-heart"></i>
+                  {nft.wishCount}
                 </div>
-                {/* <div className="item_info_like"><i className="fa fa-heart"></i>{nft.likes}</div> */}
               </div>
               {/* 작품 설명 */}
               <p>{tokenUri && tokenUri.description}</p>
@@ -348,8 +327,16 @@ const ItemDetail = function () {
                   <h6>Creator</h6>
                   <div className="item_author">
                     <div className="author_list_pp">
-                      <span>
-                        <img className="lazy" src="../img/author/author-2.jpg" alt="" />
+                      <span onClick={() => navigateTo(`/profile/${nft.artist.id}`)}>
+                        <img
+                          className="lazy"
+                          src={
+                            nft.artist && nft.artist.imagePath
+                              ? `${axios_apis.file}/${nft.artist.imagePath}`
+                              : '/img/기본프로필이미지.png'
+                          }
+                          alt=""
+                        />
                         {/* <img className="lazy" src={nft.author && api.baseUrl + nft.author.avatar.url} alt=""/> */}
                         <i className="fa fa-check"></i>
                       </span>
@@ -366,13 +353,16 @@ const ItemDetail = function () {
                   <h6>owner</h6>
                   <div className="item_author">
                     <div className="author_list_pp">
-                      <span>
-                        <img className="lazy" src="../img/author/author-3.jpg" alt="" />
-                        {/* <img
+                      <span onClick={() => navigateTo(`/profile/${nft.owner.id}`)}>
+                        <img
                           className="lazy"
-                          // src={nft.author && api.baseUrl + nft.author.avatar.url}
+                          src={
+                            nft.owner && nft.owner.imagePath
+                              ? `${axios_apis.file}/${nft.owner.imagePath}`
+                              : '/img/기본프로필이미지.png'
+                          }
                           alt=""
-                        /> */}
+                        />
                         <i className="fa fa-check"></i>
                       </span>
                     </div>
@@ -384,6 +374,7 @@ const ItemDetail = function () {
                 </div>
               </div>
               <div className="spacer-40"></div>
+              <ExchangeRecord nftId={nftId} />
               <div className="de_tab">
                 <div className="de_tab_content">
                   {/* button for checkout */}
@@ -391,7 +382,10 @@ const ItemDetail = function () {
                     {/* 판매버튼 */}
                     {!owner ? (
                       <div>
-                        <div>{tokenPrice} SSF</div>
+                        <div className="mb-1">
+                          <span>가격: </span>
+                          {tokenPrice} SSF
+                        </div>
                         <button
                           className="btn-main lead mb-5 mr15"
                           onClick={() => setModalShow(true)}>

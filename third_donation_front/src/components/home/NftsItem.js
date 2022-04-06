@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { navigate } from '@reach/router';
 // import api from '../../core/api';
 import ipfs_apis from '../../core/ipfs';
+import axios_apis from '../../core/axios';
 import { IpfsAxios, convertIpfsToHttps } from '../../core/ipfs';
 
 const Outer = styled.div`
@@ -23,15 +24,6 @@ const NftsItem = ({ nft }) => {
   const [tokenUri, setTokenUri] = useState(null);
   // console.log(nft);
 
-  const [height, setHeight] = useState(0);
-
-  const onImgLoad = ({ target: img }) => {
-    let currentHeight = height;
-    if (currentHeight < img.offsetHeight) {
-      setHeight(img.offsetHeight);
-    }
-  };
-
   const navigateTo = (link) => {
     navigate(link);
   };
@@ -48,33 +40,40 @@ const NftsItem = ({ nft }) => {
   }, [nft]);
   return (
     tokenUri && (
-      <div className="itm" onClick={() => navigateTo(`/ItemDetail/${nft.nft.id}`)}>
+      <div className="itm">
+        {console.log(nft)}
         <div className="d-item">
           <div className="nft__item" style={{ height: '400px' }}>
             <div className="author_list_pp">
-              <span onClick={() => window.open('/home1', '_self')}>
+              <span onClick={() => navigateTo(`/profile/${nft.nft.owner.id}`)}>
                 <img
                   className="lazy"
-                  // src={nft.author.avatar.url}
+                  src={
+                    nft.nft.owner && nft.nft.owner.imagePath
+                      ? `${axios_apis.file}/${nft.nft.owner.imagePath}`
+                      : '/img/기본프로필이미지.png'
+                  }
                   alt=""
                 />
                 <i className="fa fa-check"></i>
               </span>
             </div>
-            <div className="nft__item_wrap" style={{ height: '400px' }}>
+            <div
+              className="nft__item_wrap"
+              style={{ height: '400px' }}
+              onClick={() => navigateTo(`/ItemDetail/${nft.nft.id}`)}>
               <Outer>
                 <span>
                   <img
                     src={tokenUri && `${ipfs_apis.https_local}/${tokenUri.hash}`}
                     className="lazy nft__item_preview"
-                    onLoad={onImgLoad}
                     alt=""
                   />
                 </span>
               </Outer>
             </div>
             <div className="nft__item_info">
-              <span onClick={() => window.open('/#', '_self')}>
+              <span>
                 <h4>{tokenUri.title}</h4>
               </span>
               <div className="nft__item_price">

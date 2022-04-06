@@ -712,6 +712,7 @@ a {
   text-decoration: none;
   color: inherit;
 }
+
 /* dropdown */
 .dropdown-custom.btn {
   font-size: 14px;
@@ -5492,4 +5493,27 @@ blockquote {
 @media only screen and (max-width: 420px) {
 }
 @media only screen and (max-width: 378px) {
+}
+
+.profile-popup-content {
+  a {
+    color: $black !important;
+    width: 100%;
+    padding: 0px 0px;
+    margin: 0px 0px !important;
+    text-align: left;
+    left: 0px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    background: none;
+    border-radius: 6px;
+    letter-spacing: normal;
+    outline: 0;
+    font-weight: 800;
+    text-decoration: none;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 2px 2px 20px 0px rgb(131 100 226 / 0%);
+    transition: all 0.3s ease;
+  }
 }

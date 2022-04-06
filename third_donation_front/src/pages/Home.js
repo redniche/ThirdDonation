@@ -19,12 +19,12 @@ const Home = () => (
       <FeatureBox />
     </section>
 
-    <section className="container no-bottom">
+    <section className="container no-bottom mb-4">
       <div className="row">
         <div className="col-lg-12">
           <div className="text-center">
-            <h2>인기 컬렉션</h2>
-            <div className="small-border"></div>
+            <h2>인기 NFT</h2>
+            <div className="small-border mb-3"></div>
           </div>
         </div>
         <div className="col-lg-12">
@@ -37,8 +37,8 @@ const Home = () => (
       <div className="row">
         <div className="col-lg-12">
           <div className="text-center">
-            <h2>신규 아이템</h2>
-            <div className="small-border"></div>
+            <h2>신규 NFT</h2>
+            <div className="small-border mb-3"></div>
           </div>
         </div>
         <div className="col-lg-12">

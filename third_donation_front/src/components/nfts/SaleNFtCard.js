@@ -1,7 +1,10 @@
 import { memo, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import * as selectors from '../../store/selectors';
 import styled from 'styled-components';
 import { navigate } from '@reach/router';
 import ipfs_apis from '../../core/ipfs';
+import axios_apis from '../../core/axios';
 import { IpfsAxios, convertIpfsToHttps } from '../../core/ipfs';
 
 const Outer = styled.div`
@@ -26,8 +29,10 @@ const NftCard = ({
   height,
   onFileLoad,
 }) => {
+  const { data: account } = useSelector(selectors.accountState);
   const [tokenUri, setTokenUri] = useState(null);
-  console.log(nft);
+
+  // console.log(nft);
 
   const navigateTo = (link) => {
     navigate(link);
@@ -39,7 +44,7 @@ const NftCard = ({
         params: [],
       });
       setTokenUri(tokenUriJson);
-      console.log(tokenUriJson);
+      // console.log(tokenUriJson);
     } catch (err) {
       console.log(err);
     }
@@ -47,8 +52,9 @@ const NftCard = ({
 
   return (
     tokenUri && (
-      <div className={className} onClick={() => navigateTo(`/ItemDetail/${nft.nft.id}`)}>
-        {console.log(tokenUri)}
+      <div className={className}>
+        {/* {console.log(nft)}
+        {console.log(tokenUri)} */}
 
         <div className="nft__item m-0">
           {nft.item_type === 'single_items' ? (
@@ -61,20 +67,23 @@ const NftCard = ({
             </div>
           )}
           <div className="author_list_pp">
-            <span onClick={() => navigateTo(`/profile/${tokenUri.artist.id}`)}>
+            <span onClick={() => navigateTo(`/profile/${nft.nft.owner.id}`)}>
               <img
                 className="lazy"
-                // src={
-                //   tokenUri.author.imagePath
-                //     ? tokenUri.author.imagePath
-                //     : api.baseUrl + '/uploads/기본프로필이미지.png'
-                // }
+                src={
+                  nft.nft.owner && nft.nft.owner.imagePath
+                    ? `${axios_apis.file}/${nft.nft.owner.imagePath}`
+                    : '/img/기본프로필이미지.png'
+                }
                 alt=""
               />
               <i className="fa fa-check"></i>
             </span>
           </div>
-          <div className="nft__item_wrap" style={{ height: `${height}px` }}>
+          <div
+            className="nft__item_wrap"
+            style={{ height: `${height}px` }}
+            onClick={() => navigateTo(`/ItemDetail/${nft.nft.id}`)}>
             <Outer>
               <span>
                 <img
@@ -90,15 +99,15 @@ const NftCard = ({
             <span>
               <h4>{tokenUri.title}</h4>
             </span>
-            <div className="nft__item_price">{nft.basePrice} ETH</div>
-            <div className="nft__item_action">
-              <span onClick={() => navigateTo(`${nft.bid_link}/${nft.id}`)}>
-                {nft.status === 'on_auction' ? '경매 입찰' : '바로 구매'}
-              </span>
+            <div className="nft__item_price">{nft.basePrice} SSF</div>
+            <div
+              className="nft__item_action"
+              onClick={() => navigateTo(`/ItemDetail/${nft.nft.id}`)}>
+              <span>{account.id === nft.nft.owner.id ? '판매 취소' : '바로 구매'}</span>
             </div>
             <div className="nft__item_like">
               <i className="fa fa-heart"></i>
-              <span>{nft.likes}</span>
+              <span>{nft.nft.wishCount}</span>
             </div>
           </div>
         </div>

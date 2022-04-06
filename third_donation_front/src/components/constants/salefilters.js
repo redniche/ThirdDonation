@@ -18,8 +18,4 @@ export const search = [
     value: 'nftName',
     label: 'NFT명으로 검색',
   },
-  {
-    value: 'sellerId',
-    label: '판매자ID로 검색',
-  },
 ];

@@ -5,6 +5,7 @@ import * as selectors from '../../store/selectors';
 import { Axios } from '../../core/axios';
 import Pagination from '../../components/paging/Pagination';
 import PanelLayout from '../../components/layout/PanelLayout';
+import { Table } from 'react-bootstrap';
 
 const Board = () => {
   // 글 리스트
@@ -36,6 +37,7 @@ const Board = () => {
 
   const titleStyle = {
     width: '50%',
+    // height: '80%',
   };
 
   useEffect(() => {
@@ -47,7 +49,9 @@ const Board = () => {
       <section className="container">
         <div className="row">
           <div className="col-lg-12">
-            <table className="table de-table table-rank table-hover">
+            {/* <table className="table de-table table-rank table-hover" > */}
+            <Table responsive="sm" className="table-notice">
+              {/* <table responsive hover> */}
               <thead>
                 <tr className="text-center">
                   <th scope="col">글번호</th>
@@ -74,7 +78,7 @@ const Board = () => {
                     </tr>
                   ))}
               </tbody>
-            </table>
+            </Table>
             <div className="spacer-single"></div>
             <Pagination totalPage={totalPage} curPage={curPage} fetch={getList} />
             <div className="spacer-single"></div>

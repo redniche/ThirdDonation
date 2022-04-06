@@ -217,6 +217,28 @@ section {
   }
 }
 
+.minter {
+  max-width: 800px !important;
+  text-align: center;
+
+  @media (max-width: 900px) {
+    max-width: none;
+  }
+}
+.minting {
+  max-width: 100% !important;
+  text-align: left;
+}
+
+.mint-file {
+  max-width: 400px !important;
+  height: 400px;
+
+  @media (max-width: 700px) {
+    max-width: 100% !important;
+  }
+}
+
 @keyframes sheen {
   0% {
     opacity: 1;
@@ -3160,7 +3182,7 @@ i.font60 {
   display: inline-block;
   margin-right: 0px;
   position: relative;
-  top: 14px;
+  // top: 14px;
   input[type='text'] {
     padding: 8px 12px;
     width: 200px;
@@ -4317,6 +4339,24 @@ img.img-rounded {
     font-size: 13px;
     color: #727272;
   }
+}
+.table-notice {
+  width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: large;
+  // height: 30%;
+}
+.table-notice-tr {
+  font-size: large;
+  text-align: center;
+  vertical-align: middle;
+  border-bottom: 0.02px solid #aaa;
+  height: 30px;
+}
+.table-notice-content {
+  // background-color: #fffff1;
+  font-weight: bold;
 }
 
 /* blog */

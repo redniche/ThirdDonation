@@ -198,8 +198,11 @@ const Header = ({ className }) => {
                               <NavLink to="/mint" onClick={() => setMenu(!menu)}>
                                 작품 등록
                               </NavLink>
+                              <NavLink to={'/profile/' + account.id} onClick={() => setMenu(!menu)}>
+                                작품 관리
+                              </NavLink>
                               <NavLink to="/ArtistRecord" onClick={() => setMenu(!menu)}>
-                                예술가 기록
+                                후원 메시지 확인
                               </NavLink>
                             </div>
                           </div>
@@ -274,6 +277,7 @@ const Header = ({ className }) => {
                             <div className="dropdown" onClick={closeArtistMenu}>
                               <NavLink to="/mint">작품 등록</NavLink>
                               <NavLink to={'/profile/' + account.id}>작품 관리</NavLink>
+                              <NavLink to={'/ArtistRecord'}>후원 메시지 확인</NavLink>
                             </div>
                           </div>
                         )}

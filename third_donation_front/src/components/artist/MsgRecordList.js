@@ -45,9 +45,6 @@ const MsgRecord = () => {
       <div className="row sequence d-flex justify-content-center">
         <div className="col-lg-10 col-md-10 col-sm-10 sq-item wow">
           <div className="pricing-s1">
-            <div className="top">
-              <h2>후원 메세지</h2>
-            </div>
             <table className="msgBody">
               <thead>
                 <tr>

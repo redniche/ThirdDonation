@@ -244,7 +244,7 @@ public class UserController {
             @ApiResponse(code = 500, message = "서버 오류")
     })
     public ResponseEntity<ArtistListResponse> getRegisterArtistList(
-            @PageableDefault(sort = "dateCreated", direction = Sort.Direction.ASC)
+            @PageableDefault(sort = "dateLastUpdated", direction = Sort.Direction.DESC)
             @ApiParam(value = "페이지네이션", required = true) final Pageable pageable) {
         return ResponseEntity.status(200)
                 .body(ArtistListResponse.builder().statusCode(200).message("Success")

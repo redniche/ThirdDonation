@@ -47,7 +47,7 @@ public class ArtistServiceImpl implements ArtistService {
         //엔티티 생성
         Artist artist = artistRepository.findById(user.getId()).orElse(null);
         if (artist == null) {
-            artist = Artist.builder().name(name).registerNumber(name).enabled(false).build();
+            artist = Artist.builder().name(name).registerNumber(registerNumber).enabled(false).build();
             artist.setUser(user);
         } else {
             artist.setName(name);

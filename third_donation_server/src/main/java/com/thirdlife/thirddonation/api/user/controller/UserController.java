@@ -340,7 +340,7 @@ public class UserController {
 
 
     /**
-     * 팔로워 여부 확인
+     * 팔로워 여부 확인.
      *
      * @param artistId Long
      * @return ResponseEntity

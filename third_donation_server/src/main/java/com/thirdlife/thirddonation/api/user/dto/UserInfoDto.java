@@ -31,6 +31,7 @@ public class UserInfoDto {
     private String description;
     private String imagePath;
     private Authority authority;
+    private Long followCount;
 
     /**
      * 유저의 접속시 일부 정보를 반환합니다.
@@ -51,6 +52,7 @@ public class UserInfoDto {
                 .username(user.getUsername())
                 .imagePath(userPath)
                 .authority(user.getAuthority())
+                .followCount(user.getFollowCount())
                 .build();
     }
 
@@ -74,6 +76,7 @@ public class UserInfoDto {
                 .imagePath(userPath)
                 .description(user.getDescription())
                 .authority(user.getAuthority())
+                .followCount(user.getFollowCount())
                 .build();
     }
 

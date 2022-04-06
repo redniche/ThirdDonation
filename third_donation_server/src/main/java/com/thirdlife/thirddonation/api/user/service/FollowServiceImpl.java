@@ -111,6 +111,6 @@ public class FollowServiceImpl implements FollowService {
     @Override
     public Boolean getFollowerInfo(Long artistId) {
         final User user = userService.getAuthUser();
-        return followRepository.existsByUserIdAndFollowingArtistId(artistId, user.getId());
+        return followRepository.existsByUserIdAndFollowingArtistId(user.getId(), artistId);
     }
 }

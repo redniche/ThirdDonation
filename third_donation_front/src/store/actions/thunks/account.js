@@ -15,7 +15,7 @@ export const fetchAccount = (walletAddress) => async (dispatch) => {
         })
           .then(({ data: { accessToken, data } }) => {
             auth.setToken(accessToken);
-            data.imagePath = `${apis.file}/${data.imagePath}`;
+            data.imagePath = data.imagePath ? `${apis.file}/${data.imagePath}` : null;
             setAxiosHeader(auth.getToken());
             dispatch(actions.getAccount.success(data));
           })

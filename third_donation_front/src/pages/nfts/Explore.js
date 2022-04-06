@@ -6,7 +6,7 @@ import PanelLayout from '../../components/layout/PanelLayout';
  * @returns
  */
 const Explore = () => (
-  <PanelLayout title="찾아보기">
+  <PanelLayout title="NFT마켓">
     <section className="container">
       <div className="row"></div>
       <SaleNftList />

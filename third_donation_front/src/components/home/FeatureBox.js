@@ -31,12 +31,15 @@ const featurebox = () => (
     {/* 3부분 / 2번 - NFT 등록 박스 */}
     <div className="col-lg-4 col-md-6 mb-3">
       {/* 어떻게 유저상태가 예술가일때만 가능한가 */}
-      <Link to="/mint">
+      <Link to="">
         <div className="feature-box f-boxed style-3">
           <i className=" bg-color-2 i-boxed icon_cloud-upload_alt"></i>
           <div className="text">
             <h4>NFT를 만들어보세요</h4>
-            <p>(대충 NFT 생성 설명 내용)</p>
+            <p>
+              장애인 예술가 승인이 완료되면, 자신이 직접 만든 NFT를 생성하고 이를 다른 고객들에게
+              판매할 수 있습니다!
+            </p>
           </div>
           <i className="wm icon_cloud-upload_alt"></i>
         </div>
@@ -45,12 +48,15 @@ const featurebox = () => (
 
     {/* 3부분 / 3번 - NFT 판매 박스 */}
     <div className="col-lg-4 col-md-6 mb-3">
-      <Link to="/sell">
+      <Link to="">
         <div className="feature-box f-boxed style-3">
           <i className=" bg-color-2 i-boxed icon_tags_alt"></i>
           <div className="text">
-            <h4>NFT를 판매해보세요</h4>
-            <p>(대충 NFT 판매 설명 내용)</p>
+            <h4>예술가님들께 응원의 메시지를 전하세요</h4>
+            <p>
+              장애인 예술가님들의 디지털 작품 NFT를 구매할 때, 예술가님들을 위한 응원의 메시지를
+              함께 남겨 힘을 전해주세요!
+            </p>
           </div>
           <i className="wm icon_tags_alt"></i>
         </div>

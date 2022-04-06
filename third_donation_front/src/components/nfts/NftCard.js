@@ -33,7 +33,7 @@ const NftCard = ({
   onFileLoad,
   price = -1,
 }) => {
-  const [isWish, setWish] = useState(false);
+  const [isWish, setWish] = useState(0);
   const [tokenUri, setTokenUri] = useState(null);
   const { data: account } = useSelector(selectors.accountState);
   const navigateTo = (link) => {
@@ -45,18 +45,16 @@ const NftCard = ({
     console.log(account.id != nft.artist.id);
     if (account && account.id != nft.artist.id) {
       Axios.post('/nfts/wish', {
-        userId: account.id,
         tokenId: nft.id,
       })
         .then(() => {
-          setWish(true);
+          setWish(isWish + 1);
         })
         .catch(() => {
           Axios.delete('/nfts/wish', {
-            userId: account.id,
             tokenId: nft.id,
           }).then(() => {
-            setWish(false);
+            setWish(isWish - 1);
           });
         });
     }
@@ -162,7 +160,7 @@ const NftCard = ({
             )}
             <div className="nft__item_like" onClick={heartClickHandle}>
               <i className="fa fa-heart"></i>
-              <span>{isWish ? nft.wishCount + 1 : nft.wishCount}</span>
+              <span>{nft.wishCount + isWish}</span>
             </div>
           </div>
         </div>

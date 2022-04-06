@@ -172,8 +172,11 @@ const Header = ({ className }) => {
                               <NavLink to="/admin/grantArtist" onClick={() => setMenu(!menu)}>
                                 예술가 승인
                               </NavLink>
+                              <NavLink to="/charityRegistration" onClick={() => setMenu(!menu)}>
+                                자선 단체 추가
+                              </NavLink>
                               <NavLink to="/admin/grantCharity" onClick={() => setMenu(!menu)}>
-                                자선 단체 승인
+                                자선 단체 관리
                               </NavLink>
                             </div>
                           </div>
@@ -195,8 +198,11 @@ const Header = ({ className }) => {
                               <NavLink to="/mint" onClick={() => setMenu(!menu)}>
                                 작품 등록
                               </NavLink>
+                              <NavLink to={'/profile/' + account.id} onClick={() => setMenu(!menu)}>
+                                작품 관리
+                              </NavLink>
                               <NavLink to="/ArtistRecord" onClick={() => setMenu(!menu)}>
-                                예술가 기록
+                                후원 메시지 확인
                               </NavLink>
                             </div>
                           </div>
@@ -247,7 +253,8 @@ const Header = ({ className }) => {
                           <div className="item-dropdown">
                             <div className="dropdown" onClick={closeAdminMenu}>
                               <NavLink to="/admin/grantArtist">예술가 승인</NavLink>
-                              <NavLink to="/admin/grantCharity">자선단체 승인</NavLink>
+                              <NavLink to="/charityRegistration">자선 단체 추가</NavLink>
+                              <NavLink to="/admin/grantCharity">자선단체 관리</NavLink>
                             </div>
                           </div>
                         )}
@@ -270,6 +277,7 @@ const Header = ({ className }) => {
                             <div className="dropdown" onClick={closeArtistMenu}>
                               <NavLink to="/mint">작품 등록</NavLink>
                               <NavLink to={'/profile/' + account.id}>작품 관리</NavLink>
+                              <NavLink to={'/ArtistRecord'}>후원 메시지 확인</NavLink>
                             </div>
                           </div>
                         )}

@@ -59,9 +59,10 @@ const ArtistRegistration = () => {
       .then((response) => {
         console.log(response);
         alert('등록 신청이 완료되었습니다!');
-        redirectUser();
+        redirectUser('/');
       })
       .catch((err) => {
+        alert('등록 신청이 실패했습니다!');
         console.log(err);
       });
   };

@@ -36,17 +36,18 @@ const NftList = ({
 
   //TODO sellFlag 전달 후 구현이 아직 안됨
   useEffect(() => {
+    dispatch(clearPage());
+    dispatch(clearNfts());
+    dispatch(clearFilter());
     dispatch(actions.fetchNftsBreakdown(userId, artistFlag, sellFlag));
   }, [dispatch, userId]);
 
   //will run when component unmounted
   useEffect(() => {
-    return () => {
-      dispatch(clearPage());
-      dispatch(clearFilter());
-      dispatch(clearNfts());
-    };
-  }, [dispatch]);
+    dispatch(clearNfts());
+    dispatch(clearFilter());
+    dispatch(clearPage());
+  }, []);
 
   const loadMore = async () => {
     dispatch(actions.fetchNftsBreakdown(userId, artistFlag, sellFlag)).then((r) => {
@@ -65,6 +66,14 @@ const NftList = ({
               key={index}
               onImgLoad={onFileLoad}
               height={height}
+            />
+          ) : sellFlag ? (
+            <NftCard
+              nft={nft.nft}
+              key={index}
+              onFileLoad={onFileLoad}
+              height={height}
+              price={nft.basePrice}
             />
           ) : (
             <NftCard nft={nft} key={index} onFileLoad={onFileLoad} height={height} />

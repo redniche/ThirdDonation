@@ -7,10 +7,11 @@ import * as selectors from '../../store/selectors';
 import { fetchAuthor } from '../../store/actions/thunks';
 import api from '../../core/api';
 import FollowerModal from '../../components/accounts/FollowerModal';
-import { clearFilter, clearNfts } from '../../store/actions';
+import { clearFilter, clearNfts, clearPage } from '../../store/actions';
 import { doCopy } from '../../common/utils';
 import LineChart from '../../components/nfts/chart/LineChart';
 import { Axios } from '../../core/axios';
+import { navigate } from '@reach/router';
 
 /**
  * authorId를 받아 해당 유저의 프로필을 표시해주는 페이지 컴포넌트
@@ -24,6 +25,7 @@ const Profile = ({ authorId }) => {
   const [ownMenu, setOwnMenu] = useState(false);
   const [chartMenu, setChartMenu] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+  const [isFollow, setIsFollow] = useState(false);
 
   const openModal = () => {
     setModalOpen(true);
@@ -96,7 +98,7 @@ const Profile = ({ authorId }) => {
       userId: account.id,
     })
       .then(() => {
-        window.alert('팔로우 성공');
+        navigate();
       })
       .catch((err) => {
         console.log('에러발생' + err);
@@ -111,18 +113,30 @@ const Profile = ({ authorId }) => {
       },
     })
       .then(() => {
-        window.alert('언팔로우 성공');
+        navigate();
       })
       .catch((err) => {
         console.log('에러발생' + err);
       });
   }
 
+  async function myFollowCheck() {
+    if (account && authorId != account.id) {
+      try {
+        const result = await Axios.get(`/users/follow/${authorId}`);
+        setIsFollow(result);
+      } catch (err) {
+        //아무것도 안함
+      }
+    }
+  }
   useEffect(() => {
-    dispatch(clearFilter());
+    myFollowCheck();
     dispatch(clearNfts());
+    dispatch(clearFilter());
+    dispatch(clearPage());
     dispatch(fetchAuthor(authorId));
-  }, [dispatch, authorId]);
+  }, [authorId]);
   // 컴포넌트 레이아웃. 프로필당 배너는 구현 안함.
   return (
     <ProfileLayout>
@@ -171,23 +185,28 @@ const Profile = ({ authorId }) => {
                     <div className="de-flex-col">
                       <React.Fragment>
                         <div className="profile_follower" onClick={openModal}>
-                          {author.followerCount} 팔로워
+                          {author.followCount} 팔로워
                         </div>
                         <FollowerModal
-                          user={author}
+                          user={authorId}
                           open={modalOpen}
                           close={closeModal}
                           header="팔로워"></FollowerModal>
                       </React.Fragment>
                     </div>
-                    <div className="de-flex-col">
-                      <span className="btn-main" onClick={follow}>
-                        팔로우
-                      </span>
-                      <span className="btn-main" onClick={unfollow}>
-                        언팔로우
-                      </span>
-                    </div>
+                    {account && account.id != author.id && (
+                      <div className="de-flex-col">
+                        {!isFollow ? (
+                          <span className="btn-main" onClick={follow}>
+                            팔로우
+                          </span>
+                        ) : (
+                          <span className="btn-main" onClick={unfollow}>
+                            언팔로우
+                          </span>
+                        )}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

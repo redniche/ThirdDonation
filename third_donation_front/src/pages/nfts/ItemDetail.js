@@ -20,6 +20,8 @@ import { Modal } from 'react-bootstrap';
 import Spinner from 'react-bootstrap/Spinner';
 import Select from 'react-select';
 
+import ExchangeRecord from './../../components/exchange/ExchangeRecord';
+
 /**
  * NFT의 상세 정보를 보여주는 페이지 컴포넌트
  * @returns
@@ -284,10 +286,10 @@ const ItemDetail = function () {
       {console.log(tokenUri)}
       <section className="container mt-4">
         <div className="row mt-md-5 pt-md-4">
-          <div className="col-md-6 text-center align-self-center">
+          <div className="col-md-6 text-center">
             {/* NFT 이미지 */}
             <img
-              className=""
+              className="mt-5"
               style={{ width: '100%' }}
               src={tokenUri && `${ipfs_apis.https_local}/${tokenUri.hash}`}
               alt=""
@@ -372,6 +374,7 @@ const ItemDetail = function () {
                 </div>
               </div>
               <div className="spacer-40"></div>
+              <ExchangeRecord nftId={nftId} />
               <div className="de_tab">
                 <div className="de_tab_content">
                   {/* button for checkout */}

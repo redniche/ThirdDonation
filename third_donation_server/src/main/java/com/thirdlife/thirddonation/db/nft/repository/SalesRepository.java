@@ -18,7 +18,7 @@ public interface SalesRepository
     Page<Sales> findAllBySoldOutAndEnabled(Boolean soldOut, Boolean enabled,
                                            Pageable pageable);
 
-    Slice<Sales> findAllBySoldOut(Boolean soldOut, Pageable pageable);
+    Slice<Sales> findAllByNftIdAndSoldOut(Long tokenId, Boolean soldOut, Pageable pageable);
 
     Page<Sales> findAllBySoldOutAndNft_ArtistId(Boolean soldOut, Long artistId, Pageable pageable);
 }

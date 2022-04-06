@@ -228,9 +228,9 @@ public class SaleServiceImpl implements SaleService {
      * @param pageable Pageable
      * @return Slice of SaleInfo
      */
-    public Slice<SaleInfoDto> getHistory(Pageable pageable) {
+    public Slice<SaleInfoDto> getHistory(Long tokenId, Pageable pageable) {
         Slice<Sales> sales =
-                salesRepository.findAllBySoldOut(true, pageable);
+                salesRepository.findAllByNftIdAndSoldOut(tokenId, true, pageable);
 
         return sales.map(SaleInfoDto::of2);
     }

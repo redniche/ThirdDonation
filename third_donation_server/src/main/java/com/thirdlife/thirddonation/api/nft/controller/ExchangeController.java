@@ -19,6 +19,7 @@ import io.swagger.annotations.ApiResponses;
 import java.util.HashMap;
 import java.util.Map;
 import javax.validation.Valid;
+import javax.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -173,13 +174,13 @@ public class ExchangeController {
     }
 
     /**
-     * 판메 완료된 NFT 메시지 리스트.
+     * 판매 완료된 NFT 거래 기록 리스트.
      *
      * @param pageable Pageable
      * @return ResponseEntity
      */
-    @GetMapping("/sales/history")
-    @ApiOperation(value = "판메 완료된 NFT 거래 기록",
+    @GetMapping("/sales/history/{tokenId}")
+    @ApiOperation(value = "판매 완료된 NFT 거래 기록",
             notes = "?page=0&size=x")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
@@ -187,10 +188,12 @@ public class ExchangeController {
             @ApiResponse(code = 500, message = "서버 오류")
     })
     public ResponseEntity<SalesHistoryResponse> getHistory(
+            @PathVariable @ApiParam(value = "조회할 회원 id를 입력받음", required = true)
+                    Long tokenId,
             @PageableDefault(sort = "dateLastUpdated", direction = Sort.Direction.DESC)
             @ApiParam(value = "pageable", required = true) final Pageable pageable
     ) {
-        Slice<SaleInfoDto> history = saleService.getHistory(pageable);
+        Slice<SaleInfoDto> history = saleService.getHistory(tokenId, pageable);
 
         return ResponseEntity.status(200)
                 .body(SalesHistoryResponse.builder().statusCode(200).message("Success")

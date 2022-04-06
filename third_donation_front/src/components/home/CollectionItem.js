@@ -28,11 +28,11 @@ const CollectionItem = ({ nft }) => {
     } catch (err) {
       console.log(err);
     }
-  }, [nft]);
+  }, []);
   return (
     tokenUri && (
-      <div className="itm" style={{ height: '500px' }}>
-        {console.log(nft && nft.nft.owner.imagePath)}
+      <div className="itm">
+        {/* {console.log(nft)} */}
         <div className="nft_coll">
           <div
             className="nft_wrap d-flex justify-content-center"
@@ -49,6 +49,7 @@ const CollectionItem = ({ nft }) => {
           </div>
           <div
             className="nft_coll_pp mt-2"
+            // style={{ marginLeft: '60px' }}
             onClick={() => navigateTo(`/profile/${nft.nft.owner.id}`)}>
             <span>
               <img
@@ -70,6 +71,7 @@ const CollectionItem = ({ nft }) => {
             </span>
             {/* 토큰 이름 */}
             <span>{tokenUri && tokenUri.title}</span>
+            <div className="nft__item_price">{nft.basePrice} SSF</div>
           </div>
         </div>
       </div>

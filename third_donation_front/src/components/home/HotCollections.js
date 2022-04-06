@@ -11,50 +11,28 @@ import { Axios } from './../../core/axios';
  * @returns
  */
 const HotCollections = () => {
-  // const [height, setHeight] = useState(0);
-
   const [hotCollections, setHotCollections] = useState(null);
 
-  // const onFileLoad = ({ target: file }) => {
-  //   let currentHeight = height;
-  //   if (currentHeight < file.offsetHeight) {
-  //     setHeight(file.offsetHeight);
-  //   }
-  // };
-
-  const getSaleNftList = async () => {
-    await Axios.get('/nfts/exchange/sales')
-      .then((data) => data)
-      .then(async (res) => {
-        const nftData = res.data.data;
-        // console.log(nftData);
-        setHotCollections(nftData);
-      })
-      .then(() => {
-        hotCollectionsSort();
-      })
-      .catch((err) => {
-        console.log(`err: ${err}`);
-        // 만약 NFT생성은 완료 되었는데 서버전송에서 오류날 경우따로 DB저장 처리 가능한 함수 필요
-      });
+  const getSaleNftList = () => {
+    return Axios.get('/nfts/exchange/sales');
   };
 
-  const hotCollectionsSort = () => {
-    hotCollections.sort((a, b) => b.id - a.id);
-    hotCollections.splice(20);
+  const hotCollectionsSort = (collections) => {
+    console.log(collections);
+    collections.sort((a, b) => b.nft.wishCount - a.nft.wishCount);
+    return collections;
   };
 
-  useEffect(() => {
-    getSaleNftList();
+  useEffect(async () => {
+    const collections = await getSaleNftList();
+    const sortResult = hotCollectionsSort(collections.data.data);
+    setHotCollections(sortResult);
   }, []);
 
+  // useEff
   return (
     <div className="nft">
-      {/* <Slider {...settings}>
-        {hotCollections &&
-          hotCollections.map((nft, index) => nft && <CollectionItem key={index} nft={nft} />)}
-        {console.log('😀😀😀😀')}
-      </Slider> */}
+      {console.log(hotCollections)}
       {hotCollections && (
         <Slider {...settings}>
           {hotCollections.map((nft, index) => (

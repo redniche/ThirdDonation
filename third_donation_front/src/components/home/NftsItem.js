@@ -41,7 +41,7 @@ const NftsItem = ({ nft }) => {
   return (
     tokenUri && (
       <div className="itm">
-        {console.log(nft)}
+        {/* {console.log(nft)} */}
         <div className="d-item">
           <div className="nft__item" style={{ height: '400px' }}>
             <div className="author_list_pp">

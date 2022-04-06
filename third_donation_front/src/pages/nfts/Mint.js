@@ -222,7 +222,7 @@ const Mint = () => {
       <section className="container">
         <div className="Minter">
           <h1>작품 NFT 등록</h1>
-          {'Connected Address: 지갑 주소 표시'}
+          {'연결 지갑 주소: ' + account.walletAddress}
           <br />
           <br />
           <br />

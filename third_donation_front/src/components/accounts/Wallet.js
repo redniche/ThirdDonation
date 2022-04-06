@@ -45,7 +45,7 @@ const Wallet = () => {
 
   useEffect(() => {
     getBalance();
-  }, []);
+  }, [account]);
 
   return (
     <div className="">

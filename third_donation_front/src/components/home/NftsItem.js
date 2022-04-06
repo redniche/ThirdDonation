@@ -21,7 +21,7 @@ const Outer = styled.div`
  */
 const NftsItem = ({ nft }) => {
   const [tokenUri, setTokenUri] = useState(null);
-  console.log(nft);
+  // console.log(nft);
 
   const [height, setHeight] = useState(0);
 
@@ -41,7 +41,7 @@ const NftsItem = ({ nft }) => {
         params: [],
       });
       setTokenUri(tokenUriJson);
-      console.log(tokenUriJson);
+      // console.log(tokenUriJson);
     } catch (err) {
       console.log(err);
     }

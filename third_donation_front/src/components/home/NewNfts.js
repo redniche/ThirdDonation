@@ -21,7 +21,7 @@ const NewNfts = () => {
       .then((data) => data)
       .then(async (res) => {
         const nftData = res.data.data;
-        console.log(nftData);
+        // console.log(nftData);
         setNfts(nftData);
       })
       .then(() => {
@@ -43,7 +43,7 @@ const NewNfts = () => {
 
   return (
     <div className="nft">
-      {console.log(nfts)}
+      {/* {console.log(nfts)} */}
       {nfts && (
         <Slider {...carouselNew}>
           {nfts.map((nft, index) => (

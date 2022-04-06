@@ -116,8 +116,11 @@ const NftCard = ({
                   <video
                     onLoad={onFileLoad}
                     src={`${ipfs_apis.https_local}/${tokenUri.hash}`}
+                    autoPlay
+                    muted
                     className="lazy nft__item_preview"
                     alt=""
+                    style={{ maxHeight: '264px' }}
                   />
                 ) : (
                   <img
@@ -125,6 +128,7 @@ const NftCard = ({
                     src={`${ipfs_apis.https_local}/${tokenUri.hash}`}
                     className="lazy nft__item_preview"
                     alt=""
+                    style={{ maxHeight: '264px' }}
                   />
                 )}
               </span>

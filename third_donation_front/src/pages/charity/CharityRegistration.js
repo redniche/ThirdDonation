@@ -53,7 +53,8 @@ const CharityRegistration = () => {
               <h1>
                 <i className="fa fa-user"></i> 자선단체 등록
               </h1>
-              <p>NFT작품의 수익 5%는 등록된 자선단체에게 기부됩니다</p>
+              <p>NFT작품의 수익 2%는 자선단체들 중 구매자가 원하는 곳으로 기부됩니다</p>
+              <p>등록 후 따로 승인을 해주세요.</p>
 
               <div className="spacer-10"></div>
 
@@ -74,7 +75,7 @@ const CharityRegistration = () => {
 
                   <div className="col-md-6">
                     <div className="field-set">
-                      <label>자선단체 주소 :</label>
+                      <label>자선단체 홈페이지 주소 :</label>
                       <input
                         type="text"
                         name="email"

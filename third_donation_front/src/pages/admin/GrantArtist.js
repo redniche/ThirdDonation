@@ -102,7 +102,6 @@ const GrantArtist = () => {
     Axios.get('/users/artists', {
       params: {
         page,
-        sort: 'id',
       },
     })
       .then(({ data }) => data)

@@ -1,98 +1,166 @@
-// import React from 'react';
+/* eslint-disable no-unused-vars */
+import React from 'react';
 import { useState, useEffect } from 'react';
-// import { FlatList, SafeAreaView, StatusBar, StyleSheet } from 'react-native';
-// import { axios, canceler } from 'axios';
-// import styled from 'styled-components';
-// import { navigate } from '@reach/router';
-import { useSelector } from 'react-redux';
-import * as selectors from '../../store/selectors';
+import { FlatList, SafeAreaView, StatusBar, StyleSheet } from 'react-native';
+import styled from 'styled-components';
 import { Axios } from '../../core/axios';
-import Pagination from '..//paging/Pagination';
 
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     marginTop: StatusBar.currentHeight || 0,
-//     height: 400,
-//   },
-//   item: {
-//     padding: 20,
-//     marginVertical: 8,
-//     marginHorizontal: 16,
-//   },
-//   title: {
-//     fontSize: 23,
-//   },
-// });
+const DATA = [
+  {
+    avatar: '/img/author/author-1.jpg',
+    username: 'Monica Lucas',
+    sales: 3.2,
+  },
+  {
+    avatar: '/img/author/author-2.jpg',
+    username: 'Mamie Barnett',
+    sales: 2.8,
+  },
+  {
+    avatar: '/img/author/author-3.jpg',
+    username: 'Nicholas Daniels',
+    sales: 2.5,
+  },
+  {
+    avatar: '/img/author/author-4.jpg',
+    username: 'Lori Hart',
+    sales: 2.2,
+  },
+  {
+    avatar: '/img/author/author-5.jpg',
+    username: 'Jimmy Wright',
+    sales: 1.9,
+  },
+  {
+    avatar: '/img/author/author-6.jpg',
+    username: 'Karla Sharp',
+    sales: 1.6,
+  },
+  {
+    avatar: '/img/author/author-7.jpg',
+    username: 'Gayle Hicks',
+    sales: 1.5,
+  },
+  {
+    avatar: '/img/author/author-8.jpg',
+    username: 'Claude Banks',
+    sales: 1.3,
+  },
+  {
+    avatar: '/img/author/author-9.jpg',
+    username: 'Franklin Greer',
+    sales: 0.9,
+  },
+  {
+    avatar: '/img/author/author-10.jpg',
+    username: 'Stacy Long',
+    sales: 0.8,
+  },
+  {
+    avatar: '/img/author/author-11.jpg',
+    username: 'Ida Chapman',
+    sales: 0.6,
+  },
+  {
+    avatar: '/img/author/author-12.jpg',
+    username: 'Fred Ryan',
+    sales: 0.5,
+  },
+];
 
-// const Item = ({ item, textColor }) => {
-// const Item = ({ item }) => {
-//   // const navigateTo = (link) => {
-//   //   navigate(link);
-//   // };
-//   return (
-//     <React.Fragment>
-//       <span className="my-1">
-//         {/* <span className="my-1" onClick={() => navigateTo(item.authorLink)} style={textColor}> */}
-//         {/* <Image className="lazy mx-2" src={item.avatar} alt=""></Image>
-//         <Icon className="fa fa-check"></Icon> */}
-//         <span>{item.username}</span>
-//       </span>
-//     </React.Fragment>
-//   );
-// };
+const Image = styled.img`
+  width: 50px;
+  height: 50px;
+  border-radius: 45px;
+`;
 
-// const renderItem = ({ item }) => {
-//   const backgroundColor = '#6e3b6e';
-//   const color = 'black';
-//   return <Item item={item} backgroundColor={{ backgroundColor }} textColor={{ color }} />;
-// };
+const Icon = styled.i`
+  color: #ffffff;
+  background: #8364e2;
+  font-size: 10px;
+  padding: 3px;
+  position: absolute;
+  left: 40px;
+  bottom: 5px;
+  border-radius: 45px;
+  display: inline-block;
+  box-sizing: border-box;
+`;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    marginTop: StatusBar.currentHeight || 0,
+    height: 400,
+  },
+  item: {
+    padding: 20,
+    marginVertical: 8,
+    marginHorizontal: 16,
+  },
+  title: {
+    fontSize: 23,
+  },
+});
+
+const Item = ({ item, textColor }) => {
+  return (
+    <React.Fragment>
+      <span className="my-1" style={textColor}>
+        <Image
+          className="lazy mx-2"
+          src={item.imagePath ? item.imagePath : '/img/기본프로필이미지.png'}
+          alt=""></Image>
+        <Icon className="fa fa-check"></Icon>
+        <span>{item.username}</span>
+      </span>
+    </React.Fragment>
+  );
+};
+
+const renderItem = ({ item }) => {
+  const backgroundColor = '#6e3b6e';
+  const color = 'black';
+  return <Item item={item} backgroundColor={{ backgroundColor }} textColor={{ color }} />;
+};
 
 const FollowerModal = (props) => {
-  // const { user, open, close } = props;
   const { user, open, close, header } = props;
   var followers = user;
   followers;
 
-  // 글 리스트
+  const [page, setPage] = useState(0);
+  const [result, setResult] = useState(0);
+
   const [list, setList] = useState([]);
-  // 총 페이지
-  const [totalPage, setTotalPage] = useState([]);
-  // 현재 페이지 번호
-  const [curPage, setCurPage] = useState(0);
 
-  const authorsState = useSelector(selectors.authorsState);
-  const author = authorsState.data;
-
-  const getList = (pageNumber) => {
+  const getList = () => {
     Axios.get('/users/follow', {
       params: {
-        userId: author.id,
-        page: pageNumber,
+        userId: 16,
+        page,
       },
     })
       .then(({ data }) => data)
       .then(async ({ data }) => {
-        setList(data);
-        setCurPage(pageNumber);
-        setTotalPage(data.totalPages);
-        console.log(data);
+        setList([...list, ...data]);
+        setPage(page + 1);
+        if (data.length == 0) {
+          setResult(1);
+        }
       })
       .catch((err) => {
         console.log('에러 발생' + err);
       });
   };
 
-  useEffect(() => {
-    getList(curPage);
-  }, []);
+  const loadMore = () => {
+    getList();
+  };
 
-  // try {
-  //   data = await axios.get(`${api.baseUrl}${api.authors}/follower`, {
-  //     cancelToken: canceler.token,
-  //     params: {},
-  //   });
-  // } catch (err) {}
+  useEffect(() => {
+    getList();
+  }, []);
 
   return (
     <div className={open ? 'openModal modal' : 'modal'}>
@@ -105,38 +173,23 @@ const FollowerModal = (props) => {
             </button>
           </header>
           <main>
-            {/* <SafeAreaView style={styles.container}>
+            <SafeAreaView style={styles.container}>
               <FlatList
                 data={list}
                 renderItem={renderItem}
                 keyExtractor={(item) => item.username}
               />
-            </SafeAreaView> */}
-            <table className="table de-table table-rank table-hover">
-              {/* <thead>
-                <tr className="text-center">
-                  <th scope="col">팔로워 id</th>
-                  <th scope="col">팔로워 userName</th>
-                </tr>
-                <tr></tr>
-              </thead> */}
-              <tbody>
-                {list &&
-                  list.map((item) => (
-                    <tr key={item.username}>
-                      <td className="text-center">{item.id}</td>
-                      <td className="text-center">{item.username}</td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
-            <Pagination totalPage={totalPage} curPage={curPage} fetch={getList} />
+            </SafeAreaView>
+            <span onClick={loadMore} className="btn-main lead m-auto">
+              더 보기
+            </span>
+            {result == 1 && <div className="result_log">마지막 NFT 입니다.</div>}
           </main>
-          {/* <footer>
+          <footer>
             <button className="close" onClick={close}>
               닫기
             </button>
-          </footer> */}
+          </footer>
         </section>
       ) : null}
     </div>

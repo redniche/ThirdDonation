@@ -30,6 +30,7 @@ const ItemDetail = function () {
   const { data: account } = useSelector(selectors.accountState);
 
   const [tokenUri, setTokenUri] = useState(null);
+  const [isWish, setWish] = useState(0);
 
   const [nft, setNft] = useState({});
   const [owner, setOwner] = useState(false);
@@ -50,6 +51,24 @@ const ItemDetail = function () {
 
   const selectInfo = useRef();
   const msgInfo = useRef();
+
+  const heartClickHandle = () => {
+    console.log(account);
+    console.log(account.id != nft.artist.id);
+    if (account && account.id != nft.artist.id) {
+      Axios.post('/nfts/wish', {
+        tokenId: nft.id,
+      })
+        .then(() => {
+          setWish(isWish + 1);
+        })
+        .catch(() => {
+          Axios.delete(`/nfts/wish/${nft.id}`).then(() => {
+            setWish(isWish - 1);
+          });
+        });
+    }
+  };
 
   const getCharity = () => {
     Axios.get('/charities')
@@ -332,9 +351,9 @@ const ItemDetail = function () {
                   )}
                 </div>
                 {/* 좋아요 수 */}
-                <div className="item_info_like">
+                <div className="item_info_like" onClick={heartClickHandle}>
                   <i className="fa fa-heart"></i>
-                  {nft.wishCount}
+                  {nft.wishCount + isWish}
                 </div>
               </div>
               {/* 작품 설명 */}
@@ -400,29 +419,33 @@ const ItemDetail = function () {
                   <div className="d-flex flex-row mt-5">
                     {/* 판매버튼 */}
                     {!owner ? (
-                      loading ? (
-                        <div>
-                          <div className="mb-1">
-                            <span>가격: </span>
-                            {tokenPrice} SSF
+                      sale ? (
+                        loading ? (
+                          <div>
+                            <div className="mb-1">
+                              <span>가격: </span>
+                              {tokenPrice} SSF
+                            </div>
+                            <div className="m-4 d-flex justify-content-center">
+                              <Spinner animation="border" />
+                              <span className="m-1">구매 중입니다.</span>
+                            </div>
                           </div>
-                          <div className="m-4 d-flex justify-content-center">
-                            <Spinner animation="border" />
-                            <span className="m-1">구매 중입니다.</span>
+                        ) : (
+                          <div>
+                            <div className="mb-1">
+                              <span>가격: </span>
+                              {tokenPrice} SSF
+                            </div>
+                            <button
+                              className="btn-main lead mb-5 mr15"
+                              onClick={() => setModalShow(true)}>
+                              구매하기
+                            </button>
                           </div>
-                        </div>
+                        )
                       ) : (
-                        <div>
-                          <div className="mb-1">
-                            <span>가격: </span>
-                            {tokenPrice} SSF
-                          </div>
-                          <button
-                            className="btn-main lead mb-5 mr15"
-                            onClick={() => setModalShow(true)}>
-                            구매하기
-                          </button>
-                        </div>
+                        <div></div>
                       )
                     ) : sale ? (
                       loading ? (

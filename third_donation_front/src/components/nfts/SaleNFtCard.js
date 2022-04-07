@@ -6,6 +6,7 @@ import { navigate } from '@reach/router';
 import ipfs_apis from '../../core/ipfs';
 import axios_apis from '../../core/axios';
 import { IpfsAxios, convertIpfsToHttps } from '../../core/ipfs';
+import { Axios } from '../../core/axios';
 
 const Outer = styled.div`
   display: flex;
@@ -31,10 +32,31 @@ const NftCard = ({
 }) => {
   const { data: account } = useSelector(selectors.accountState);
   const [tokenUri, setTokenUri] = useState(null);
+  const [isWish, setWish] = useState(0);
+  // console.log(nft);
 
   const navigateTo = (link) => {
     navigate(link);
   };
+
+  const heartClickHandle = () => {
+    console.log(account);
+    console.log(account.id != nft.nft.artist.id);
+    if (account && account.id != nft.nft.artist.id) {
+      Axios.post('/nfts/wish', {
+        tokenId: nft.nft.id,
+      })
+        .then(() => {
+          setWish(isWish + 1);
+        })
+        .catch(() => {
+          Axios.delete(`/nfts/wish/${nft.nft.id}`).then(() => {
+            setWish(isWish - 1);
+          });
+        });
+    }
+  };
+
   useEffect(async () => {
     try {
       const { data: tokenUriJson } = await IpfsAxios.get(convertIpfsToHttps(nft.nft.tokenUri), {
@@ -60,12 +82,12 @@ const NftCard = ({
             </div>
           )}
           <div className="author_list_pp">
-            <span onClick={() => navigateTo(`/profile/${nft.nft.owner.id}`)}>
+            <span onClick={() => navigateTo(`/profile/${nft.nft.artist.id}`)}>
               <img
                 className="lazy"
                 src={
-                  nft.nft.owner && nft.nft.owner.imagePath
-                    ? `${axios_apis.file}/${nft.nft.owner.imagePath}`
+                  nft.nft.artist && nft.nft.artist.imagePath
+                    ? `${axios_apis.file}/${nft.nft.artist.imagePath}`
                     : '/img/기본프로필이미지.png'
                 }
                 alt=""
@@ -111,9 +133,9 @@ const NftCard = ({
               onClick={() => navigateTo(`/ItemDetail/${nft.nft.id}`)}>
               <span>{account && account.id === nft.nft.owner.id ? '판매 취소' : '바로 구매'}</span>
             </div>
-            <div className="nft__item_like">
+            <div className="nft__item_like" onClick={heartClickHandle}>
               <i className="fa fa-heart"></i>
-              <span>{nft.nft.wishCount}</span>
+              <span>{nft.nft.wishCount + isWish}</span>
             </div>
           </div>
         </div>

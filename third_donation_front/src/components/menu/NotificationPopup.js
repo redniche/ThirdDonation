@@ -23,8 +23,8 @@ const NotificationPopup = () => {
   };
 
   const onIconClick = () => {
-    !notification && readNotifications();
-    notification && fetchNotifications();
+    notification && readNotifications();
+    !notification && fetchNotifications();
     setNotification(!notification);
   };
 

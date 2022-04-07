@@ -57,8 +57,9 @@ const SaleFilterBar = ({
   return (
     <div>
       <div className="items_filter mt-1">
-        <div className="d-flex">
-          <div className="dropdownSelect one">
+        <div className="row">
+          {/* <div className="col d-flex"> */}
+          <div className="dropdownSelect one col m-0" style={{}}>
             <Select
               placeholder={<div> {searchValue.label} </div>}
               styles={customStyles}
@@ -67,10 +68,10 @@ const SaleFilterBar = ({
               onChange={(e) => searchKind(e)}
             />
           </div>
-          <div className="row form-dark" id="form_quick_search" name="form_quick_search">
-            <div className="col">
+          <div className="form-dark col p-0" id="form_quick_search" name="form_quick_search">
+            <div className="d-flex" style={{}}>
               <input
-                className="form-control"
+                className="form-control mb-0"
                 id="name_1"
                 name="name_1"
                 placeholder="검색어"
@@ -89,7 +90,7 @@ const SaleFilterBar = ({
               <div className="clearfix"></div>
             </div>
           </div>
-          <div className="dropdownSelect one" style={{ marginLeft: '10px' }}>
+          <div className="dropdownSelect one col" style={{}}>
             <Select
               placeholder={<div> {defaultValue1.label} </div>}
               styles={customStyles}
@@ -98,7 +99,9 @@ const SaleFilterBar = ({
               onChange={(e) => fileType(e)}
             />
           </div>
-          <div className="d-flex" style={{ marginLeft: '20px' }}>
+          {/* </div> */}
+          {/* <div className="col" style={{ marginLeft: '20px' }}> */}
+          <div className="col d-flex">
             <input
               className="form-control"
               style={{ width: '150px' }}
@@ -117,6 +120,8 @@ const SaleFilterBar = ({
               type="number"
               onChange={(e) => onChangeMaxPrice(e.target.value)}
             />
+          </div>
+          <div className="col">
             <input
               className="form-control"
               style={{ marginLeft: '20px', width: '90px' }}
@@ -127,6 +132,7 @@ const SaleFilterBar = ({
               onChange={(e) => onChangeWishCount(e.target.value)}
             />
           </div>
+          {/* </div> */}
         </div>
       </div>
     </div>

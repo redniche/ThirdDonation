@@ -2821,6 +2821,21 @@ i.font60 {
     color: pink;
   }
 }
+.item_info_like {
+  position: relative;
+  bottom: 0px;
+  font-size: 14px;
+  // color: #ddd;
+  float: right;
+  span {
+    // color: $gray;
+    margin-left: 5px;
+    font-size: 12px;
+  }
+  &:hover i {
+    color: pink !important;
+  }
+}
 .de_countdown {
   position: relative;
   font-size: 0.8rem;

@@ -1,10 +1,12 @@
 import { memo, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { navigate } from '@reach/router';
-// import api from '../../core/api';
+import { useSelector } from 'react-redux';
+import * as selectors from '../../store/selectors';
 import ipfs_apis from '../../core/ipfs';
 import axios_apis from '../../core/axios';
 import { IpfsAxios, convertIpfsToHttps } from '../../core/ipfs';
+import { Axios } from '../../core/axios';
 
 const Outer = styled.div`
   display: flex;
@@ -21,12 +23,33 @@ const Outer = styled.div`
  * @returns
  */
 const NftsItem = ({ nft }) => {
+  const { data: account } = useSelector(selectors.accountState);
   const [tokenUri, setTokenUri] = useState(null);
+  const [isWish, setWish] = useState(0);
   // console.log(nft);
 
   const navigateTo = (link) => {
     navigate(link);
   };
+
+  const heartClickHandle = () => {
+    console.log(account);
+    console.log(account.id != nft.nft.artist.id);
+    if (account && account.id != nft.nft.artist.id) {
+      Axios.post('/nfts/wish', {
+        tokenId: nft.nft.id,
+      })
+        .then(() => {
+          setWish(isWish + 1);
+        })
+        .catch(() => {
+          Axios.delete(`/nfts/wish/${nft.nft.id}`).then(() => {
+            setWish(isWish - 1);
+          });
+        });
+    }
+  };
+
   useEffect(async () => {
     try {
       const { data: tokenUriJson } = await IpfsAxios.get(convertIpfsToHttps(nft.nft.tokenUri), {
@@ -41,16 +64,16 @@ const NftsItem = ({ nft }) => {
   return (
     tokenUri && (
       <div className="itm">
-        {/* {console.log(nft)} */}
+        {console.log(nft)}
         <div className="d-item">
           <div className="nft__item" style={{ height: '400px' }}>
             <div className="author_list_pp">
-              <span onClick={() => navigateTo(`/profile/${nft.nft.owner.id}`)}>
+              <span onClick={() => navigateTo(`/profile/${nft.nft.artist.id}`)}>
                 <img
                   className="lazy"
                   src={
-                    nft.nft.owner && nft.nft.owner.imagePath
-                      ? `${axios_apis.file}/${nft.nft.owner.imagePath}`
+                    nft.nft.artist && nft.nft.artist.imagePath
+                      ? `${axios_apis.file}/${nft.nft.artist.imagePath}`
                       : '/img/기본프로필이미지.png'
                   }
                   alt=""
@@ -89,18 +112,10 @@ const NftsItem = ({ nft }) => {
               <span>
                 <h4>{tokenUri.title}</h4>
               </span>
-              <div className="nft__item_price">
-                {nft.basePrice} SSF
-                {/* <span>
-                  {nft.bid}/{nft.max_bid}
-                </span> */}
-              </div>
-              {/* <div className="nft__item_action">
-                <span onClick={() => window.open(nft.bid_link, '_self')}>Place a bid</span>
-              </div> */}
-              <div className="nft__item_like">
+              <div className="nft__item_price">{nft.basePrice} SSF</div>
+              <div className="nft__item_like" onClick={heartClickHandle}>
                 <i className="fa fa-heart"></i>
-                {/* <span>{nft.likes}</span> */}
+                <span>{nft.nft.wishCount + isWish}</span>
               </div>
             </div>
           </div>

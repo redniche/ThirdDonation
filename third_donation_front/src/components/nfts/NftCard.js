@@ -41,8 +41,6 @@ const NftCard = ({
   };
 
   const heartClickHandle = () => {
-    console.log(account);
-    console.log(account.id != nft.artist.id);
     if (account && account.id != nft.artist.id) {
       Axios.post('/nfts/wish', {
         tokenId: nft.id,

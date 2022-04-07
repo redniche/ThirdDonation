@@ -1,10 +1,10 @@
 import { memo, useState } from 'react';
-import { useSelector } from 'react-redux';
+// import { useSelector } from 'react-redux';
 import { Form, Formik, Field, ErrorMessage } from 'formik';
 import { navigate } from '@reach/router';
 import * as Yup from 'yup';
 import BasicLayout from '../../components/layout/BasicLayout';
-import * as selectors from '../../store/selectors';
+// import * as selectors from '../../store/selectors';
 import apis, { Axios } from '../../core/axios';
 // import { Axios } from '../../core/axios';
 
@@ -23,9 +23,9 @@ const validationSchema = Yup.object().shape({
 const ArtistRegistration = () => {
   // state
   const [file, setFile] = useState();
-  const { data: account } = useSelector(selectors.accountState);
-  const author = account;
-  console.log(author);
+  // const { data: account } = useSelector(selectors.accountState);
+  // const author = account;
+  // console.log(author);
 
   const initialValues = {
     realName: '',
@@ -56,8 +56,7 @@ const ArtistRegistration = () => {
         registerNumber: data.registNumber,
       },
     })
-      .then((response) => {
-        console.log(response);
+      .then(() => {
         alert('등록 신청이 완료되었습니다!');
         redirectUser('/');
       })
@@ -84,47 +83,6 @@ const ArtistRegistration = () => {
     reader.readAsDataURL(file);
   };
 
-  // const { data: wallet } = useSelector(selectors.accountState);
-  // const [name, setName] = useState('');
-  // const [regNum, setRegNum] = useState('');
-
-  // const onChangeName = (e) => {
-  //   setName(e.target.value);
-  // };
-
-  // const onChangeRegNum = (e) => {
-  //   setRegNum(e.target.value);
-  // };
-
-  // console.log(wallet);
-
-  // function artistRegist() {
-  //   Axios.post(
-  //     '/users/artists',
-  //     {
-  //       filePath: 'string',
-  //       name: name,
-  //       registerNumber: regNum,
-  //       userId: wallet.id,
-  //     },
-  //     {
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       withCredentials: true,
-  //     },
-  //   )
-  //     .then(() => {
-  //       window.alert(name + '은 자선단체 등록을 성공하였습니다.');
-  //     })
-  //     .catch((err) => {
-  //       console.log('에러발생' + err);
-  //       window.alert('자선단체 등록을 실패하였습니다.');
-  //     });
-  //   // console.log(name);
-  //   // console.log(url);
-  //   // console.log(wallet.walletAddress);
-  // }
   return (
     <BasicLayout>
       <section id="section-main" aria-label="section">

@@ -25,14 +25,12 @@ const LineChart = ({ userId }) => {
     },
     xaxis: {
       categories: xAxis,
-      // categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
     },
   };
 
   const series = [
     {
       data: yAxis,
-      // data: [30, 40, 35, 50, 49, -60, 70, 91, -125],
     },
   ];
 
@@ -42,8 +40,6 @@ const LineChart = ({ userId }) => {
       .then(({ data }) => {
         const xAxisArray = extractColumn(data, 'tradingDate');
         const yAxisArray = extractColumn(data, 'income');
-        console.log(xAxisArray);
-        console.log(yAxisArray);
 
         setXAxis(xAxisArray);
         setYAxis(yAxisArray);

@@ -28,7 +28,6 @@ import ExchangeRecord from './../../components/exchange/ExchangeRecord';
  */
 const ItemDetail = function () {
   const { data: account } = useSelector(selectors.accountState);
-  // console.log(account.id);
 
   const [tokenUri, setTokenUri] = useState(null);
 
@@ -42,7 +41,6 @@ const ItemDetail = function () {
 
   // 파라미터 id값 받아오기
   const nftId = useParams().nftId;
-  // console.log(nftId);
 
   const navigateTo = (link) => {
     navigate(link);
@@ -58,11 +56,9 @@ const ItemDetail = function () {
       .then((data) => data)
       .then(async (res) => {
         const charityList = res.data.data.content;
-        console.log(charityList);
         for (let i = 0; i < charityList.length; i++) {
           const name = charityList[i].name;
           const walletAddress = charityList[i].walletAddress;
-          console.log('😀😀');
           const charity = { value: walletAddress, label: name };
           charities.push(charity);
         }
@@ -120,7 +116,6 @@ const ItemDetail = function () {
           const sellNftId = sellData[i].nft.id;
           if (sellNftId == nftId) {
             setSaleId(sellData[i].id);
-            console.log(sellData[i].id);
             return;
           }
         }
@@ -156,21 +151,18 @@ const ItemDetail = function () {
     try {
       // 토큰 ID에 해당하는 tokenURI 가져오기
       const tokenUri = await artNftContract.methods.getTokenURI(nftId).call();
-      console.log(tokenUri);
       const { data: tokenUriJson } = await IpfsAxios.get(convertIpfsToHttps(tokenUri), {
         params: [],
       });
       setTokenUri(tokenUriJson);
 
       const price = await saleArtContract.methods.artTokenPrices(nftId).call();
-      console.log(price);
       // 판매 중인 NFT라면
       if (price != 0) {
         setTokenPrice(price);
         setSale(true);
       }
     } catch (error) {
-      console.log(error);
       alert('정보 가져오기 실패!');
     }
   };
@@ -204,9 +196,7 @@ const ItemDetail = function () {
   // 백엔드에 판매 취소 전송
   const saveCancelSale = () => {
     Axios.patch(`/nfts/exchange/sales/${saleId}/cancel`)
-      .then((res) => {
-        console.log(res);
-      })
+      .then(() => {})
       .catch((err) => {
         console.log(`err: ${err}`);
         // 만약 NFT생성은 완료 되었는데 서버전송에서 오류날 경우따로 DB저장 처리 가능한 함수 필요
@@ -226,7 +216,6 @@ const ItemDetail = function () {
       }
       const charityWalletAddress = selectInfo.current.state.value.value;
       const msgToArtist = msgInfo.current.value;
-      console.log(selectInfo.current.state);
       if (msgToArtist.length == 0) {
         alert('메시지를 입력해주세요.');
         return;
@@ -239,8 +228,6 @@ const ItemDetail = function () {
       setLoading(true);
       const accounts = await currentProvider.request({ method: 'eth_requestAccounts' });
       const currentWallet = accounts[0];
-
-      console.log(ssafyTokenContract.methods);
 
       // 구매 승인 (스마트 컨트랙트)
       const response = await ssafyTokenContract.methods
@@ -282,9 +269,7 @@ const ItemDetail = function () {
         },
       },
     )
-      .then((res) => {
-        console.log(res);
-      })
+      .then(() => {})
       .catch((error) => {
         console.log(error);
       });
@@ -301,10 +286,8 @@ const ItemDetail = function () {
     if (!account) return;
     if (nft.owner && account.id == nft.owner.id) setOwner(true);
     else setOwner(false);
-    console.log(owner);
   }, [nft]);
 
-  if (nft.owner) console.log(nft.owner.id);
   return (
     <BasicLayout>
       {console.log(nft)}

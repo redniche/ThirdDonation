@@ -31,7 +31,6 @@ const GrantArtist = () => {
   if (!currentProvider) return;
 
   const artNftContract = getSsafyNftContract(currentProvider);
-  console.log(artNftContract.methods);
 
   const setttingProcess = (flag, id) => {
     setList(
@@ -44,7 +43,6 @@ const GrantArtist = () => {
     if (confirm('예술가로 승인하시겠습니까?')) {
       try {
         const userData = await getUserAddress(userId);
-        console.log(userData.data.data.walletAddress);
         const userAddress = userData.data.data.walletAddress;
 
         const accounts = await currentProvider.request({ method: 'eth_requestAccounts' });
@@ -73,7 +71,6 @@ const GrantArtist = () => {
     if (confirm('일반 사용자로 승인하시겠습니까?')) {
       try {
         const userData = await getUserAddress(userId);
-        console.log(userData.data.data.walletAddress);
         const userAddress = userData.data.data.walletAddress;
 
         const accounts = await currentProvider.request({ method: 'eth_requestAccounts' });

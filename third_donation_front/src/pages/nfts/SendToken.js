@@ -44,7 +44,6 @@ function Main() {
       if (error) {
         console.log('Something went wrong', error);
       } else {
-        console.log('transaction submitted ', hash);
         window.alert('후원을 성공했습니다. Hash : ' + hash);
       }
     });

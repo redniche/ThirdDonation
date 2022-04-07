@@ -34,36 +34,28 @@ const SaleNftList = () => {
   };
 
   const searchKind = (e) => {
-    console.log(e);
     setSearchValue(e.value);
   };
 
   const searchWord = (word) => {
-    console.log(word);
-    // setWord(word);
     if (searchValue == 'artist') {
       setArtistWord(word);
-      console.log('😁😁');
     } else if (searchValue == 'nftName') {
       setNftWord(word);
     }
   };
 
   const selectFileType = (e) => {
-    console.log(e);
     setFileType(e.value);
   };
 
   const onChangeMinPrice = (price) => {
-    console.log(price);
     setMinPrice(price);
   };
   const onChangeMaxPrice = (price) => {
-    console.log(price);
     setMaxPrice(price);
   };
   const onChangeWishCount = (cnt) => {
-    console.log(cnt);
     setWishCount(cnt - 1);
   };
 
@@ -126,7 +118,6 @@ const SaleNftList = () => {
 
   useEffect(() => {
     if (isNaN(parseInt(wishCount))) {
-      console.log('😂');
       setWishCount(null);
     }
 

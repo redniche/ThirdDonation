@@ -32,19 +32,15 @@ const NftCard = ({
   const { data: account } = useSelector(selectors.accountState);
   const [tokenUri, setTokenUri] = useState(null);
 
-  // console.log(nft);
-
   const navigateTo = (link) => {
     navigate(link);
   };
   useEffect(async () => {
     try {
-      // const { data: tokenUriJson } = await Axios.get(nft.nft.tokenUri, { params: [] });
       const { data: tokenUriJson } = await IpfsAxios.get(convertIpfsToHttps(nft.nft.tokenUri), {
         params: [],
       });
       setTokenUri(tokenUriJson);
-      // console.log(tokenUriJson);
     } catch (err) {
       console.log(err);
     }
@@ -53,9 +49,6 @@ const NftCard = ({
   return (
     tokenUri && (
       <div className={className}>
-        {/* {console.log(nft)}
-        {console.log(tokenUri)} */}
-
         <div className="nft__item m-0">
           {nft.item_type === 'single_items' ? (
             <div className="icontype">

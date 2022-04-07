@@ -10,13 +10,10 @@ const ExchangeRecord = ({ nftId }) => {
   const [record, setRecord] = useState(null);
 
   const getExchangeRecord = async () => {
-    console.log('😀😀😀');
     await Axios.get(`/nfts/exchange/sales/history/${nftId}`)
       .then((data) => {
-        console.log(data.data.data.content);
         const records = data.data.data.content;
         setRecord(records);
-        console.log(record);
       })
       .catch((error) => {
         console.log(error);
@@ -29,7 +26,6 @@ const ExchangeRecord = ({ nftId }) => {
 
   return (
     <div>
-      {console.log(record)}
       <button
         className="btn-main lead mb-2 mr15"
         onClick={() => setOpen(!open)}

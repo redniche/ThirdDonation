@@ -33,7 +33,6 @@ const BoardView = ({ navigate }) => {
       .then((data) => data)
       .then(async (res) => {
         setArticle(res.data.data);
-        console.log(res);
       })
       .catch((err) => {
         console.log('에러 발생' + err);

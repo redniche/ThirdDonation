@@ -11,12 +11,10 @@ import codeSyntaxHighlight from '@toast-ui/editor-plugin-code-syntax-highlight';
 const ManualModal = (props) => {
   const { article, open, close, header } = props;
 
-  console.log('들어옴');
-
   return (
     <div className={open ? 'openModal modal' : 'modal'}>
       {open ? (
-        <section style={{ width: '800px' }}>
+        <section id="manual" style={{ width: '800px' }}>
           <header>
             {header}
             <button className="close" onClick={close}>

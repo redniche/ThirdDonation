@@ -27,7 +27,6 @@ const NewNfts = () => {
 
   return (
     <div className="nft">
-      {console.log(nfts)}
       {nfts && (
         <Slider {...carouselNew}>
           {nfts.map((nft, index) => (

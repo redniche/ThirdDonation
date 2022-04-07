@@ -37,7 +37,7 @@ const Board = () => {
 
   const titleStyle = {
     width: '50%',
-    // height: '80%',
+    height: '80%',
   };
 
   useEffect(() => {

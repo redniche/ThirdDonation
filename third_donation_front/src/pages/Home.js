@@ -25,7 +25,7 @@ const Home = () => {
   function getArticle() {
     Axios.get('/board/article/detail', {
       params: {
-        articleId: 36,
+        articleId: 37,
       },
     })
       .then((data) => data)

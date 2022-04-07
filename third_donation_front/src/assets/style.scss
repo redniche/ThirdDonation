@@ -107,6 +107,14 @@ section {
   }
 }
 
+.img-logo {
+  @media (max-width: 500px) {
+    display: none !important;
+    width: 0% !important;
+    height: 30px !important;
+  }
+}
+
 .wraper {
   padding: 0;
   display: block;
@@ -214,12 +222,6 @@ section {
     opacity: 0;
     -webkit-transform: rotateZ(60deg) translate(0, -12em);
     transform: rotateZ(60deg) translate(0, -12em);
-  }
-}
-
-.img-logo {
-  @media (max-width: 500px) {
-    display: none !important;
   }
 }
 
@@ -3260,7 +3262,7 @@ i.font60 {
 .modal > section {
   // width: 90%;
   // max-width: 450px;
-  margin-top: 8%;
+  margin-top: 320%;
   // margin-bottom: 10%;
   margin-left: auto;
   margin-right: auto;

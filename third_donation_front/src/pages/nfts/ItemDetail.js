@@ -77,19 +77,29 @@ const ItemDetail = function () {
     return (
       <Modal {...props} aria-labelledby="contained-modal-title-vcenter" style={{ zIndex: '2000' }}>
         <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">Modal heading</Modal.Title>
+          <Modal.Title id="contained-modal-title-vcenter">자선단체 선택 & 메시지 입력</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          기부할 자선단체를 선택해주세요.
-          <Select
-            options={charities}
-            // onChange={handleSelect}
-            ref={selectInfo}></Select>
-          <input
-            type="text"
-            // onChange={msgChange}
-            ref={msgInfo}
-          />
+          <div className="m-2 mb-4">
+            <p className="m-0">기부할 자선단체를 선택해주세요.</p>
+            <p className="mb-2">(판매된 금액 2%는 자선단체에게 기부됩니다.)</p>
+            <Select options={charities} ref={selectInfo}></Select>
+          </div>
+          <div className="m-2">
+            <p className="m-0 mb-1">예술가에게 따뜻한 한 마디를 입력해주세요.</p>
+            <input
+              type="text"
+              ref={msgInfo}
+              placeholder="100자 이내로 입력해주세요."
+              style={{
+                width: '100%',
+                border: 'solid #bbb 1px',
+                borderRadius: '5px',
+                height: '37px',
+                paddingLeft: '10px',
+              }}
+            />
+          </div>
         </Modal.Body>
         <Modal.Footer>
           <button className="btn-main lead mb-5 mr15" onClick={purchaseToken}>
@@ -210,11 +220,23 @@ const ItemDetail = function () {
         alert('지갑을 연결해주세요.');
         return;
       }
+      if (selectInfo.current.state.value == null) {
+        alert('자선단체를 선택해주세요.');
+        return;
+      }
       const charityWalletAddress = selectInfo.current.state.value.value;
       const msgToArtist = msgInfo.current.value;
-      console.log(charityWalletAddress);
-      console.log(msgToArtist);
-
+      console.log(selectInfo.current.state);
+      if (msgToArtist.length == 0) {
+        alert('메시지를 입력해주세요.');
+        return;
+      }
+      if (msgToArtist.length > 100) {
+        alert('메시지는 100자 이내로 입력해주세요.');
+        return;
+      }
+      setModalShow(false);
+      setLoading(true);
       const accounts = await currentProvider.request({ method: 'eth_requestAccounts' });
       const currentWallet = accounts[0];
 
@@ -236,9 +258,11 @@ const ItemDetail = function () {
         });
       console.log(response2);
 
+      setLoading(false);
       alert('NFT 구매가 완료되었습니다.');
       navigateTo();
     } catch (error) {
+      setLoading(false);
       console.log(error);
     }
   };
@@ -393,17 +417,30 @@ const ItemDetail = function () {
                   <div className="d-flex flex-row mt-5">
                     {/* 판매버튼 */}
                     {!owner ? (
-                      <div>
-                        <div className="mb-1">
-                          <span>가격: </span>
-                          {tokenPrice} SSF
+                      loading ? (
+                        <div>
+                          <div className="mb-1">
+                            <span>가격: </span>
+                            {tokenPrice} SSF
+                          </div>
+                          <div className="m-4 d-flex justify-content-center">
+                            <Spinner animation="border" />
+                            <span className="m-1">구매 중입니다.</span>
+                          </div>
                         </div>
-                        <button
-                          className="btn-main lead mb-5 mr15"
-                          onClick={() => setModalShow(true)}>
-                          구매하기
-                        </button>
-                      </div>
+                      ) : (
+                        <div>
+                          <div className="mb-1">
+                            <span>가격: </span>
+                            {tokenPrice} SSF
+                          </div>
+                          <button
+                            className="btn-main lead mb-5 mr15"
+                            onClick={() => setModalShow(true)}>
+                            구매하기
+                          </button>
+                        </div>
+                      )
                     ) : sale ? (
                       loading ? (
                         <div className="m-4 d-flex justify-content-center">

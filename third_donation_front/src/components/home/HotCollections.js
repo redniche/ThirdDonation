@@ -18,7 +18,6 @@ const HotCollections = () => {
   };
 
   const hotCollectionsSort = (collections) => {
-    console.log(collections);
     collections.sort((a, b) => b.nft.wishCount - a.nft.wishCount);
     return collections;
   };
@@ -32,7 +31,6 @@ const HotCollections = () => {
   // useEff
   return (
     <div className="nft">
-      {console.log(hotCollections)}
       {hotCollections && (
         <Slider {...settings}>
           {hotCollections.map((nft, index) => (

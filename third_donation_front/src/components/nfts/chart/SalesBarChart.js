@@ -25,10 +25,6 @@ export default function SalesBar() {
     },
   ];
 
-  // componentDidMount(props) {
-  //   console.log(this.props)
-  // };
-
   return (
     <span className="salesbar">
       <Chart options={options} series={series} type="bar" width="100%" />

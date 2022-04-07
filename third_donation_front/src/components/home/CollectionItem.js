@@ -48,7 +48,6 @@ const CollectionItem = ({ nft }) => {
         params: [],
       });
       setTokenUri(tokenUriJson);
-      // console.log(tokenUriJson);
     } catch (err) {
       console.log(err);
     }
@@ -56,7 +55,6 @@ const CollectionItem = ({ nft }) => {
   return (
     tokenUri && (
       <div className="itm">
-        {console.log(nft)}
         <div className="nft_coll">
           <div
             className="nft_wrap d-flex justify-content-center"

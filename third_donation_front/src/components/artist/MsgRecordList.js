@@ -36,8 +36,6 @@ const MsgRecord = () => {
 
   useEffect(() => {
     getList(curPage);
-    // setMsg(msgList);
-    // console.log(msgList);
   }, []);
 
   return (

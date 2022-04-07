@@ -3259,10 +3259,25 @@ i.font60 {
   cursor: pointer;
   border: 0;
 }
-.modal > section {
-  // width: 90%;
-  // max-width: 450px;
+.modal > #manual {
+  width: 90%;
+  max-width: 1500px;
   margin-top: 320%;
+  // margin-bottom: 10%;
+  margin-left: auto;
+  margin-right: auto;
+  // margin: 0 auto;
+  border-radius: 0.3rem;
+  background-color: #fff;
+  /* 팝업이 열릴때 스르륵 열리는 효과 */
+  animation: modal-show 0.3s;
+  overflow: hidden;
+  padding: 0 0;
+}
+.modal > section {
+  width: 90%;
+  max-width: 450px;
+  // margin-top: 320%;
   // margin-bottom: 10%;
   margin-left: auto;
   margin-right: auto;

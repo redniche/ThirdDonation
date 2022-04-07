@@ -16,7 +16,6 @@ const Home = () => {
 
   const openModal = () => {
     setModalOpen(true);
-    console.log('오픈 모달');
   };
   const closeModal = () => {
     setModalOpen(false);
@@ -31,7 +30,6 @@ const Home = () => {
       .then((data) => data)
       .then(async (res) => {
         setArticle(res.data.data);
-        // console.log(res);
       })
       .catch((err) => {
         console.log('에러 발생' + err);

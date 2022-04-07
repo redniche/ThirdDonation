@@ -49,7 +49,6 @@ const GrantArtist = () => {
         .then(() => {
           saveAceeptCharity(walletAddress);
         });
-      // console.log(response);
 
       alert('자선 단체 승인 성공');
     } catch (error) {

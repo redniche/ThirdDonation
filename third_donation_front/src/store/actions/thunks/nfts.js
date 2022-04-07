@@ -23,7 +23,6 @@ export const fetchNftsBreakdown = (userId, isArtist = false, isSell = false, isM
           dispatch(actions.getNftBreakdown.success(data));
           return 0;
         } else {
-          console.log('마지막 NFT 입니다.');
           dispatch(actions.getNftBreakdown.failure('마지막 NFT 입니다.'));
           return 1;
         }
@@ -39,7 +38,6 @@ export const fetchNftsBreakdown = (userId, isArtist = false, isSell = false, isM
           dispatch(actions.getNftBreakdown.success(data));
           return 0;
         } else {
-          console.log('마지막 NFT 입니다.');
           dispatch(actions.getNftBreakdown.failure('마지막 NFT 입니다.'));
           return 1;
         }

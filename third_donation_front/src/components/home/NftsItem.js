@@ -56,7 +56,6 @@ const NftsItem = ({ nft }) => {
         params: [],
       });
       setTokenUri(tokenUriJson);
-      // console.log(tokenUriJson);
     } catch (err) {
       console.log(err);
     }
@@ -64,7 +63,6 @@ const NftsItem = ({ nft }) => {
   return (
     tokenUri && (
       <div className="itm">
-        {console.log(nft)}
         <div className="d-item">
           <div className="nft__item" style={{ height: '400px' }}>
             <div className="author_list_pp">

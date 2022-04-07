@@ -23,14 +23,12 @@ import PanelLayout from '../../components/layout/PanelLayout';
  */
 const Sell = () => {
   const { data: account } = useSelector(selectors.accountState);
-  console.log(account.id);
 
   const [tokenUri, setTokenUri] = useState(null);
   const [nft, setNft] = useState({});
 
   // 파라미터 id값 받아오기
   const nftId = useParams().nftId;
-  console.log(nftId);
 
   const [sellPrice, setSellPrice] = useState('');
   const [loading, setLoading] = useState(false);
@@ -54,9 +52,6 @@ const Sell = () => {
   // 판매 등록을 승인하는 함수
   const approveToggle = async (artNftContract, currentWallet) => {
     try {
-      console.log(artNftContract.methods);
-      console.log(currentWallet);
-
       const response = await artNftContract.methods
         .setApprovalForAll(SALE_NFT_CONTRACT_ADDRESS, true)
         .send({ from: currentWallet });
@@ -85,13 +80,11 @@ const Sell = () => {
 
       setLoading(true);
 
-      // console.log(saleArtTokenContracts.methods);
       const currentProvider = detectCurrentProvider();
       if (!currentProvider) return;
 
       const accounts = await currentProvider.request({ method: 'eth_requestAccounts' });
       const currentWallet = accounts[0];
-      console.log(currentWallet);
 
       const saleArtContract = getSaleNftContract(currentProvider);
       const artNftContract = getSsafyNftContract(currentProvider);
@@ -99,9 +92,7 @@ const Sell = () => {
       const saleAuth = await artNftContract.methods
         .isApprovedForAll(currentWallet, SALE_NFT_CONTRACT_ADDRESS)
         .call();
-      console.log(saleAuth);
       if (!saleAuth) await approveToggle(artNftContract, currentWallet);
-      console.log(saleAuth);
 
       const response = await saleArtContract.methods
         .setForSaleArtToken(nft.id, sellPrice)
@@ -110,14 +101,6 @@ const Sell = () => {
           saveSaleNFT();
         });
       console.log(response);
-
-      // 해당 주소 토큰 개수 확인
-      // const balance = await artNftContract.methods.balanceOf(currentWallet).call();
-      // console.log(balance);
-
-      // 해당 tokenId에 해당하는 토큰 가격 확인
-      // const price = await saleArtContract.methods.getArtTokenPrice(nft.id).call();
-      // console.log(price);
 
       setLoading(false);
       alert('NFT 판매 등록이 완료되었습니다.');
@@ -131,10 +114,6 @@ const Sell = () => {
 
   // 백엔드에 판매 정보 등록하는 함수
   const saveSaleNFT = () => {
-    console.log(sellPrice);
-    console.log(SALE_NFT_CONTRACT_ADDRESS);
-    console.log(account.id);
-    console.log(nft.id);
     Axios.post(
       '/nfts/exchange/sell',
       {
@@ -150,9 +129,7 @@ const Sell = () => {
         },
       },
     )
-      .then((res) => {
-        console.log(res);
-      })
+      .then(() => {})
       .catch((err) => {
         console.log(`err: ${err}`);
         // 만약 NFT생성은 완료 되었는데 서버전송에서 오류날 경우따로 DB저장 처리 가능한 함수 필요
@@ -185,13 +162,10 @@ const Sell = () => {
 
   useEffect(async () => {
     getNFT();
-    console.log(account.id);
   }, []);
 
   return (
     <PanelLayout title="작품 판매">
-      {console.log(nft)}
-      {console.log(tokenUri)}
       <section className="container">
         <div className="row justify-content-center">
           <div className="col-lg-7 offset-lg-1 mb-5">

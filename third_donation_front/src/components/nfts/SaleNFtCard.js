@@ -103,7 +103,7 @@ const NftCard = ({
             <div
               className="nft__item_action"
               onClick={() => navigateTo(`/ItemDetail/${nft.nft.id}`)}>
-              <span>{account.id === nft.nft.owner.id ? '판매 취소' : '바로 구매'}</span>
+              <span>{account && account.id === nft.nft.owner.id ? '판매 취소' : '바로 구매'}</span>
             </div>
             <div className="nft__item_like">
               <i className="fa fa-heart"></i>

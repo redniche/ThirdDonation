@@ -182,28 +182,28 @@ const Sell = () => {
                       </span>
                     </li>
                   </ul>
-
-                  <div className="de_tab_content pt-3">
+                  <div className="mt-4 mb-0">
+                    <p>
+                      판매금액은 판매자에게 90%, 예술가에게 6%, 기부단체에게 2%, 사이트에 2%로
+                      배분됩니다.
+                    </p>
+                  </div>
+                  <div className="de_tab_content pt-2">
                     <div id="tab_opt_1">
                       <h5>가격</h5>
                       <input
                         type="number"
                         name="item_price"
                         id="item_price"
-                        className="form-control"
+                        className="form-control mb-2"
                         placeholder="작품의 가격을 입력해주세요. (SSF)"
                         value={sellPrice}
                         onChange={onChangeSellPrice}
                       />
+                      <p>실수령토큰: {Math.floor(sellPrice * 0.9)} SSF</p>
                     </div>
-
-                    <div id="tab_opt_3"></div>
                   </div>
                 </div>
-
-                <div className="spacer-20"></div>
-
-                <div className="spacer-10"></div>
 
                 <div className="spacer-10"></div>
 

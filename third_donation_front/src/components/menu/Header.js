@@ -149,7 +149,7 @@ const Header = ({ className }) => {
                             <NavLink to="/notice" onClick={() => setMenu(!menu)}>
                               공지사항
                             </NavLink>
-                            <NavLink to="#" onClick={() => setMenu(!menu)}>
+                            <NavLink to="/contact" onClick={() => setMenu(!menu)}>
                               문의
                             </NavLink>
                           </div>
@@ -231,7 +231,7 @@ const Header = ({ className }) => {
                         <div className="item-dropdown">
                           <div className="dropdown" onClick={closeSupportMenu}>
                             <NavLink to="/notice">공지 사항</NavLink>
-                            <NavLink to="#">문의</NavLink>
+                            <NavLink to="/contact">문의</NavLink>
                           </div>
                         </div>
                       )}

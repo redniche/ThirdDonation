@@ -272,8 +272,8 @@ const Sell = () => {
                 <span>
                   {nft.fileType == 'video' ? (
                     <video
-                      src={`${ipfs_apis.https_local}/${tokenUri.hash}`}
-                      style={{ maxHeight: '260px' }}
+                      src={tokenUri && `${ipfs_apis.https_local}/${tokenUri.hash}`}
+                      style={{ maxHeight: '260px', width: '100%' }}
                       autoPlay
                       muted
                       loop

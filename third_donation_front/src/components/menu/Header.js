@@ -110,8 +110,8 @@ const Header = ({ className }) => {
           <div className="logo px-0">
             <div className="navbar-title navbar-item">
               <NavLink to="/">
-                <img src="/img/logo.png" className="img-fluid d-block" alt="#" />
-                <img src="/img/logo-light.png" className="img-fluid d-none" alt="#" />
+                <img src="/img/logo.png" className="img-fluid d-block img-logo" alt="#" />
+                <img src="/img/logo-light.png" className="img-fluid d-none img-logo" alt="#" />
               </NavLink>
             </div>
           </div>

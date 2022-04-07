@@ -217,6 +217,12 @@ section {
   }
 }
 
+.img-logo {
+  @media (max-width: 500px) {
+    display: none !important;
+  }
+}
+
 .minter {
   max-width: 800px !important;
   text-align: center;

@@ -2,8 +2,6 @@ package com.thirdlife.thirddonation.api.charity.dto.response;
 
 import com.thirdlife.thirddonation.api.charity.dto.CharityInfoDto;
 import com.thirdlife.thirddonation.common.model.response.BaseResponseBody;
-import com.thirdlife.thirddonation.db.charity.entity.Charity;
-import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
@@ -20,3 +18,4 @@ public class CharityResponse extends BaseResponseBody {
     private Page<CharityInfoDto> data;
 
 }
+

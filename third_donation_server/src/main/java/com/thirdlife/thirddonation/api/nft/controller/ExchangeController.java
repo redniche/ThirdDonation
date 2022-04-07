@@ -11,6 +11,7 @@ import com.thirdlife.thirddonation.api.nft.dto.response.SalesHistoryResponse;
 import com.thirdlife.thirddonation.api.nft.dto.response.SalesMessageResponse;
 import com.thirdlife.thirddonation.api.nft.service.SaleService;
 import com.thirdlife.thirddonation.common.model.response.BaseResponseBody;
+import com.thirdlife.thirddonation.common.model.response.MessageBody;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -19,7 +20,6 @@ import io.swagger.annotations.ApiResponses;
 import java.util.HashMap;
 import java.util.Map;
 import javax.validation.Valid;
-import javax.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -73,7 +73,8 @@ public class ExchangeController {
         saleService.sell(sellRequest);
 
         return ResponseEntity.status(200)
-                .body(BaseResponseBody.builder().statusCode(200).message("Success").build());
+                .body(BaseResponseBody.builder().statusCode(200).message(MessageBody.SUCCESS)
+                        .build());
     }
 
     /**
@@ -96,7 +97,8 @@ public class ExchangeController {
         saleService.buy(buyRequest);
 
         return ResponseEntity.status(200)
-                .body(BaseResponseBody.builder().statusCode(200).message("Success").build());
+                .body(BaseResponseBody.builder().statusCode(200).message(MessageBody.SUCCESS)
+                        .build());
     }
 
     /**
@@ -128,9 +130,9 @@ public class ExchangeController {
             @PageableDefault(size = 20, sort = "id", direction = Sort.Direction.DESC)
             @ApiParam(value = "페이지네이션", required = true) final Pageable pageable) {
         Map<SearchKey, Object> searchKeys = new HashMap<>();
-        for (String key : searchRequest.keySet()) {
+        for (Map.Entry<String, Object> entry : searchRequest.entrySet()) {
             try {
-                searchKeys.put(SearchKey.valueOf(key.toUpperCase()), searchRequest.get(key));
+                searchKeys.put(SearchKey.valueOf(entry.getKey().toUpperCase()), entry.getValue());
             } catch (Exception ex) {
                 //TODO 나중에 guava 등의 방법으로 exception 을 쓰지 않는 방향으로 바꿔야 더 빨라짐.
             }
@@ -141,7 +143,8 @@ public class ExchangeController {
 
         return ResponseEntity.status(200).body(
                 SaleListResponse.builder()
-                        .statusCode(200).message("Success").data(salesList.getContent()).build()
+                        .statusCode(200).message(MessageBody.SUCCESS).data(salesList.getContent())
+                        .build()
         );
     }
 
@@ -168,7 +171,7 @@ public class ExchangeController {
         Page<MessageInfoDto> messageList = saleService.getMessageList(artistId, pageable);
 
         return ResponseEntity.status(200)
-                .body(SalesMessageResponse.builder().statusCode(200).message("Success")
+                .body(SalesMessageResponse.builder().statusCode(200).message(MessageBody.SUCCESS)
                         .data(messageList)
                         .build());
     }
@@ -196,7 +199,7 @@ public class ExchangeController {
         Slice<SaleInfoDto> history = saleService.getHistory(tokenId, pageable);
 
         return ResponseEntity.status(200)
-                .body(SalesHistoryResponse.builder().statusCode(200).message("Success")
+                .body(SalesHistoryResponse.builder().statusCode(200).message(MessageBody.SUCCESS)
                         .data(history)
                         .build());
     }
@@ -222,6 +225,7 @@ public class ExchangeController {
         saleService.disableSales(salesId);
 
         return ResponseEntity.status(200)
-                .body(BaseResponseBody.builder().statusCode(200).message("Success").build());
+                .body(BaseResponseBody.builder().statusCode(200).message(MessageBody.SUCCESS)
+                        .build());
     }
 }

@@ -12,9 +12,12 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+
+/**
+ * UserImg 엔티티 클래스. 유저의 이미지를 담습니다.
+ */
 @Builder
 @Data
 @AllArgsConstructor(access = AccessLevel.PRIVATE)

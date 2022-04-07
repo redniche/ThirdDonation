@@ -1,5 +1,7 @@
 package com.thirdlife.thirddonation.config;
 
+import static com.google.common.collect.Lists.newArrayList;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -17,8 +19,6 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 
-import static com.google.common.collect.Lists.newArrayList;
-
 /**
  * Configuration for Swagger2.
  */
@@ -26,7 +26,6 @@ import static com.google.common.collect.Lists.newArrayList;
 public class SwaggerConfig {
 
     private final String version = "V1";
-    private final String title = "Third Donation API " + version;
 
     /**
      * Return Docket instance for swagger configuration.
@@ -65,7 +64,8 @@ public class SwaggerConfig {
     public static final String AUTHORIZATION_SCOPE_GLOBAL_DESC = "accessEverything";
 
     private List<SecurityReference> defaultAuth() {
-        AuthorizationScope authorizationScope = new AuthorizationScope(AUTHORIZATION_SCOPE_GLOBAL, AUTHORIZATION_SCOPE_GLOBAL_DESC);
+        AuthorizationScope authorizationScope =
+                new AuthorizationScope(AUTHORIZATION_SCOPE_GLOBAL, AUTHORIZATION_SCOPE_GLOBAL_DESC);
         AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
         authorizationScopes[0] = authorizationScope;
         return newArrayList(new SecurityReference(SECURITY_SCHEMA_NAME, authorizationScopes));
@@ -102,10 +102,12 @@ public class SwaggerConfig {
      * @return ApiInfo instance
      */
     private ApiInfo apiInfo() {
+        String title = "Third Donation API " + version;
         return new ApiInfoBuilder()
                 .title(title)
                 .description("")
-                .contact(new Contact("ThirdDonation", "https://j6e207.p.ssafy.io/", "third_donation@gmail.com"))
+                .contact(new Contact("ThirdDonation", "https://j6e207.p.ssafy.io/",
+                        "third_donation@gmail.com"))
                 .license("Temp License")
                 .licenseUrl("Temp Licnse Link")
                 .version("1.0").build();

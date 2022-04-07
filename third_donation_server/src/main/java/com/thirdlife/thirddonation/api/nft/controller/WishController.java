@@ -3,6 +3,7 @@ package com.thirdlife.thirddonation.api.nft.controller;
 import com.thirdlife.thirddonation.api.nft.dto.request.WishRequest;
 import com.thirdlife.thirddonation.api.nft.service.WishService;
 import com.thirdlife.thirddonation.common.model.response.BaseResponseBody;
+import com.thirdlife.thirddonation.common.model.response.MessageBody;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -53,7 +54,8 @@ public class WishController {
         wishService.createWish(wishRequest);
 
         return ResponseEntity.status(200)
-                .body(BaseResponseBody.builder().statusCode(200).message("Success").build());
+                .body(BaseResponseBody.builder().statusCode(200).message(MessageBody.SUCCESS)
+                        .build());
     }
 
     /**
@@ -75,6 +77,7 @@ public class WishController {
         wishService.deleteWish(tokenId);
 
         return ResponseEntity.status(200)
-                .body(BaseResponseBody.builder().statusCode(200).message("Success").build());
+                .body(BaseResponseBody.builder().statusCode(200).message(MessageBody.SUCCESS)
+                        .build());
     }
 }

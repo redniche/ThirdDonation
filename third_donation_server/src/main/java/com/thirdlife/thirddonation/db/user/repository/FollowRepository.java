@@ -16,6 +16,7 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
 
     /**
      * 팔로워 목록 데이터 조회.
+     *
      * @param artistId Long
      * @param pageable Pageable
      * @return Optional

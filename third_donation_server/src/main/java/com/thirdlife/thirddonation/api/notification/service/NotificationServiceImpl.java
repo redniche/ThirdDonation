@@ -2,15 +2,11 @@ package com.thirdlife.thirddonation.api.notification.service;
 
 import com.thirdlife.thirddonation.api.notification.dto.NotificationInfoDto;
 import com.thirdlife.thirddonation.api.user.service.UserService;
-import com.thirdlife.thirddonation.common.exception.CustomException;
-import com.thirdlife.thirddonation.common.exception.ErrorCode;
-import com.thirdlife.thirddonation.db.notification.entity.Notification;
 import com.thirdlife.thirddonation.db.notification.repository.NotificationRepository;
 import com.thirdlife.thirddonation.db.user.entity.User;
 import com.thirdlife.thirddonation.db.user.repository.UserRepository;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,7 +24,7 @@ public class NotificationServiceImpl implements NotificationService {
     private final UserService userService;
 
     /**
-     * 알림 리스트 반환
+     * 알림 리스트 반환.
      *
      * @return List
      */

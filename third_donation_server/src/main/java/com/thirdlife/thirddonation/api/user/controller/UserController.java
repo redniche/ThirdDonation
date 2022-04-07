@@ -15,6 +15,7 @@ import com.thirdlife.thirddonation.api.user.service.UserService;
 import com.thirdlife.thirddonation.common.exception.CustomException;
 import com.thirdlife.thirddonation.common.exception.ErrorCode;
 import com.thirdlife.thirddonation.common.model.response.BaseResponseBody;
+import com.thirdlife.thirddonation.common.model.response.MessageBody;
 import com.thirdlife.thirddonation.common.util.JwtTokenUtil;
 import com.thirdlife.thirddonation.db.log.document.DailyIncome;
 import com.thirdlife.thirddonation.db.user.entity.User;
@@ -36,7 +37,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -104,7 +104,7 @@ public class UserController {
         String token = JwtTokenUtil.getToken(walletAddress);
 
         return ResponseEntity.status(200).body(
-                UserResponse.of(200, "Success", token, user));
+                UserResponse.of(200, MessageBody.SUCCESS, token, user));
     }
 
     /**
@@ -126,7 +126,7 @@ public class UserController {
         User user = userService.getAuthUser();
 
         return ResponseEntity.status(200).body(
-                UserResponse.of2(200, "Success", user));
+                UserResponse.of2(200, MessageBody.SUCCESS, user));
     }
 
     /**
@@ -154,7 +154,8 @@ public class UserController {
             throw new CustomException(ErrorCode.OWNER_NOT_FOUND);
         }
 
-        return ResponseEntity.status(200).body(UserProfileResponse.of(200, "Success", user));
+        return ResponseEntity.status(200)
+                .body(UserProfileResponse.of(200, MessageBody.SUCCESS, user));
     }
 
     /**
@@ -179,11 +180,13 @@ public class UserController {
         userService.updateProfile(userProfileModifyRequest);
 
         return ResponseEntity.status(200)
-                .body(BaseResponseBody.builder().statusCode(200).message("Success").build());
+                .body(BaseResponseBody.builder().statusCode(200).message(MessageBody.SUCCESS)
+                        .build());
     }
 
     /**
      * 유저의 이미지 정보를 업로드하는 메서드입니다.
+     * 더 이상 유저 id를 받지 않습니다
      *
      * @param userId Long
      * @param img    MultipartFile
@@ -204,7 +207,8 @@ public class UserController {
         userService.uploadProfileImage(img);
 
         return ResponseEntity.status(200)
-                .body(BaseResponseBody.builder().statusCode(200).message("Success").build());
+                .body(BaseResponseBody.builder().statusCode(200).message(MessageBody.SUCCESS)
+                        .build());
     }
 
     /**
@@ -229,7 +233,8 @@ public class UserController {
         artistService.createArtist(name, registerNumber, imageFile);
 
         return ResponseEntity.status(200)
-                .body(BaseResponseBody.builder().statusCode(200).message("Success").build());
+                .body(BaseResponseBody.builder().statusCode(200).message(MessageBody.SUCCESS)
+                        .build());
     }
 
     /**
@@ -247,7 +252,7 @@ public class UserController {
             @PageableDefault(sort = "dateLastUpdated", direction = Sort.Direction.DESC)
             @ApiParam(value = "페이지네이션", required = true) final Pageable pageable) {
         return ResponseEntity.status(200)
-                .body(ArtistListResponse.builder().statusCode(200).message("Success")
+                .body(ArtistListResponse.builder().statusCode(200).message(MessageBody.SUCCESS)
                         .data(artistService.getArtistList(pageable)).build());
     }
 
@@ -268,7 +273,8 @@ public class UserController {
             @RequestParam(value = "userId") Long userId) {
         artistService.enableArtist(userId);
         return ResponseEntity.status(200)
-                .body(BaseResponseBody.builder().statusCode(200).message("Success").build());
+                .body(BaseResponseBody.builder().statusCode(200).message(MessageBody.SUCCESS)
+                        .build());
     }
 
     /**
@@ -288,7 +294,8 @@ public class UserController {
             @RequestParam(value = "userId") Long userId) {
         artistService.disableArtist(userId);
         return ResponseEntity.status(200)
-                .body(BaseResponseBody.builder().statusCode(200).message("Success").build());
+                .body(BaseResponseBody.builder().statusCode(200).message(MessageBody.SUCCESS)
+                        .build());
     }
 
 
@@ -310,7 +317,8 @@ public class UserController {
         followService.createFollow(followRequest);
 
         return ResponseEntity.status(200)
-                .body(BaseResponseBody.builder().statusCode(200).message("Success").build());
+                .body(BaseResponseBody.builder().statusCode(200).message(MessageBody.SUCCESS)
+                        .build());
     }
 
     /**
@@ -334,7 +342,7 @@ public class UserController {
         Slice<UserInfoDto> slice = followService.getFollowerList(userId, pageable);
 
         return ResponseEntity.status(200)
-                .body(FollowerListResponse.builder().statusCode(200).message("Success")
+                .body(FollowerListResponse.builder().statusCode(200).message(MessageBody.SUCCESS)
                         .data(slice.getContent()).build());
     }
 
@@ -358,7 +366,7 @@ public class UserController {
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }
         return ResponseEntity.status(200)
-                .body(BaseResponseBody.builder().statusCode(200).message("Success")
+                .body(BaseResponseBody.builder().statusCode(200).message(MessageBody.SUCCESS)
                         .build());
     }
 
@@ -380,7 +388,8 @@ public class UserController {
         followService.deleteFollow(followRequest);
 
         return ResponseEntity.status(200)
-                .body(BaseResponseBody.builder().statusCode(200).message("Success").build());
+                .body(BaseResponseBody.builder().statusCode(200).message(MessageBody.SUCCESS)
+                        .build());
     }
 
     /**
@@ -396,7 +405,7 @@ public class UserController {
         List<DailyIncome> incomeList = userService.getDailyIncome();
 
         return ResponseEntity.status(200)
-                .body(UserDailyIncomeResponse.builder().statusCode(200).message("Success")
+                .body(UserDailyIncomeResponse.builder().statusCode(200).message(MessageBody.SUCCESS)
                         .data(incomeList).build());
     }
 

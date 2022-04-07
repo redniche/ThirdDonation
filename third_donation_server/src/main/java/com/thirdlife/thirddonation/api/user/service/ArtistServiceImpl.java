@@ -31,9 +31,9 @@ public class ArtistServiceImpl implements ArtistService {
     /**
      * 장애인 예술가 신청 요청 등록.
      *
-     * @param name String
+     * @param name           String
      * @param registerNumber String
-     * @param multipartFile MultipartFile
+     * @param multipartFile  MultipartFile
      */
     @Override
     public void createArtist(String name, String registerNumber, MultipartFile multipartFile) {
@@ -47,7 +47,8 @@ public class ArtistServiceImpl implements ArtistService {
         //엔티티 생성
         Artist artist = artistRepository.findById(user.getId()).orElse(null);
         if (artist == null) {
-            artist = Artist.builder().name(name).registerNumber(registerNumber).enabled(false).build();
+            artist = Artist.builder().name(name).registerNumber(registerNumber).enabled(false)
+                    .build();
             artist.setUser(user);
         } else {
             artist.setName(name);
@@ -78,10 +79,9 @@ public class ArtistServiceImpl implements ArtistService {
         Artist artist = artistRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         // 허가할 때 없는 아이디일 수 있다.(삭제이상발생시)
-        userRepository.findById(artist.getId())
+        User user = userRepository.findById(artist.getId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        User user = artist.getUser();
         if (user.getAuthority() == Authority.ADMIN) {
             throw new CustomException(ErrorCode.CANNOT_DOWN_AUTHORITY);
         } else {
@@ -102,10 +102,9 @@ public class ArtistServiceImpl implements ArtistService {
         Artist artist = artistRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         // 허가할 때 없는 아이디일 수 있다.(삭제이상발생시)
-        userRepository.findById(artist.getId())
+        User user = userRepository.findById(artist.getId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        User user = artist.getUser();
         if (user.getAuthority() == Authority.ADMIN) {
             throw new CustomException(ErrorCode.CANNOT_DOWN_AUTHORITY);
         } else if (user.getAuthority() == Authority.ARTIST) {

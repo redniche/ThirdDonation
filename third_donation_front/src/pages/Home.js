@@ -91,7 +91,7 @@ const Home = () => {
         </div>
       </section>
 
-      <section className="container no-bottom">
+      <section className="container no-bottom mb-4">
         <div className="row">
           <div className="col-lg-12">
             <div className="text-center">

@@ -35,9 +35,9 @@ const Mint = () => {
     let tempFile = e.target.files[0];
     if (!tempFile) return;
 
-    let maxSize = 200 * 1024 * 1024;
+    let maxSize = 100 * 1024 * 1024;
     if (maxSize <= tempFile.size) {
-      alert('파일 용량은 200MB 이내로 등록 가능합니다.');
+      alert('파일 용량은 100MB 이내로 등록 가능합니다.');
       return;
     }
     URL.revokeObjectURL(file);
@@ -243,12 +243,12 @@ const Mint = () => {
                 !isVideo ? (
                   <img src={preview} className="mint-file"></img>
                 ) : (
-                  <video src={preview} autoPlay className="mint-file"></video>
+                  <video src={preview} autoPlay loop className="mint-file"></video>
                 )
               ) : (
                 <></>
               )}
-              <p id="file_name">PNG, JPG, GIF, WEBP, MP4 확장자만 200MB 이내로 추가해주세요</p>
+              <p id="file_name">PNG, JPG, GIF, WEBP, MP4 확장자만 100MB 이내로 추가해주세요</p>
               <p>{file && file.name}</p>
               <div className="browse">
                 <input type="button" id="get_file" className="btn-main" value="파일 찾기" />

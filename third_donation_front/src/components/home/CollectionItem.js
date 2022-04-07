@@ -32,7 +32,7 @@ const CollectionItem = ({ nft }) => {
   return (
     tokenUri && (
       <div className="itm">
-        {/* {console.log(nft)} */}
+        {console.log(nft)}
         <div className="nft_coll">
           <div
             className="nft_wrap d-flex justify-content-center"
@@ -40,11 +40,22 @@ const CollectionItem = ({ nft }) => {
             onClick={() => navigateTo(`/ItemDetail/${nft.nft.id}`)}>
             {/* 토큰 이미지 */}
             <div className="align-self-center">
-              <img
-                src={tokenUri && `${ipfs_apis.https_local}/${tokenUri.hash}`}
-                className="lazy img-fluid"
-                alt=""
-              />
+              {nft.nft.fileType == 'video' ? (
+                <video
+                  src={`${ipfs_apis.https_local}/${tokenUri.hash}`}
+                  autoPlay
+                  muted
+                  loop
+                  className="lazy img-fluid"
+                  alt=""
+                />
+              ) : (
+                <img
+                  src={tokenUri && `${ipfs_apis.https_local}/${tokenUri.hash}`}
+                  className="lazy img-fluid"
+                  alt=""
+                />
+              )}
             </div>
           </div>
           <div

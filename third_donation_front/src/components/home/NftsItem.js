@@ -37,7 +37,7 @@ const NftsItem = ({ nft }) => {
     } catch (err) {
       console.log(err);
     }
-  }, [nft]);
+  }, []);
   return (
     tokenUri && (
       <div className="itm">
@@ -64,11 +64,24 @@ const NftsItem = ({ nft }) => {
               onClick={() => navigateTo(`/ItemDetail/${nft.nft.id}`)}>
               <Outer>
                 <span>
-                  <img
-                    src={tokenUri && `${ipfs_apis.https_local}/${tokenUri.hash}`}
-                    className="lazy nft__item_preview"
-                    alt=""
-                  />
+                  {nft.nft.fileType == 'video' ? (
+                    <video
+                      src={`${ipfs_apis.https_local}/${tokenUri.hash}`}
+                      autoPlay
+                      muted
+                      loop
+                      className="lazy nft__item_preview"
+                      alt=""
+                      style={{ maxHeight: '260px' }}
+                    />
+                  ) : (
+                    <img
+                      style={{ maxHeight: '260px' }}
+                      src={tokenUri && `${ipfs_apis.https_local}/${tokenUri.hash}`}
+                      className="lazy nft__item_preview"
+                      alt=""
+                    />
+                  )}
                 </span>
               </Outer>
             </div>

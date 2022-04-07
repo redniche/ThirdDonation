@@ -12,6 +12,7 @@ import {
 import { detectCurrentProvider } from '../../core/ethereum';
 import { navigate } from '@reach/router';
 import ipfs_apis from '../../core/ipfs';
+import axios_apis from '../../core/axios';
 import { IpfsAxios, convertIpfsToHttps } from '../../core/ipfs';
 
 import Spinner from 'react-bootstrap/Spinner';
@@ -77,6 +78,11 @@ const Sell = () => {
         alert('가격을 입력해주세요.');
         return;
       }
+      if (sellPrice < 100) {
+        alert('최소 판매 금액은 100SSF입니다.');
+        return;
+      }
+
       setLoading(true);
 
       // console.log(saleArtTokenContracts.methods);
@@ -115,7 +121,7 @@ const Sell = () => {
 
       setLoading(false);
       alert('NFT 판매 등록이 완료되었습니다.');
-      navigateTo('/explore');
+      navigateTo(-1);
     } catch (error) {
       console.log(error);
       setLoading(false);
@@ -201,16 +207,6 @@ const Sell = () => {
                         <i className="fa fa-tag"></i>일반 판매
                       </span>
                     </li>
-                    {/* <li id="btn2" onClick={handleShow1}>
-                      <span>
-                        <i className="fa fa-hourglass-1"></i>경매
-                      </span>
-                    </li> */}
-                    {/* <li id="btn3" onClick={this.handleShow2}>
-                        <span>
-                          <i className="fa fa-users"></i>Open for bids
-                        </span>
-                      </li> */}
                   </ul>
 
                   <div className="de_tab_content pt-3">
@@ -221,46 +217,11 @@ const Sell = () => {
                         name="item_price"
                         id="item_price"
                         className="form-control"
-                        placeholder="작품의 가격을 입력해주세요. (ETH)"
+                        placeholder="작품의 가격을 입력해주세요. (SSF)"
                         value={sellPrice}
                         onChange={onChangeSellPrice}
                       />
                     </div>
-
-                    {/* <div id="tab_opt_2" className="hide">
-                      <h5>경매 시작가</h5>
-                      <input
-                        type="text"
-                        name="item_price_bid"
-                        id="item_price_bid"
-                        className="form-control"
-                        placeholder="가격을 입력해주세요."
-                      />
-
-                      <div className="spacer-20"></div>
-
-                      <div className="row">
-                        <div className="col-md-6">
-                          <h5>시작일</h5>
-                          <input
-                            type="date"
-                            name="bid_starting_date"
-                            id="bid_starting_date"
-                            className="form-control"
-                            min="1997-01-01"
-                          />
-                        </div>
-                        <div className="col-md-6">
-                          <h5>종료일</h5>
-                          <input
-                            type="date"
-                            name="bid_expiration_date"
-                            id="bid_expiration_date"
-                            className="form-control"
-                          />
-                        </div>
-                      </div>
-                    </div> */}
 
                     <div id="tab_opt_3"></div>
                   </div>
@@ -269,15 +230,6 @@ const Sell = () => {
                 <div className="spacer-20"></div>
 
                 <div className="spacer-10"></div>
-
-                {/* <h5>Royalties</h5>
-                  <input
-                    type="text"
-                    name="item_royalties"
-                    id="item_royalties"
-                    className="form-control"
-                    placeholder="suggested: 0, 10%, 20%, 30%. Maximum is 70%"
-                  /> */}
 
                 <div className="spacer-10"></div>
 
@@ -300,38 +252,53 @@ const Sell = () => {
           </div>
 
           <div className="col-lg-3 col-sm-6 col-xs-12">
-            <h5>Preview item</h5>
+            <h5>미리 보기</h5>
             <div className="nft__item m-0">
               <div className="author_list_pp">
                 <span>
-                  <img className="lazy" src="/img/author/author-1.jpg" alt="" />
+                  <img
+                    className="lazy"
+                    src={
+                      nft.owner && nft.owner.imagePath
+                        ? `${axios_apis.file}/${nft.owner.imagePath}`
+                        : '/img/기본프로필이미지.png'
+                    }
+                    alt=""
+                  />
                   <i className="fa fa-check"></i>
                 </span>
               </div>
               <div className="nft__item_wrap">
                 <span>
-                  <img
-                    src={tokenUri && `${ipfs_apis.https_local}/${tokenUri.hash}`}
-                    id="get_file_2"
-                    className="lazy nft__item_preview"
-                    alt=""
-                  />
+                  {nft.fileType == 'video' ? (
+                    <video
+                      src={`${ipfs_apis.https_local}/${tokenUri.hash}`}
+                      style={{ maxHeight: '260px' }}
+                      autoPlay
+                      muted
+                      loop
+                      className="lazy nft__item_preview"
+                      alt=""
+                    />
+                  ) : (
+                    <img
+                      src={tokenUri && `${ipfs_apis.https_local}/${tokenUri.hash}`}
+                      id="get_file_2"
+                      className="lazy nft__item_preview"
+                      alt=""
+                    />
+                  )}
                 </span>
               </div>
               <div className="nft__item_info">
                 <span>
                   <h4>{tokenUri && tokenUri.title}</h4>
                 </span>
-                <div className="nft__item_price">
-                  {sellPrice ? <span>{sellPrice} SSF</span> : <span>0 SSF</span>}
-                  {/* <span>1/20</span> */}
-                </div>
-                {/* <div className="nft__item_action">
-                    <span>Place a bid</span>
-                  </div> */}
+                <div className="nft__item_price">{sellPrice ? sellPrice : 0} SSF</div>
+
                 <div className="nft__item_like">
                   <i className="fa fa-heart"></i>
-                  <span>50</span>
+                  <span>{nft.wishCount}</span>
                 </div>
               </div>
             </div>

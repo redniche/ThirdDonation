@@ -114,6 +114,7 @@ const NftCard = ({
                     src={`${ipfs_apis.https_local}/${tokenUri.hash}`}
                     autoPlay
                     muted
+                    loop
                     className="lazy nft__item_preview"
                     alt=""
                     style={{ maxHeight: '264px' }}

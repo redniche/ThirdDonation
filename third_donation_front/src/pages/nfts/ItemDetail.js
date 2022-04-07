@@ -237,6 +237,7 @@ const ItemDetail = function () {
       console.log(response2);
 
       alert('NFT 구매가 완료되었습니다.');
+      navigateTo();
     } catch (error) {
       console.log(error);
     }
@@ -288,12 +289,23 @@ const ItemDetail = function () {
         <div className="row mt-md-5 pt-md-4">
           <div className="col-md-6 text-center">
             {/* NFT 이미지 */}
-            <img
-              className="mt-5"
-              style={{ width: '100%' }}
-              src={tokenUri && `${ipfs_apis.https_local}/${tokenUri.hash}`}
-              alt=""
-            />
+            {nft.fileType == 'video' ? (
+              <video
+                src={tokenUri && `${ipfs_apis.https_local}/${tokenUri.hash}`}
+                style={{ width: '100%', maxHeight: '500px' }}
+                autoPlay
+                loop
+                className="mt-5"
+                alt=""
+              />
+            ) : (
+              <img
+                className=""
+                style={{ width: '100%', maxHeight: '550px' }}
+                src={tokenUri && `${ipfs_apis.https_local}/${tokenUri.hash}`}
+                alt=""
+              />
+            )}
           </div>
           <div className="col-md-6">
             <div className="item_info">
@@ -324,7 +336,7 @@ const ItemDetail = function () {
               <div className="d-flex-row">
                 <div className="mb-4">
                   {/* 작가 */}
-                  <h6>Creator</h6>
+                  <h6>예술가</h6>
                   <div className="item_author">
                     <div className="author_list_pp">
                       <span onClick={() => navigateTo(`/profile/${nft.artist.id}`)}>
@@ -343,14 +355,14 @@ const ItemDetail = function () {
                     </div>
                     <div className="author_list_info">
                       {/* 제작자 아이디 */}
-                      <span>{tokenUri && tokenUri.artist.name}</span>
+                      <span>{nft.artist && nft.artist.username}</span>
                       {/* <span>{nft.author && nft.author.username}</span> */}
                     </div>
                   </div>
                 </div>
 
                 <div className="mr40">
-                  <h6>owner</h6>
+                  <h6>소유자</h6>
                   <div className="item_author">
                     <div className="author_list_pp">
                       <span onClick={() => navigateTo(`/profile/${nft.owner.id}`)}>
@@ -399,9 +411,15 @@ const ItemDetail = function () {
                           <span className="m-1">판매 취소 중입니다.</span>
                         </div>
                       ) : (
-                        <button className="btn-main lead mb-5 mr15" onClick={cancelSale}>
-                          판매 취소
-                        </button>
+                        <div>
+                          <div className="mb-1">
+                            <span>가격: </span>
+                            {tokenPrice} SSF
+                          </div>
+                          <button className="btn-main lead mb-5 mr15" onClick={cancelSale}>
+                            판매 취소
+                          </button>
+                        </div>
                       )
                     ) : (
                       <button

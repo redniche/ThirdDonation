@@ -86,12 +86,25 @@ const NftCard = ({
             onClick={() => navigateTo(`/ItemDetail/${nft.nft.id}`)}>
             <Outer>
               <span>
-                <img
-                  onLoad={onFileLoad}
-                  src={tokenUri && `${ipfs_apis.https_local}/${tokenUri.hash}`}
-                  className="lazy nft__item_preview"
-                  alt=""
-                />
+                {nft.nft.fileType == 'video' ? (
+                  <video
+                    src={`${ipfs_apis.https_local}/${tokenUri.hash}`}
+                    style={{ maxHeight: '260px' }}
+                    onLoad={onFileLoad}
+                    autoPlay
+                    muted
+                    loop
+                    className="lazy nft__item_preview"
+                    alt=""
+                  />
+                ) : (
+                  <img
+                    onLoad={onFileLoad}
+                    src={tokenUri && `${ipfs_apis.https_local}/${tokenUri.hash}`}
+                    className="lazy nft__item_preview"
+                    alt=""
+                  />
+                )}
               </span>
             </Outer>
           </div>

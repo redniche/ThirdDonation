@@ -145,27 +145,24 @@ const SaleNftList = () => {
   }, [minPrice, maxPrice]);
 
   return (
-    <div className="row">
-      {/* {console.log(fileType)}
-      {console.log(searchValue)} */}
-      {console.log(minPrice.length)}
-      {console.log(maxPrice)}
-      {/* {console.log(wishCount.length)} */}
-      <SaleFilterBar
-        searchKind={searchKind}
-        searchWord={searchWord}
-        fileType={selectFileType}
-        onChangeMinPrice={onChangeMinPrice}
-        onChangeMaxPrice={onChangeMaxPrice}
-        onChangeWishCount={onChangeWishCount}
-      />
-      {nfts &&
-        nfts.map((nft, index) => (
-          <SaleNFtCard nft={nft} key={index} onFileLoad={onFileLoad} height={height} />
-        ))}
-      <span onClick={loadMore} className="btn-main lead m-auto">
+    <div>
+      <div className="row">
+        <SaleFilterBar
+          searchKind={searchKind}
+          searchWord={searchWord}
+          fileType={selectFileType}
+          onChangeMinPrice={onChangeMinPrice}
+          onChangeMaxPrice={onChangeMaxPrice}
+          onChangeWishCount={onChangeWishCount}
+        />
+        {nfts &&
+          nfts.map((nft, index) => (
+            <SaleNFtCard nft={nft} key={index} onFileLoad={onFileLoad} height={height} />
+          ))}
+      </div>
+      <div onClick={loadMore} className="btn-main lead m-auto mt-3">
         더 보기
-      </span>
+      </div>
       {result == 1 && <div className="result_log">마지막 NFT 입니다.</div>}
     </div>
   );

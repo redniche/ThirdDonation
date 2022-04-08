@@ -16,9 +16,6 @@ contract SaleArtToken {
 
     mapping(uint256 => uint256) public artTokenPrices;
 
-    // 판매중인 토큰을 담는 배열
-    uint256[] public onSaleArtTokkenArray;
-
     // 작품 판매 등록
     function setForSaleArtToken(uint256 _artTokenId, uint256 _price) public{
         // 해당 작품의 소유자 주소
@@ -32,8 +29,6 @@ contract SaleArtToken {
         require(mintArtTokenAddress.isApprovedForAll(artTokenOwner, address(this)),"Art token owner did not approve token");
         
         artTokenPrices[_artTokenId] = _price;
-
-        onSaleArtTokkenArray.push(_artTokenId);
     }
 
     // 작품 판매 중지
@@ -44,14 +39,6 @@ contract SaleArtToken {
         require(artTokenOwner == msg.sender, "Caller is not art token owner.");
 
         artTokenPrices[_artTokenId] = 0;
-
-        for(uint256 i = 0; i < onSaleArtTokkenArray.length; i++){
-            if(artTokenPrices[onSaleArtTokkenArray[i]] == 0){
-                onSaleArtTokkenArray[i] = onSaleArtTokkenArray[onSaleArtTokkenArray.length-1];
-                onSaleArtTokkenArray.pop();
-            }
-
-        }
 
     } 
 
@@ -80,13 +67,6 @@ contract SaleArtToken {
         mintArtTokenAddress.safeTransferFrom(artTokenOwner, msg.sender, _artTokenId);
 
         artTokenPrices[_artTokenId] = 0;
-
-        for(uint256 i = 0; i < onSaleArtTokkenArray.length; i++){
-            if(artTokenPrices[onSaleArtTokkenArray[i]] == 0){
-                onSaleArtTokkenArray[i] = onSaleArtTokkenArray[onSaleArtTokkenArray.length-1];
-                onSaleArtTokkenArray.pop();
-            }
-        }
     }
 
     function getArtTokenPrice(uint256 _artTokenId) view public returns (uint256){

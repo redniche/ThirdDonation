@@ -97,7 +97,7 @@ public class SaleServiceImpl implements SaleService {
             throw new CustomException(ErrorCode.CANNOT_BUY_DISABLED);
         } else if (sales.getSoldOut()) {
             throw new CustomException(ErrorCode.CANNOT_BUY_SOLD_OUT);
-        } else if (!seller.getId().equals(buyer.getId())) {
+        } else if (seller.getId().equals(buyer.getId())) {
             throw new CustomException(ErrorCode.CANNOT_BUY_MINE);
         }
 
@@ -216,9 +216,9 @@ public class SaleServiceImpl implements SaleService {
      * @return List of Messages
      */
     @Override
-    public Page<MessageInfoDto> getMessageList(Pageable pageable) {
+    public Page<MessageInfoDto> getMessageList(Long artistId, Pageable pageable) {
         Page<Sales> page =
-                salesRepository.findAllBySoldOutAndEnabled(true, true, pageable);
+                salesRepository.findAllBySoldOutAndNft_ArtistId(true, artistId, pageable);
         return page.map(MessageInfoDto::of);
     }
 
@@ -228,9 +228,9 @@ public class SaleServiceImpl implements SaleService {
      * @param pageable Pageable
      * @return Slice of SaleInfo
      */
-    public Slice<SaleInfoDto> getHistory(Pageable pageable) {
+    public Slice<SaleInfoDto> getHistory(Long tokenId, Pageable pageable) {
         Slice<Sales> sales =
-                salesRepository.findAllBySoldOut(true, pageable);
+                salesRepository.findAllByNftIdAndSoldOut(tokenId, true, pageable);
 
         return sales.map(SaleInfoDto::of2);
     }
@@ -238,7 +238,7 @@ public class SaleServiceImpl implements SaleService {
     /**
      * 판매 리스트 필터링 조회 메서드.
      *
-     * @param pageable Pageable
+     * @param pageable       Pageable
      * @param searchKeywords Specification
      * @return Page of SaleInfoDto
      */

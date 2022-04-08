@@ -31,4 +31,13 @@ public interface FollowService {
      * @return Slice
      */
     Slice<UserInfoDto> getFollowerList(Long userId, Pageable pageable);
+
+
+    /**
+     * 해당 아티스트 아이디에 내 팔로워 정보가 존재하는지 보기.
+     *
+     * @param artistId Long
+     * @return artistId
+     */
+    Boolean getFollowerInfo(Long artistId);
 }

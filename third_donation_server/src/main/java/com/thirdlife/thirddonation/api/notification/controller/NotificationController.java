@@ -4,7 +4,7 @@ import com.thirdlife.thirddonation.api.notification.dto.NotificationInfoDto;
 import com.thirdlife.thirddonation.api.notification.dto.NotificationListResponse;
 import com.thirdlife.thirddonation.api.notification.service.NotificationService;
 import com.thirdlife.thirddonation.common.model.response.BaseResponseBody;
-import com.thirdlife.thirddonation.db.notification.entity.Notification;
+import com.thirdlife.thirddonation.common.model.response.MessageBody;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -54,7 +54,8 @@ public class NotificationController {
         List<NotificationInfoDto> list = notificationService.getList();
 
         return ResponseEntity.status(200)
-                .body(NotificationListResponse.builder().statusCode(200).message("Success")
+                .body(NotificationListResponse.builder().statusCode(200)
+                        .message(MessageBody.SUCCESS)
                         .data(list).build());
     }
 
@@ -79,7 +80,8 @@ public class NotificationController {
         notificationService.setDisabled();
 
         return ResponseEntity.status(200)
-                .body(BaseResponseBody.builder().statusCode(200).message("Success").build());
+                .body(BaseResponseBody.builder().statusCode(200).message(MessageBody.SUCCESS)
+                        .build());
     }
 
 }

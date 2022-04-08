@@ -21,8 +21,8 @@ public class NotificationInfoDto {
     /**
      * 엔티티를 DTO로 변환.
      *
-     * @param notification
-     * @return
+     * @param notification Notification
+     * @return NotificationInfoDto
      */
     public static NotificationInfoDto of(Notification notification) {
         return NotificationInfoDto.builder()

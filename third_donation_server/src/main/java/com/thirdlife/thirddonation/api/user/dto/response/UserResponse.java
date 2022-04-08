@@ -29,6 +29,7 @@ public class UserResponse extends BaseResponseBody {
 
     /**
      * 상태 코드와 메시지, 유저 객체를 입력받아 UserResponse 객체를 반환합니다.
+     * 액세스 토큰과 같이 보냅니다.
      *
      * @param statusCode Integer
      * @param message    String
@@ -39,5 +40,19 @@ public class UserResponse extends BaseResponseBody {
                                   User user) {
         return UserResponse.builder().statusCode(statusCode).message(message)
                 .accessToken(accessToken).data(UserInfoDto.of(user)).build();
+    }
+
+    /**
+     * 상태 코드와 메시지, 유저 객체를 입력받아 UserResponse 객체를 반환합니다.
+     *
+     * @param statusCode Integer
+     * @param message    String
+     * @param user       User
+     * @return UserResponse
+     */
+    public static UserResponse of2(Integer statusCode, String message,
+                                  User user) {
+        return UserResponse.builder().statusCode(statusCode).message(message)
+                .data(UserInfoDto.of(user)).build();
     }
 }

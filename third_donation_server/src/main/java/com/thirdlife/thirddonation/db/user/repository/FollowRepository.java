@@ -16,6 +16,7 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
 
     /**
      * 팔로워 목록 데이터 조회.
+     *
      * @param artistId Long
      * @param pageable Pageable
      * @return Optional
@@ -31,5 +32,12 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
      */
     Optional<Follow> findByUserAndFollowingArtist(User user, User followingArtist);
 
-
+    /**
+     * 팔로잉 여부 조회.
+     *
+     * @param userId Long
+     * @param artistId Long
+     * @return Boolean
+     */
+    Boolean existsByUserIdAndFollowingArtistId(Long userId, Long artistId);
 }

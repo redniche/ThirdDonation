@@ -22,6 +22,9 @@ public class SellRequest {
     @NotNull
     private Long basePrice;
 
+    /**
+     * 더 이상 판매자 id를 받지 않습니다.
+     */
     @Deprecated
     private Long sellerId;
 

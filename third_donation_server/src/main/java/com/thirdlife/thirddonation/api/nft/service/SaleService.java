@@ -49,7 +49,7 @@ public interface SaleService {
      * @param pageable Pageable
      * @return List of Messages
      */
-    Page<MessageInfoDto> getMessageList(Pageable pageable);
+    Page<MessageInfoDto> getMessageList(Long artistId, Pageable pageable);
 
     /**
      * 판매 완료된 거래 기록 조회.
@@ -57,7 +57,7 @@ public interface SaleService {
      * @param pageable Pageable
      * @return Slice of SaleInfo
      */
-    Slice<SaleInfoDto> getHistory(Pageable pageable);
+    Slice<SaleInfoDto> getHistory(Long tokenId, Pageable pageable);
 
     /**
      * 판매 리스트 필터링 조회 메서드.

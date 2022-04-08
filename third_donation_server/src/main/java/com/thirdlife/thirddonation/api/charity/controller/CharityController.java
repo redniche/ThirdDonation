@@ -5,6 +5,7 @@ import com.thirdlife.thirddonation.api.charity.dto.request.CharityRegisterReques
 import com.thirdlife.thirddonation.api.charity.dto.response.CharityResponse;
 import com.thirdlife.thirddonation.api.charity.service.CharityService;
 import com.thirdlife.thirddonation.common.model.response.BaseResponseBody;
+import com.thirdlife.thirddonation.common.model.response.MessageBody;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -59,7 +60,8 @@ public class CharityController {
         charityService.createCharity(charityRegisterRequest);
 
         return ResponseEntity.status(200)
-                .body(BaseResponseBody.builder().statusCode(200).message("Success").build());
+                .body(BaseResponseBody.builder().statusCode(200).message(MessageBody.SUCCESS)
+                        .build());
     }
 
     /**
@@ -79,7 +81,8 @@ public class CharityController {
         Page<CharityInfoDto> charityList = charityService.getCharityList(pageable);
 
         return ResponseEntity.status(200)
-                .body(CharityResponse.builder().statusCode(200).message("Success").data(charityList)
+                .body(CharityResponse.builder().statusCode(200).message(MessageBody.SUCCESS)
+                        .data(charityList)
                         .build());
     }
 
@@ -100,7 +103,8 @@ public class CharityController {
         Page<CharityInfoDto> charityList = charityService.getEnableCharityList(pageable);
 
         return ResponseEntity.status(200)
-                .body(CharityResponse.builder().statusCode(200).message("Success").data(charityList)
+                .body(CharityResponse.builder().statusCode(200).message(MessageBody.SUCCESS)
+                        .data(charityList)
                         .build());
     }
 
@@ -124,6 +128,7 @@ public class CharityController {
         charityService.enableCharity(walletAddress, enabled);
 
         return ResponseEntity.status(200)
-                .body(BaseResponseBody.builder().statusCode(200).message("Success").build());
+                .body(BaseResponseBody.builder().statusCode(200).message(MessageBody.SUCCESS)
+                        .build());
     }
 }

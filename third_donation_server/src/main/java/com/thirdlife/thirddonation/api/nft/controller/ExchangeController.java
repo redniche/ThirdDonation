@@ -11,6 +11,7 @@ import com.thirdlife.thirddonation.api.nft.dto.response.SalesHistoryResponse;
 import com.thirdlife.thirddonation.api.nft.dto.response.SalesMessageResponse;
 import com.thirdlife.thirddonation.api.nft.service.SaleService;
 import com.thirdlife.thirddonation.common.model.response.BaseResponseBody;
+import com.thirdlife.thirddonation.common.model.response.MessageBody;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -72,7 +73,8 @@ public class ExchangeController {
         saleService.sell(sellRequest);
 
         return ResponseEntity.status(200)
-                .body(BaseResponseBody.builder().statusCode(200).message("Success").build());
+                .body(BaseResponseBody.builder().statusCode(200).message(MessageBody.SUCCESS)
+                        .build());
     }
 
     /**
@@ -95,7 +97,8 @@ public class ExchangeController {
         saleService.buy(buyRequest);
 
         return ResponseEntity.status(200)
-                .body(BaseResponseBody.builder().statusCode(200).message("Success").build());
+                .body(BaseResponseBody.builder().statusCode(200).message(MessageBody.SUCCESS)
+                        .build());
     }
 
     /**
@@ -127,9 +130,9 @@ public class ExchangeController {
             @PageableDefault(size = 20, sort = "id", direction = Sort.Direction.DESC)
             @ApiParam(value = "페이지네이션", required = true) final Pageable pageable) {
         Map<SearchKey, Object> searchKeys = new HashMap<>();
-        for (String key : searchRequest.keySet()) {
+        for (Map.Entry<String, Object> entry : searchRequest.entrySet()) {
             try {
-                searchKeys.put(SearchKey.valueOf(key.toUpperCase()), searchRequest.get(key));
+                searchKeys.put(SearchKey.valueOf(entry.getKey().toUpperCase()), entry.getValue());
             } catch (Exception ex) {
                 //TODO 나중에 guava 등의 방법으로 exception 을 쓰지 않는 방향으로 바꿔야 더 빨라짐.
             }
@@ -140,7 +143,8 @@ public class ExchangeController {
 
         return ResponseEntity.status(200).body(
                 SaleListResponse.builder()
-                        .statusCode(200).message("Success").data(salesList.getContent()).build()
+                        .statusCode(200).message(MessageBody.SUCCESS).data(salesList.getContent())
+                        .build()
         );
     }
 
@@ -150,7 +154,7 @@ public class ExchangeController {
      * @param pageable Pageable
      * @return ResponseEntity
      */
-    @GetMapping("/sales/messages")
+    @GetMapping("/sales/messages/{artistId}")
     @ApiOperation(value = "판메 완료된 NFT 메시지 리스트",
             notes = "?page=0&size=x")
     @ApiResponses({
@@ -160,24 +164,26 @@ public class ExchangeController {
     })
     public ResponseEntity<SalesMessageResponse> getMessageList(
             @PageableDefault(sort = "dateLastUpdated", direction = Sort.Direction.DESC)
-            @ApiParam(value = "pageable", required = true) final Pageable pageable
+            @ApiParam(value = "pageable", required = true) final Pageable pageable,
+            @PathVariable @ApiParam(value = "NFT 민팅 예술가 아이디", required = true)
+                    Long artistId
     ) {
-        Page<MessageInfoDto> messageList = saleService.getMessageList(pageable);
+        Page<MessageInfoDto> messageList = saleService.getMessageList(artistId, pageable);
 
         return ResponseEntity.status(200)
-                .body(SalesMessageResponse.builder().statusCode(200).message("Success")
+                .body(SalesMessageResponse.builder().statusCode(200).message(MessageBody.SUCCESS)
                         .data(messageList)
                         .build());
     }
 
     /**
-     * 판메 완료된 NFT 메시지 리스트.
+     * 판매 완료된 NFT 거래 기록 리스트.
      *
      * @param pageable Pageable
      * @return ResponseEntity
      */
-    @GetMapping("/sales/history")
-    @ApiOperation(value = "판메 완료된 NFT 거래 기록",
+    @GetMapping("/sales/history/{tokenId}")
+    @ApiOperation(value = "판매 완료된 NFT 거래 기록",
             notes = "?page=0&size=x")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
@@ -185,13 +191,15 @@ public class ExchangeController {
             @ApiResponse(code = 500, message = "서버 오류")
     })
     public ResponseEntity<SalesHistoryResponse> getHistory(
+            @PathVariable @ApiParam(value = "조회할 회원 id를 입력받음", required = true)
+                    Long tokenId,
             @PageableDefault(sort = "dateLastUpdated", direction = Sort.Direction.DESC)
             @ApiParam(value = "pageable", required = true) final Pageable pageable
     ) {
-        Slice<SaleInfoDto> history = saleService.getHistory(pageable);
+        Slice<SaleInfoDto> history = saleService.getHistory(tokenId, pageable);
 
         return ResponseEntity.status(200)
-                .body(SalesHistoryResponse.builder().statusCode(200).message("Success")
+                .body(SalesHistoryResponse.builder().statusCode(200).message(MessageBody.SUCCESS)
                         .data(history)
                         .build());
     }
@@ -217,6 +225,7 @@ public class ExchangeController {
         saleService.disableSales(salesId);
 
         return ResponseEntity.status(200)
-                .body(BaseResponseBody.builder().statusCode(200).message("Success").build());
+                .body(BaseResponseBody.builder().statusCode(200).message(MessageBody.SUCCESS)
+                        .build());
     }
 }

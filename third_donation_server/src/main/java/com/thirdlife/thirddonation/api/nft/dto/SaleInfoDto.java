@@ -3,6 +3,7 @@ package com.thirdlife.thirddonation.api.nft.dto;
 import com.thirdlife.thirddonation.api.user.dto.UserInfoDto;
 import com.thirdlife.thirddonation.db.nft.entity.SaleType;
 import com.thirdlife.thirddonation.db.nft.entity.Sales;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,6 +25,7 @@ public class SaleInfoDto {
     private Long basePrice;
     private UserInfoDto seller;
     private UserInfoDto buyer;
+    private LocalDateTime exchangeDate;
 
     /**
      * 판매 정보 빌드 메서드.
@@ -55,6 +57,7 @@ public class SaleInfoDto {
                 .basePrice(sales.getBasePrice())
                 .seller(UserInfoDto.of(sales.getSeller()))
                 .buyer(UserInfoDto.of(sales.getBuyer()))
+                .exchangeDate(sales.getDateLastUpdated())
                 .build();
     }
 }

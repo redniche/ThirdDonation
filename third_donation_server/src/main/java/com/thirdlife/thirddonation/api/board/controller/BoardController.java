@@ -8,6 +8,7 @@ import com.thirdlife.thirddonation.api.board.dto.response.CategoryListResponse;
 import com.thirdlife.thirddonation.api.board.service.ArticleService;
 import com.thirdlife.thirddonation.api.board.service.CategoryService;
 import com.thirdlife.thirddonation.common.model.response.BaseResponseBody;
+import com.thirdlife.thirddonation.common.model.response.MessageBody;
 import com.thirdlife.thirddonation.db.user.entity.Authority;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -27,7 +28,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -69,7 +69,8 @@ public class BoardController {
         articleService.createArticle(articleRegisterRequest);
 
         return ResponseEntity.status(200)
-                .body(BaseResponseBody.builder().statusCode(200).message("Success").build());
+                .body(BaseResponseBody.builder().statusCode(200).message(MessageBody.SUCCESS)
+                        .build());
     }
 
 
@@ -98,7 +99,7 @@ public class BoardController {
                 articleService.getArticlePageByCategoryName(categoryName, pageable);
 
         ArticleListResponse response =
-                ArticleListResponse.builder().statusCode(200).message("Success")
+                ArticleListResponse.builder().statusCode(200).message(MessageBody.SUCCESS)
                         .data(articleInfoDtoPage).build();
 
         return ResponseEntity.status(200).body(response);
@@ -126,7 +127,7 @@ public class BoardController {
                 articleService.getArticleByArticleId(articleId);
 
         ArticleInfoResponse response =
-                ArticleInfoResponse.builder().statusCode(200).message("Success")
+                ArticleInfoResponse.builder().statusCode(200).message(MessageBody.SUCCESS)
                         .data(articleInfoDto).build();
 
         return ResponseEntity.status(200).body(response);
@@ -154,7 +155,8 @@ public class BoardController {
         articleService.modifyArticle(articleRegisterRequest, articleId);
 
         return ResponseEntity.status(200)
-                .body(BaseResponseBody.builder().statusCode(200).message("Success").build());
+                .body(BaseResponseBody.builder().statusCode(200).message(MessageBody.SUCCESS)
+                        .build());
     }
 
     /**
@@ -179,7 +181,8 @@ public class BoardController {
                     Long userId) {
         articleService.deleteArticle(articleId, userId);
         return ResponseEntity.status(200)
-                .body(BaseResponseBody.builder().statusCode(200).message("Success").build());
+                .body(BaseResponseBody.builder().statusCode(200).message(MessageBody.SUCCESS)
+                        .build());
     }
 
     /**
@@ -200,11 +203,11 @@ public class BoardController {
                     String categoryName,
             @ApiParam(value = "카테고리 권한", required = true)
             @RequestParam(value = "authority", defaultValue = "ADMIN") Authority authority) {
-        System.out.println(authority);
         categoryService.createCategory(categoryName, authority);
 
         return ResponseEntity.status(200)
-                .body(BaseResponseBody.builder().statusCode(200).message("Success").build());
+                .body(BaseResponseBody.builder().statusCode(200).message(MessageBody.SUCCESS)
+                        .build());
     }
 
     /**
@@ -220,7 +223,7 @@ public class BoardController {
     })
     public ResponseEntity<BaseResponseBody> getCategoryList() {
         CategoryListResponse response =
-                CategoryListResponse.builder().statusCode(200).message("Success")
+                CategoryListResponse.builder().statusCode(200).message(MessageBody.SUCCESS)
                         .data(categoryService.getCategoryList()).build();
 
         return ResponseEntity.status(200).body(response);
@@ -245,6 +248,7 @@ public class BoardController {
             @RequestParam(value = "categoryName") String categoryName) {
         categoryService.deleteCategory(categoryName);
         return ResponseEntity.status(200)
-                .body(BaseResponseBody.builder().statusCode(200).message("Success").build());
+                .body(BaseResponseBody.builder().statusCode(200).message(MessageBody.SUCCESS)
+                        .build());
     }
 }

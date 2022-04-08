@@ -1,7 +1,6 @@
 package com.thirdlife.thirddonation.api.user.service;
 
 import com.thirdlife.thirddonation.api.user.dto.ArtistInfoDto;
-import com.thirdlife.thirddonation.api.user.dto.request.ArtistRegisterRequest;
 import com.thirdlife.thirddonation.common.exception.CustomException;
 import com.thirdlife.thirddonation.common.exception.ErrorCode;
 import com.thirdlife.thirddonation.common.util.FileManageUtil;
@@ -32,27 +31,28 @@ public class ArtistServiceImpl implements ArtistService {
     /**
      * 장애인 예술가 신청 요청 등록.
      *
-     * @param artistRegisterRequest ArtistRegisterRequest
+     * @param name           String
+     * @param registerNumber String
+     * @param multipartFile  MultipartFile
      */
     @Override
-    public void createArtist(ArtistRegisterRequest artistRegisterRequest) {
-        final User user = userService.getAuthUser();
-
-        MultipartFile multipartFile = artistRegisterRequest.getImageFile();
+    public void createArtist(String name, String registerNumber, MultipartFile multipartFile) {
+        User user = userService.getAuthUser();
+        user = userRepository.getById(user.getId());
 
         //파일저장
         String fileName = multipartFile.getOriginalFilename();
         String savingFileName = FileManageUtil.saveFile(multipartFile, fileName);
 
         //엔티티 생성
-
         Artist artist = artistRepository.findById(user.getId()).orElse(null);
         if (artist == null) {
-            artist = artistRegisterRequest.toEntity();
+            artist = Artist.builder().name(name).registerNumber(registerNumber).enabled(false)
+                    .build();
             artist.setUser(user);
         } else {
-            artist.setName(artistRegisterRequest.getName());
-            artist.setRegisterNumber(artistRegisterRequest.getRegisterNumber());
+            artist.setName(name);
+            artist.setRegisterNumber(registerNumber);
         }
         artist.setFilePath(savingFileName);
         artistRepository.save(artist);
@@ -79,10 +79,9 @@ public class ArtistServiceImpl implements ArtistService {
         Artist artist = artistRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         // 허가할 때 없는 아이디일 수 있다.(삭제이상발생시)
-        userRepository.findById(artist.getId())
+        User user = userRepository.findById(artist.getId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        User user = artist.getUser();
         if (user.getAuthority() == Authority.ADMIN) {
             throw new CustomException(ErrorCode.CANNOT_DOWN_AUTHORITY);
         } else {
@@ -103,10 +102,9 @@ public class ArtistServiceImpl implements ArtistService {
         Artist artist = artistRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         // 허가할 때 없는 아이디일 수 있다.(삭제이상발생시)
-        userRepository.findById(artist.getId())
+        User user = userRepository.findById(artist.getId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        User user = artist.getUser();
         if (user.getAuthority() == Authority.ADMIN) {
             throw new CustomException(ErrorCode.CANNOT_DOWN_AUTHORITY);
         } else if (user.getAuthority() == Authority.ARTIST) {

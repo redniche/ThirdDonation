@@ -42,7 +42,7 @@ public class SaleSearch {
      * @return Specification
      */
     public static Specification<Sales> searchWith(Map<SearchKey, Object> searchKeyword) {
-        return (Specification<Sales>) ((root, query, builder) -> {
+        return ((root, query, builder) -> {
             List<Predicate> predicate = getPredicateWithKeyword(searchKeyword, root, builder);
             return builder.and(predicate.toArray(new Predicate[0]));
         });

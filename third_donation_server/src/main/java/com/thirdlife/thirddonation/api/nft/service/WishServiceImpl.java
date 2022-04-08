@@ -6,10 +6,10 @@ import com.thirdlife.thirddonation.common.exception.CustomException;
 import com.thirdlife.thirddonation.common.exception.ErrorCode;
 import com.thirdlife.thirddonation.db.nft.entity.Nft;
 import com.thirdlife.thirddonation.db.nft.entity.Wish;
-import com.thirdlife.thirddonation.db.user.entity.User;
 import com.thirdlife.thirddonation.db.nft.repository.NftRepository;
-import com.thirdlife.thirddonation.db.user.repository.UserRepository;
 import com.thirdlife.thirddonation.db.nft.repository.WishRepository;
+import com.thirdlife.thirddonation.db.user.entity.User;
+import com.thirdlife.thirddonation.db.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +24,7 @@ public class WishServiceImpl implements WishService {
 
     private final WishRepository wishRepository;
     private final NftRepository nftRepository;
+    private final UserRepository userRepository;
     private final UserService userService;
 
     /**
@@ -33,12 +34,13 @@ public class WishServiceImpl implements WishService {
      */
     @Override
     public void createWish(WishRequest wishRequest) {
-        final User user = userService.getAuthUser();
+        User user = userService.getAuthUser();
+        user = userRepository.getById(user.getId());
 
         Nft nft = nftRepository.findById(wishRequest.getTokenId())
                 .orElseThrow(() -> new CustomException(ErrorCode.NFT_NOT_FOUND));
 
-        if (user.equals(nft.getOwner())) {
+        if (user.equals(nft.getArtist())) {
             throw new CustomException(ErrorCode.CANNOT_WISH_MYSELF);
         }
 
@@ -59,13 +61,14 @@ public class WishServiceImpl implements WishService {
     /**
      * NFT 찜 정보를 삭제하는 메서드입니다.
      *
-     * @param wishRequest WishRequest
+     * @param tokenId Long
      */
     @Override
-    public void deleteWish(WishRequest wishRequest) {
-        final User user = userService.getAuthUser();
+    public void deleteWish(Long tokenId) {
+        User user = userService.getAuthUser();
+        user = userRepository.getById(user.getId());
 
-        Nft nft = nftRepository.findById(wishRequest.getTokenId())
+        Nft nft = nftRepository.findById(tokenId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NFT_NOT_FOUND));
 
         Wish wish = wishRepository.findByUserAndNft(user, nft)

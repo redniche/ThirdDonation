@@ -5,27 +5,42 @@ import apis from './../../../core/axios';
 
 export const fetchNftsBreakdown = (userId, isArtist = false, isSell = false, isMusic = false) => {
   return async (dispatch, getState) => {
-    //TODO isSell 이 true일 때 다른 동작 필요
-    if (isSell) return;
     //access the state
     const state = getState();
     const page = state.NFT.nftPage.data;
     dispatch(actions.getNftBreakdown.request(Canceler.cancel));
+
     try {
-      const {
-        data: { data },
-      } = await Axios.get(`${apis.nfts.items}/${isMusic ? '/nfts_music.json' : userId}`, {
-        cancelToken: Canceler.token,
-        params: { page, size: 20, artist: isArtist },
-      });
-      if (data.length) {
-        dispatch(actions.increasePage());
-        dispatch(actions.getNftBreakdown.success(data));
-        return 0;
+      if (isSell) {
+        const {
+          data: { data },
+        } = await Axios.get('/nfts/exchange/sales', {
+          cancelToken: Canceler.token,
+          params: { page, size: 20, seller_id: userId },
+        });
+        if (data.length) {
+          dispatch(actions.increasePage());
+          dispatch(actions.getNftBreakdown.success(data));
+          return 0;
+        } else {
+          dispatch(actions.getNftBreakdown.failure('마지막 NFT 입니다.'));
+          return 1;
+        }
       } else {
-        console.log('마지막 NFT 입니다.');
-        dispatch(actions.getNftBreakdown.failure('마지막 NFT 입니다.'));
-        return 1;
+        const {
+          data: { data },
+        } = await Axios.get(`${apis.nfts.items}/${isMusic ? '/nfts_music.json' : userId}`, {
+          cancelToken: Canceler.token,
+          params: { page, size: 20, artist: isArtist },
+        });
+        if (data.length) {
+          dispatch(actions.increasePage());
+          dispatch(actions.getNftBreakdown.success(data));
+          return 0;
+        } else {
+          dispatch(actions.getNftBreakdown.failure('마지막 NFT 입니다.'));
+          return 1;
+        }
       }
     } catch (err) {
       dispatch(actions.getNftBreakdown.failure(err));

@@ -11,6 +11,9 @@ import lombok.Getter;
 @Getter
 public class ArticleRegisterRequest {
 
+    /**
+     * 더 이상 유저 id를 받지 않습니다.
+     */
     @Deprecated
     private Long userId;
 

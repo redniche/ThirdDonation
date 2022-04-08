@@ -12,6 +12,7 @@ import {
 import { detectCurrentProvider } from '../../core/ethereum';
 import { navigate } from '@reach/router';
 import ipfs_apis from '../../core/ipfs';
+import axios_apis from '../../core/axios';
 import { IpfsAxios, convertIpfsToHttps } from '../../core/ipfs';
 
 import Spinner from 'react-bootstrap/Spinner';
@@ -22,14 +23,12 @@ import PanelLayout from '../../components/layout/PanelLayout';
  */
 const Sell = () => {
   const { data: account } = useSelector(selectors.accountState);
-  console.log(account.id);
 
   const [tokenUri, setTokenUri] = useState(null);
   const [nft, setNft] = useState({});
 
   // 파라미터 id값 받아오기
   const nftId = useParams().nftId;
-  console.log(nftId);
 
   const [sellPrice, setSellPrice] = useState('');
   const [loading, setLoading] = useState(false);
@@ -53,9 +52,6 @@ const Sell = () => {
   // 판매 등록을 승인하는 함수
   const approveToggle = async (artNftContract, currentWallet) => {
     try {
-      console.log(artNftContract.methods);
-      console.log(currentWallet);
-
       const response = await artNftContract.methods
         .setApprovalForAll(SALE_NFT_CONTRACT_ADDRESS, true)
         .send({ from: currentWallet });
@@ -77,15 +73,18 @@ const Sell = () => {
         alert('가격을 입력해주세요.');
         return;
       }
+      if (sellPrice < 100) {
+        alert('최소 판매 금액은 100SSF입니다.');
+        return;
+      }
+
       setLoading(true);
 
-      // console.log(saleArtTokenContracts.methods);
       const currentProvider = detectCurrentProvider();
       if (!currentProvider) return;
 
       const accounts = await currentProvider.request({ method: 'eth_requestAccounts' });
       const currentWallet = accounts[0];
-      console.log(currentWallet);
 
       const saleArtContract = getSaleNftContract(currentProvider);
       const artNftContract = getSsafyNftContract(currentProvider);
@@ -93,9 +92,7 @@ const Sell = () => {
       const saleAuth = await artNftContract.methods
         .isApprovedForAll(currentWallet, SALE_NFT_CONTRACT_ADDRESS)
         .call();
-      console.log(saleAuth);
       if (!saleAuth) await approveToggle(artNftContract, currentWallet);
-      console.log(saleAuth);
 
       const response = await saleArtContract.methods
         .setForSaleArtToken(nft.id, sellPrice)
@@ -105,17 +102,9 @@ const Sell = () => {
         });
       console.log(response);
 
-      // 해당 주소 토큰 개수 확인
-      // const balance = await artNftContract.methods.balanceOf(currentWallet).call();
-      // console.log(balance);
-
-      // 해당 tokenId에 해당하는 토큰 가격 확인
-      // const price = await saleArtContract.methods.getArtTokenPrice(nft.id).call();
-      // console.log(price);
-
       setLoading(false);
       alert('NFT 판매 등록이 완료되었습니다.');
-      navigateTo('/explore');
+      navigateTo(-1);
     } catch (error) {
       console.log(error);
       setLoading(false);
@@ -125,10 +114,6 @@ const Sell = () => {
 
   // 백엔드에 판매 정보 등록하는 함수
   const saveSaleNFT = () => {
-    console.log(sellPrice);
-    console.log(SALE_NFT_CONTRACT_ADDRESS);
-    console.log(account.id);
-    console.log(nft.id);
     Axios.post(
       '/nfts/exchange/sell',
       {
@@ -144,9 +129,7 @@ const Sell = () => {
         },
       },
     )
-      .then((res) => {
-        console.log(res);
-      })
+      .then(() => {})
       .catch((err) => {
         console.log(`err: ${err}`);
         // 만약 NFT생성은 완료 되었는데 서버전송에서 오류날 경우따로 DB저장 처리 가능한 함수 필요
@@ -179,13 +162,10 @@ const Sell = () => {
 
   useEffect(async () => {
     getNFT();
-    console.log(account.id);
   }, []);
 
   return (
     <PanelLayout title="작품 판매">
-      {console.log(nft)}
-      {console.log(tokenUri)}
       <section className="container">
         <div className="row justify-content-center">
           <div className="col-lg-7 offset-lg-1 mb-5">
@@ -201,83 +181,29 @@ const Sell = () => {
                         <i className="fa fa-tag"></i>일반 판매
                       </span>
                     </li>
-                    {/* <li id="btn2" onClick={handleShow1}>
-                      <span>
-                        <i className="fa fa-hourglass-1"></i>경매
-                      </span>
-                    </li> */}
-                    {/* <li id="btn3" onClick={this.handleShow2}>
-                        <span>
-                          <i className="fa fa-users"></i>Open for bids
-                        </span>
-                      </li> */}
                   </ul>
-
-                  <div className="de_tab_content pt-3">
+                  <div className="mt-4 mb-0">
+                    <p>
+                      판매금액은 판매자에게 90%, 예술가에게 6%, 기부단체에게 2%, 사이트에 2%로
+                      배분됩니다.
+                    </p>
+                  </div>
+                  <div className="de_tab_content pt-2">
                     <div id="tab_opt_1">
                       <h5>가격</h5>
                       <input
                         type="number"
                         name="item_price"
                         id="item_price"
-                        className="form-control"
-                        placeholder="작품의 가격을 입력해주세요. (ETH)"
+                        className="form-control mb-2"
+                        placeholder="작품의 가격을 입력해주세요. (SSF)"
                         value={sellPrice}
                         onChange={onChangeSellPrice}
                       />
+                      <p>실수령토큰: {Math.floor(sellPrice * 0.9)} SSF</p>
                     </div>
-
-                    {/* <div id="tab_opt_2" className="hide">
-                      <h5>경매 시작가</h5>
-                      <input
-                        type="text"
-                        name="item_price_bid"
-                        id="item_price_bid"
-                        className="form-control"
-                        placeholder="가격을 입력해주세요."
-                      />
-
-                      <div className="spacer-20"></div>
-
-                      <div className="row">
-                        <div className="col-md-6">
-                          <h5>시작일</h5>
-                          <input
-                            type="date"
-                            name="bid_starting_date"
-                            id="bid_starting_date"
-                            className="form-control"
-                            min="1997-01-01"
-                          />
-                        </div>
-                        <div className="col-md-6">
-                          <h5>종료일</h5>
-                          <input
-                            type="date"
-                            name="bid_expiration_date"
-                            id="bid_expiration_date"
-                            className="form-control"
-                          />
-                        </div>
-                      </div>
-                    </div> */}
-
-                    <div id="tab_opt_3"></div>
                   </div>
                 </div>
-
-                <div className="spacer-20"></div>
-
-                <div className="spacer-10"></div>
-
-                {/* <h5>Royalties</h5>
-                  <input
-                    type="text"
-                    name="item_royalties"
-                    id="item_royalties"
-                    className="form-control"
-                    placeholder="suggested: 0, 10%, 20%, 30%. Maximum is 70%"
-                  /> */}
 
                 <div className="spacer-10"></div>
 
@@ -300,38 +226,53 @@ const Sell = () => {
           </div>
 
           <div className="col-lg-3 col-sm-6 col-xs-12">
-            <h5>Preview item</h5>
+            <h5>미리 보기</h5>
             <div className="nft__item m-0">
               <div className="author_list_pp">
                 <span>
-                  <img className="lazy" src="/img/author/author-1.jpg" alt="" />
+                  <img
+                    className="lazy"
+                    src={
+                      nft.owner && nft.owner.imagePath
+                        ? `${axios_apis.file}/${nft.owner.imagePath}`
+                        : '/img/기본프로필이미지.png'
+                    }
+                    alt=""
+                  />
                   <i className="fa fa-check"></i>
                 </span>
               </div>
               <div className="nft__item_wrap">
                 <span>
-                  <img
-                    src={tokenUri && `${ipfs_apis.https_local}/${tokenUri.hash}`}
-                    id="get_file_2"
-                    className="lazy nft__item_preview"
-                    alt=""
-                  />
+                  {nft.fileType == 'video' ? (
+                    <video
+                      src={tokenUri && `${ipfs_apis.https_local}/${tokenUri.hash}`}
+                      style={{ maxHeight: '260px', width: '100%' }}
+                      autoPlay
+                      muted
+                      loop
+                      className="lazy nft__item_preview"
+                      alt=""
+                    />
+                  ) : (
+                    <img
+                      src={tokenUri && `${ipfs_apis.https_local}/${tokenUri.hash}`}
+                      id="get_file_2"
+                      className="lazy nft__item_preview"
+                      alt=""
+                    />
+                  )}
                 </span>
               </div>
               <div className="nft__item_info">
                 <span>
                   <h4>{tokenUri && tokenUri.title}</h4>
                 </span>
-                <div className="nft__item_price">
-                  {sellPrice ? <span>{sellPrice} SSF</span> : <span>0 SSF</span>}
-                  {/* <span>1/20</span> */}
-                </div>
-                {/* <div className="nft__item_action">
-                    <span>Place a bid</span>
-                  </div> */}
+                <div className="nft__item_price">{sellPrice ? sellPrice : 0} SSF</div>
+
                 <div className="nft__item_like">
                   <i className="fa fa-heart"></i>
-                  <span>50</span>
+                  <span>{nft.wishCount}</span>
                 </div>
               </div>
             </div>

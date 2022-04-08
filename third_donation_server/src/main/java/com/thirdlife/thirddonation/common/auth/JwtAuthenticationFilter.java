@@ -78,7 +78,8 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
             String walletAddress = decodedJwt.getSubject();
 
             // Search in the DB if we find the user by token subject (username)
-            // If so, then grab user details and create spring auth token using username, pass, authorities/roles
+            // If so, then grab user details and create spring auth token using
+            // username, pass, authorities/roles.
             if (walletAddress != null) {
                 // jwt 토큰에 포함된 계정 정보(userId) 통해 실제 디비에 해당 정보의 계정이 있는지 조회.
                 User user = userService.getUserByWalletAddress(walletAddress);

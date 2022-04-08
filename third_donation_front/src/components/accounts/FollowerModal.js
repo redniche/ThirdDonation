@@ -1,8 +1,9 @@
+/* eslint-disable no-unused-vars */
 import React from 'react';
+import { useState, useEffect } from 'react';
 import { FlatList, SafeAreaView, StatusBar, StyleSheet } from 'react-native';
-// import { axios, canceler } from 'axios';
 import styled from 'styled-components';
-import { navigate } from '@reach/router';
+import { Axios } from '../../core/axios';
 
 const DATA = [
   {
@@ -103,13 +104,13 @@ const styles = StyleSheet.create({
 });
 
 const Item = ({ item, textColor }) => {
-  const navigateTo = (link) => {
-    navigate(link);
-  };
   return (
     <React.Fragment>
-      <span className="my-1" onClick={() => navigateTo(item.authorLink)} style={textColor}>
-        <Image className="lazy mx-2" src={item.avatar} alt=""></Image>
+      <span className="my-1" style={textColor}>
+        <Image
+          className="lazy mx-2"
+          src={item.imagePath ? `/upload/file/${item.imagePath}` : '/img/기본프로필이미지.png'}
+          alt=""></Image>
         <Icon className="fa fa-check"></Icon>
         <span>{item.username}</span>
       </span>
@@ -125,20 +126,44 @@ const renderItem = ({ item }) => {
 
 const FollowerModal = (props) => {
   const { user, open, close, header } = props;
-  var followers = user;
-  followers;
 
-  // try {
-  //   data = await axios.get(`${api.baseUrl}${api.authors}/follower`, {
-  //     cancelToken: canceler.token,
-  //     params: {},
-  //   });
-  // } catch (err) {}
+  const [page, setPage] = useState(0);
+  const [result, setResult] = useState(0);
+
+  const [list, setList] = useState([]);
+
+  const getList = () => {
+    Axios.get('/users/follow', {
+      params: {
+        userId: user,
+        page,
+      },
+    })
+      .then(({ data }) => data)
+      .then(async ({ data }) => {
+        setList([...list, ...data]);
+        setPage(page + 1);
+        if (data.length == 0) {
+          setResult(1);
+        }
+      })
+      .catch((err) => {
+        console.log('에러 발생' + err);
+      });
+  };
+
+  const loadMore = () => {
+    getList();
+  };
+
+  useEffect(() => {
+    getList();
+  }, []);
 
   return (
     <div className={open ? 'openModal modal' : 'modal'}>
       {open ? (
-        <section>
+        <section style={{ width: '400px' }}>
           <header>
             {header}
             <button className="close" onClick={close}>
@@ -148,11 +173,15 @@ const FollowerModal = (props) => {
           <main>
             <SafeAreaView style={styles.container}>
               <FlatList
-                data={DATA}
+                data={list}
                 renderItem={renderItem}
                 keyExtractor={(item) => item.username}
               />
             </SafeAreaView>
+            <span onClick={loadMore} className="btn-main lead m-auto">
+              더 보기
+            </span>
+            {result == 1 && <div className="result_log">마지막 팔로워 입니다.</div>}
           </main>
           <footer>
             <button className="close" onClick={close}>

@@ -23,6 +23,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Formula;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -86,6 +87,9 @@ public class User implements UserDetails {
     @Builder.Default
     @OneToMany(mappedBy = "buyer", cascade = CascadeType.ALL)
     private List<Sales> buyNfts = new ArrayList<>();
+
+    @Formula("(select count(*) from follow f where f.following_id = id)")
+    private Long followCount;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

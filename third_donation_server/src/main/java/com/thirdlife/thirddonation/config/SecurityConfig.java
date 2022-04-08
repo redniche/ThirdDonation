@@ -74,11 +74,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         Authority.ADMIN.name())
                 .antMatchers(HttpMethod.POST, apiPath + nftsItemsPath).hasAuthority(
                         Authority.ARTIST.name())
-                .antMatchers(HttpMethod.POST, apiPath + nftsExchangePath + "/sell").hasAuthority(
-                        Authority.ARTIST.name())
-                .antMatchers(HttpMethod.PATCH, apiPath + nftsExchangePath + "/sales/**")
-                    .hasAuthority(
-                        Authority.ARTIST.name())
+                .antMatchers(HttpMethod.GET, apiPath + nftsExchangePath + "/sell/messages")
+                        .hasAuthority(
+                                Authority.ARTIST.name())
                 .antMatchers(HttpMethod.GET, apiPath + charitiesPath + adminPath).hasAuthority(
                         Authority.ADMIN.name())
                 .antMatchers(HttpMethod.POST, apiPath + charitiesPath).hasAuthority(

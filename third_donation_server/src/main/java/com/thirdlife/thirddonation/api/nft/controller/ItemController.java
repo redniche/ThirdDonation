@@ -6,6 +6,7 @@ import com.thirdlife.thirddonation.api.nft.dto.response.NftListResponse;
 import com.thirdlife.thirddonation.api.nft.dto.response.NftResponse;
 import com.thirdlife.thirddonation.api.nft.service.NftService;
 import com.thirdlife.thirddonation.common.model.response.BaseResponseBody;
+import com.thirdlife.thirddonation.common.model.response.MessageBody;
 import com.thirdlife.thirddonation.db.nft.entity.Nft;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -63,7 +64,8 @@ public class ItemController {
         nftService.createNft(nftMintRequest);
 
         return ResponseEntity.status(200)
-                .body(BaseResponseBody.builder().statusCode(200).message("Success").build());
+                .body(BaseResponseBody.builder().statusCode(200).message(MessageBody.SUCCESS)
+                        .build());
     }
 
     /**
@@ -94,8 +96,9 @@ public class ItemController {
         Page<NftInfoDto> nftPage = artist ? nftService.getNftListByArtistId(userId, pageable) :
                 nftService.getNftListByOwnerId(userId, pageable);
 
-        NftListResponse response = NftListResponse.builder().statusCode(200).message("Success")
-                .data(nftPage.getContent()).build();
+        NftListResponse response =
+                NftListResponse.builder().statusCode(200).message(MessageBody.SUCCESS)
+                        .data(nftPage.getContent()).build();
 
         return ResponseEntity.status(200).body(response);
     }
@@ -121,7 +124,7 @@ public class ItemController {
 
         // nft 를 담은 NftResponse 을 담은 ResponseEntity 반환
         return ResponseEntity.status(200)
-                .body(NftResponse.builder().statusCode(200).message("Success")
+                .body(NftResponse.builder().statusCode(200).message(MessageBody.SUCCESS)
                         .data(NftInfoDto.of(nft)).build());
     }
 }

@@ -5,62 +5,119 @@ import FeatureBox from '../components/home/FeatureBox';
 import Catgor from '../components/home/Category';
 import NewNfts from '../components/home/NewNfts';
 import HotCollections from '../components/home/HotCollections';
+import { Axios } from '../core/axios';
+import React, { useEffect, useState } from 'react';
+import ManualModal from '../components/home/ManualModal';
 
-const Home = () => (
-  <div>
-    <Header />
-    <section
-      className="jumbotron breadcumb no-bg h-vh"
-      style={{ backgroundImage: `url(${'/img/bg-shape-1.jpg'})` }}>
-      <SliderMain />
-    </section>
+const Home = () => {
+  const [article, setArticle] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  const HAS_VISITED_BEFORE = localStorage.getItem('hasVisitedBefore');
 
-    <section className="container no-top no-bottom">
-      <FeatureBox />
-    </section>
+  const openModal = () => {
+    setModalOpen(true);
+  };
+  const closeModal = () => {
+    setModalOpen(false);
+  };
 
-    <section className="container no-bottom">
-      <div className="row">
-        <div className="col-lg-12">
-          <div className="text-center">
-            <h2>인기 컬렉션</h2>
-            <div className="small-border"></div>
+  function getArticle() {
+    Axios.get('/board/article/detail', {
+      params: {
+        articleId: 37,
+      },
+    })
+      .then((data) => data)
+      .then(async (res) => {
+        setArticle(res.data.data);
+      })
+      .catch((err) => {
+        console.log('에러 발생' + err);
+      });
+  }
+
+  useEffect(() => {
+    getArticle();
+    const handleShowModal = () => {
+      if (HAS_VISITED_BEFORE && HAS_VISITED_BEFORE > new Date()) {
+        return;
+      }
+
+      if (!HAS_VISITED_BEFORE) {
+        openModal();
+        let expires = new Date();
+        expires = expires.setHours(expires.getHours() + 24);
+        localStorage.setItem('hasVisitedBefore', expires);
+      }
+    };
+
+    window.setTimeout(handleShowModal, 2000);
+  }, [HAS_VISITED_BEFORE]);
+
+  return (
+    <div>
+      <React.Fragment>
+        <ManualModal
+          article={article}
+          open={modalOpen}
+          close={closeModal}
+          header="서드 도네이션 메뉴얼"></ManualModal>
+      </React.Fragment>
+
+      <Header />
+      <section
+        className="jumbotron breadcumb no-bg h-vh"
+        style={{ backgroundImage: `url(${'/img/bg-shape-1.jpg'})` }}>
+        <SliderMain />
+      </section>
+
+      <section className="container no-top no-bottom">
+        <FeatureBox />
+      </section>
+
+      <section className="container no-bottom mb-4">
+        <div className="row">
+          <div className="col-lg-12">
+            <div className="text-center">
+              <h2>인기 NFT</h2>
+              <div className="small-border mb-3"></div>
+            </div>
+          </div>
+          <div className="col-lg-12">
+            <HotCollections />
           </div>
         </div>
-        <div className="col-lg-12">
-          <HotCollections />
-        </div>
-      </div>
-    </section>
+      </section>
 
-    <section className="container no-bottom">
-      <div className="row">
-        <div className="col-lg-12">
-          <div className="text-center">
-            <h2>신규 아이템</h2>
-            <div className="small-border"></div>
+      <section className="container no-bottom mb-4">
+        <div className="row">
+          <div className="col-lg-12">
+            <div className="text-center">
+              <h2>신규 NFT</h2>
+              <div className="small-border mb-3"></div>
+            </div>
+          </div>
+          <div className="col-lg-12">
+            <NewNfts />
           </div>
         </div>
-        <div className="col-lg-12">
-          <NewNfts />
-        </div>
-      </div>
-    </section>
+      </section>
 
-    <section className="container">
-      <div className="row">
-        <div className="col-lg-12">
-          <div className="text-center">
-            <h2>카테고리</h2>
-            <div className="small-border"></div>
+      <section className="container">
+        <div className="row">
+          <div className="col-lg-12">
+            <div className="text-center">
+              <h2>카테고리</h2>
+              <div className="small-border"></div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <Catgor />
-    </section>
+        <Catgor />
+      </section>
 
-    <Footer />
-  </div>
-);
+      <Footer />
+    </div>
+  );
+};
 export default Home;

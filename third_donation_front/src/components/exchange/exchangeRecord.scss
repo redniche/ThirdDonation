@@ -1,0 +1,23 @@
+#table-wrap {
+  height: 130px;
+  overflow: auto;
+}
+
+#exchange-record-table {
+  text-align: center;
+  thead {
+    th {
+      font-size: 14px;
+    }
+  }
+
+  .exchange-time {
+    color: #666;
+    margin-left: 10px;
+  }
+  tbody {
+    // height: 10px;
+    // background-color: black;
+    overflow: auto;
+  }
+}

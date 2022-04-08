@@ -6,6 +6,8 @@ import * as selectors from '../../store/selectors';
 import { Link } from '@reach/router';
 import { Axios } from '../../core/axios';
 
+// import { Table } from 'react-bootstrap';
+
 import { Viewer } from '@toast-ui/react-editor';
 // 여기 css를 수정해서 코드 하이라이팅 커스텀 가능
 import 'prismjs/themes/prism.css';
@@ -31,7 +33,6 @@ const BoardView = ({ navigate }) => {
       .then((data) => data)
       .then(async (res) => {
         setArticle(res.data.data);
-        console.log(res);
       })
       .catch((err) => {
         console.log('에러 발생' + err);
@@ -54,7 +55,7 @@ const BoardView = ({ navigate }) => {
   }
 
   const thStyle = {
-    width: '20%',
+    // width: '30%',
     padding: '30px 0',
   };
 
@@ -69,21 +70,22 @@ const BoardView = ({ navigate }) => {
           <div className="col-lg-12">
             {article ? (
               <>
-                <table className="table de-table table-rank">
+                {/* <table className="table de-table table-rank"> */}
+                <table className="table-notice">
                   <tbody>
-                    <tr>
+                    <tr className="table-notice-tr">
                       <th style={thStyle}>제목</th>
                       <td>{article.title}</td>
                     </tr>
-                    <tr>
+                    <tr className="table-notice-tr">
                       <th style={thStyle}>작성자</th>
                       <td>{article.user.username}</td>
                     </tr>
-                    <tr>
+                    <tr className="table-notice-tr">
                       <th style={thStyle}>작성일</th>
                       <td>{article.dateCreated.substr(0, 10)}</td>
                     </tr>
-                    <tr>
+                    <tr className="table-notice-content">
                       <td colSpan={2}>
                         <section className="containerWrap">
                           {article.contentText && (

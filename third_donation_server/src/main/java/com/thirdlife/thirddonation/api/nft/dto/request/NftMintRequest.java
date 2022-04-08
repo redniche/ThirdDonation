@@ -2,7 +2,6 @@ package com.thirdlife.thirddonation.api.nft.dto.request;
 
 import com.thirdlife.thirddonation.db.nft.entity.Nft;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import lombok.Getter;
@@ -20,6 +19,9 @@ public class NftMintRequest {
     @NotBlank
     private String tokenUri;
 
+    /**
+     * 더 이상 오너 어드레스를 받지 않습니다.
+     */
     @Deprecated
     private String ownerAddress;
 

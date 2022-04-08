@@ -1,20 +1,23 @@
 package com.thirdlife.thirddonation.api.user.service;
 
 import com.thirdlife.thirddonation.api.user.dto.ArtistInfoDto;
-import com.thirdlife.thirddonation.api.user.dto.request.ArtistRegisterRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 장애인 예술가 서비스.
  */
 public interface ArtistService {
+
     /**
      * 장애인 예술가 신청 요청 등록.
      *
-     * @param artistRegisterRequest ArtistRegisterRequest
+     * @param name String
+     * @param registerNumber String
+     * @param multipartFile MultipartFile
      */
-    void createArtist(ArtistRegisterRequest artistRegisterRequest);
+    void createArtist(String name, String registerNumber, MultipartFile multipartFile);
 
     /**
      * 장애인 예술가 조회.

@@ -55,7 +55,6 @@ export const nftItems = createSelector(nftFilter, nftBreakdownState, (filters, n
   }
   if (nftTitle.trim().length) {
     let pattern = new RegExp(`${nftTitle.trim()}`, 'gi');
-    console.log(pattern);
     data = data.filter((nft) => nft.title.match(pattern));
   }
 

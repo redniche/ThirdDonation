@@ -21,6 +21,7 @@ import Donation from './pages/nfts/SendToken';
 
 import Recommended from './pages/nfts/Recommended';
 import Notice from './pages/board/Board';
+import Contact from './pages/board/Contact';
 
 import NoticeView from './pages/board/BoardView';
 import NoticeWrite from './pages/board/BoardWrite';
@@ -58,7 +59,9 @@ const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    window.ethereum.on('accountsChanged', (account) => dispatch(fetchAccount(account[0])));
+    if (window.ethereum) {
+      window.ethereum.on('accountsChanged', (account) => dispatch(fetchAccount(account[0])));
+    }
   }, []);
 
   return (
@@ -87,6 +90,7 @@ const App = () => {
           <Notice path="/notice" />
           <NoticeWrite path="/noticeWrite" />
           <NoticeView path="/noticeView/:no" />
+          <Contact path="/contact" />
           {/* <NoticeView path="/boardView/:no" componenet={NoticeView} /> */}
         </ScrollTop>
       </PosedRouter>

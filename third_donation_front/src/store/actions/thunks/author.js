@@ -14,7 +14,7 @@ export const fetchAuthor = (authorId) => async (dispatch) => {
       params: {},
     })
       .then(({ data: { data } }) => {
-        data.imagePath = `${apis.file}/${data.imagePath}`;
+        data.imagePath = data.imagePath ? `${apis.file}/${data.imagePath}` : null;
         dispatch(actions.getAuthorList.success(data));
       })
       .then((err) => {

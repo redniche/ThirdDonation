@@ -6,6 +6,9 @@ import axios_apis from '../../core/axios';
 import ipfs_apis from '../../core/ipfs';
 import { IpfsAxios } from '../../core/ipfs';
 import { convertIpfsToHttps } from './../../core/ipfs';
+import { Axios } from '../../core/axios';
+import { useSelector } from 'react-redux';
+import * as selectors from '../../store/selectors';
 
 const Outer = styled.div`
   display: flex;
@@ -27,25 +30,41 @@ const NftCard = ({
   className = 'd-item col-lg-3 col-md-6 col-sm-6 col-xs-12 mb-4',
   // preview = false,
   clockTop = true,
-  height,
   onFileLoad,
+  price = -1,
 }) => {
+  const [isWish, setWish] = useState(0);
   const [tokenUri, setTokenUri] = useState(null);
-  console.log(nft);
-
+  const { data: account } = useSelector(selectors.accountState);
   const navigateTo = (link) => {
     navigate(link);
   };
 
-  const heartClickHandle = () => {};
+  const heartClickHandle = () => {
+    if (account && account.id != nft.artist.id) {
+      Axios.post('/nfts/wish', {
+        tokenId: nft.id,
+      })
+        .then(() => {
+          setWish(isWish + 1);
+        })
+        .catch(() => {
+          Axios.delete(`/nfts/wish/${nft.id}`).then(() => {
+            setWish(isWish - 1);
+          });
+        });
+    }
+  };
   useEffect(async () => {
-    try {
-      const { data: tokenUriJson } = await IpfsAxios.get(convertIpfsToHttps(nft.tokenUri), {
-        params: [],
-      });
-      setTokenUri(tokenUriJson);
-    } catch (err) {
-      console.log(err);
+    if (nft && nft.tokenUri) {
+      try {
+        const { data: tokenUriJson } = await IpfsAxios.get(convertIpfsToHttps(nft.tokenUri), {
+          params: [],
+        });
+        setTokenUri(tokenUriJson);
+      } catch (err) {
+        console.log(err);
+      }
     }
   }, []);
 
@@ -84,15 +103,19 @@ const NftCard = ({
           <div
             className="nft__item_wrap"
             onClick={() => navigateTo(`/ItemDetail/${nft.id}`)}
-            style={{ height: `${height}px` }}>
+            style={{ height: '264px' }}>
             <Outer>
               <span>
                 {nft.fileType == 'video' ? (
                   <video
                     onLoad={onFileLoad}
                     src={`${ipfs_apis.https_local}/${tokenUri.hash}`}
+                    autoPlay
+                    muted
+                    loop
                     className="lazy nft__item_preview"
                     alt=""
+                    style={{ maxHeight: '264px' }}
                   />
                 ) : (
                   <img
@@ -100,6 +123,7 @@ const NftCard = ({
                     src={`${ipfs_apis.https_local}/${tokenUri.hash}`}
                     className="lazy nft__item_preview"
                     alt=""
+                    style={{ maxHeight: '264px' }}
                   />
                 )}
               </span>
@@ -114,26 +138,26 @@ const NftCard = ({
             <span>
               <h4>{nft.name}</h4>
             </span>
-            {nft.price && (
+            {price != -1 && (
               <>
                 <div className="nft__item_price">
-                  {nft.price} ETH
+                  {price} SSF
                   {nft.status === 'on_auction' && (
                     <span>
                       {nft.bid}/{nft.max_bid}
                     </span>
                   )}
                 </div>
-                <div className="nft__item_action">
+                {/* <div className="nft__item_action">
                   <span onClick={() => navigateTo(`${nft.bid_link}/${nft.id}`)}>
                     {nft.status === 'on_auction' ? '경매 입찰' : '바로 구매'}
                   </span>
-                </div>
+                </div> */}
               </>
             )}
-            <div className="nft__item_like">
-              <i className="fa fa-heart" onClick={heartClickHandle}></i>
-              <span>{nft.wishCount}</span>
+            <div className="nft__item_like" onClick={heartClickHandle}>
+              <i className="fa fa-heart"></i>
+              <span>{nft.wishCount + isWish}</span>
             </div>
           </div>
         </div>

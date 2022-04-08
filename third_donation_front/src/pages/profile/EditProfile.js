@@ -54,10 +54,8 @@ const EditProfile = ({ authorId }) => {
    */
   const handleSubmitForm = async (data) => {
     data.id = parseInt(authorId);
-    console.log(data);
     await Axios.patch(axios_apis.users.profile, data)
-      .then((response) => {
-        console.log(response);
+      .then(() => {
         redirectUser(`/editProfile/${authorId}`);
       })
       .catch((err) => {
@@ -69,24 +67,14 @@ const EditProfile = ({ authorId }) => {
     const formData = new FormData();
     formData.append('img', file);
 
-    // await Axios({
-    //   method: 'post',
-    //   url: `${apis.users.img}`,
-    //   data: formData,
-    //   headers: {
-    //     Authorization: `Bearer ${jwt}`,
-    //     'Content-Type': 'multipart/form-data',
-    //   },
-    // })
     await Axios.post(`${axios_apis.users.img}`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
       params: { userId: userId },
     })
-      .then((res) => {
+      .then(() => {
         redirectUser(`/editProfile/${authorId}`);
-        console.log(res);
       })
       .catch((err) => {
         console.log(err);

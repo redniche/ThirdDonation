@@ -3,6 +3,8 @@ import { Table } from 'react-bootstrap';
 import PanelLayout from '../../components/layout/PanelLayout';
 import Pagination from '../../components/paging/Pagination';
 import { Axios } from '../../core/axios';
+import { detectCurrentProvider } from '../../core/ethereum';
+import { getSsafyNftContract } from '../../contracts';
 
 // 증명서 이미지 행 hover 이벤트 방지 설정 (작동 안 됨 - 수정 필요)
 /* .table-hover > tbody > tr.anti-hover:hover > td,
@@ -21,27 +23,82 @@ const GrantArtist = () => {
   const [list, setList] = useState([]);
   const [detailsShown, setDetailsShown] = useState([]);
 
-  const onEnableClick = (userId) => {
-    confirm('예술가로 승인하시겠습니까?') &&
-      Axios.patch(`/users/artists/enable?userId=${userId}`).then(({ data }) => {
-        console.log(data);
-        getList(curPage);
-      });
+  const getUserAddress = async (userId) => {
+    return Axios.get(`/users/profile/${userId}`);
   };
 
-  const onDisableClick = (userId) => {
-    confirm('일반 사용자로 승인하시겠습니까?') &&
-      Axios.patch(`/users/artists/disable?userId=${userId}`).then(({ data }) => {
-        console.log(data);
-        getList(curPage);
-      });
+  const currentProvider = detectCurrentProvider();
+  if (!currentProvider) return;
+
+  const artNftContract = getSsafyNftContract(currentProvider);
+
+  const setttingProcess = (flag, id) => {
+    setList(
+      list.map((item) => {
+        return item.id === id ? { ...item, process: flag } : item;
+      }),
+    );
+  };
+  const onEnableClick = async (userId) => {
+    if (confirm('예술가로 승인하시겠습니까?')) {
+      try {
+        const userData = await getUserAddress(userId);
+        const userAddress = userData.data.data.walletAddress;
+
+        const accounts = await currentProvider.request({ method: 'eth_requestAccounts' });
+        const currentWallet = accounts[0];
+
+        setttingProcess(true, userId);
+        await artNftContract.methods
+          .addArtistAddress(userAddress)
+          .send({ from: currentWallet })
+          .then(() => {
+            Axios.patch(`/users/artists/enable?userId=${userId}`).then(({ data }) => {
+              console.log(data);
+              getList(curPage);
+            });
+          });
+        list[userId].process = false;
+        setttingProcess(false, userId);
+      } catch (error) {
+        console.log(error);
+        setttingProcess(false, userId);
+      }
+    }
+  };
+
+  const onDisableClick = async (userId) => {
+    if (confirm('일반 사용자로 승인하시겠습니까?')) {
+      try {
+        const userData = await getUserAddress(userId);
+        const userAddress = userData.data.data.walletAddress;
+
+        const accounts = await currentProvider.request({ method: 'eth_requestAccounts' });
+        const currentWallet = accounts[0];
+
+        setttingProcess(true, userId);
+        await artNftContract.methods
+          .deleteArtistAddress(userAddress)
+          .send({ from: currentWallet })
+          .then(() => {
+            Axios.patch(`/users/artists/disable?userId=${userId}`).then(({ data }) => {
+              console.log(data);
+              getList(curPage);
+            });
+          });
+        setttingProcess(false, userId);
+      } catch (error) {
+        console.log(error);
+        list[userId].process = false;
+        setttingProcess(false, userId);
+      }
+    }
   };
 
   const getList = (page) => {
     Axios.get('/users/artists', {
       params: {
         page,
-        sort: 'id',
       },
     })
       .then(({ data }) => data)
@@ -109,14 +166,14 @@ const GrantArtist = () => {
                             <input
                               type="button"
                               className="btn-grey d-inline-block"
-                              value="거절"
+                              value={item.process ? '처리중' : '삭제'}
                               onClick={() => onDisableClick(item.id)}
                             />
                           ) : (
                             <input
                               type="button"
                               className="btn-main d-inline-block me-2"
-                              value="승인"
+                              value={item.process ? '처리중' : '승인'}
                               onClick={() => onEnableClick(item.id)}
                             />
                           )}
@@ -124,7 +181,9 @@ const GrantArtist = () => {
                       </tr>
                       {detailsShown.includes(item.id) && (
                         <tr className="anti-hover">
-                          <td colSpan={5}>증명서 이미지 여기다가 뿌린다 {item.filePath}</td>
+                          <td colSpan={5}>
+                            <img src={`/upload/file/${item.filePath}`} alt="증명서이미지"></img>
+                          </td>
                         </tr>
                       )}
                     </React.Fragment>

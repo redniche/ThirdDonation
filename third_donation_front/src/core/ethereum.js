@@ -1,3 +1,5 @@
+import { navigate } from '@reach/router';
+
 export const connectWallet = () =>
   new Promise((resolve, reject) => {
     if (window.ethereum) {
@@ -26,9 +28,12 @@ export const detectCurrentProvider = () => {
     provider = window.web3.currentProvider;
     // metamask가 깔려있지 않을 때 -> 메타마스크 설치 페이지로 이동
   } else {
-    alert('Install Metamask!');
-    window.location =
-      'https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn/';
+    alert('메타마스크를 설치하세요!');
+    window.open(
+      'https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn',
+      '_blank',
+    );
+    navigate('/');
   }
   return provider;
 };

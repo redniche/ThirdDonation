@@ -25,10 +25,6 @@ export default function FollowBar() {
     },
   ];
 
-  // componentDidMount(props) {
-  //   console.log(this.props)
-  // };
-
   return (
     <span className="followbar">
       <Chart options={options} series={series} type="bar" width="100%" />

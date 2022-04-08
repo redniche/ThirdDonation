@@ -19,6 +19,7 @@ const axios_apis = {
     list: `${nft_base}/nft`,
     sales: `${nft_base}/sales`,
     saleList: `${nft_sale_base}/sales`,
+    wish: `${nft_sale_base}/wish`,
   },
   users: {
     user: `${user_base}`,

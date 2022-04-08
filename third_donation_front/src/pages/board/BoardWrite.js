@@ -23,12 +23,6 @@ import { Link } from '@reach/router';
 
 const editorRef = React.createRef();
 
-// const onChangeEditorTextHandler = () => {
-//   // // console.log(editorRef);
-//   console.log(editorRef.current.getInstance().getMarkdown());
-//   // console.log(editorRef.getMarkdown());
-// };
-
 /**
  * NFT 민팅을 할 수 있는 페이지 컴포넌트
  * @returns
@@ -79,7 +73,6 @@ const BoardWrite = ({ navigate }) => {
                 ['code', 'codeblock'],
               ]}
               plugins={[colorSyntax, [codeSyntaxHighlight, { highlighter: Prism }]]}
-              // onChange={onChangeEditorTextHandler}
             />
             <div className="d-flex justify-content-end mt-3">
               <Link to="/notice">

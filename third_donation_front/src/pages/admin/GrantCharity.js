@@ -49,7 +49,6 @@ const GrantArtist = () => {
         .then(() => {
           saveAceeptCharity(walletAddress);
         });
-      // console.log(response);
 
       alert('자선 단체 승인 성공');
     } catch (error) {
@@ -130,13 +129,13 @@ const GrantArtist = () => {
                           {item.enabled ? (
                             <button
                               className="btn-main d-inline-block"
-                              onClick={(e) => declineCharity(item.walletAddress, e)}>
+                              onClick={declineCharity(item.walletAddress)}>
                               허용 안함
                             </button>
                           ) : (
                             <button
                               className="btn-main d-inline-block"
-                              onClick={(e) => acceptCharity(item.walletAddress, e)}>
+                              onClick={acceptCharity(item.walletAddress)}>
                               허용
                             </button>
                           )}

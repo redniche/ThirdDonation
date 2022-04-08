@@ -129,13 +129,13 @@ const GrantArtist = () => {
                           {item.enabled ? (
                             <button
                               className="btn-main d-inline-block"
-                              onClick={(e) => declineCharity(item.walletAddress, e)}>
+                              onClick={declineCharity(item.walletAddress)}>
                               허용 안함
                             </button>
                           ) : (
                             <button
                               className="btn-main d-inline-block"
-                              onClick={(e) => acceptCharity(item.walletAddress, e)}>
+                              onClick={acceptCharity(item.walletAddress)}>
                               허용
                             </button>
                           )}

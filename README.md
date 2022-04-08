@@ -201,9 +201,9 @@
 
 ### **CLIENTS**
 
-- Framework: Vue.js 2.6.12
-- IDE: Visual Studio Code (Npm build)
-- Language: JavaScript ^ES6 => babel-ES5
+- Framework: React 17.0.2
+- IDE: Visual Studio Code (yarn)
+- Language: JavaScript (ECMA-12)
 - Frontend native languages
   - Web: HTML, CSS, JavaScript
 
@@ -212,7 +212,7 @@
 - Framework: Spring Boot 2.5.6
 - IDE: Spring Tool Suite 3 (Maven build)
 - Language: Open JDK 11
-- DB: MySQL 8.0 Server
+- DB: MySQL 8.0, MongoDB 5.0
 - WAS: Tomcat
 - Host: AWS
 - Server OS: Ubuntu 20.04 LTS
@@ -222,8 +222,7 @@
 - Framework: Truffle
 - IDE: Visual Studio Code
 - Language: Solidity
-- Mainnet: maybe Matic Mainnet(https://polygon-rpc.com/)
-- Testnet: maybe Mumbai(https://rpc-mumbai.matic.today)
+- Mainnet: Ssafy Network (private: http://20.196.xxx.xxx:xxxx/)
 
 ### **Docker**
 
